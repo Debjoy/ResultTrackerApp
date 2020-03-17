@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:contentPadding="10dp"
+        app:cardElevation="@dimen/cardview_default_elevation">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="5dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Term : "
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:drawableTint="@color/colorWhite"
+                        android:drawableLeft="@drawable/ic_timelapse_black_24dp"/>
+                    <TextView
+                        android:id="@+id/input_recycler_termname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
+
+
+                </LinearLayout>
+                <Button
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="@color/colorWhite"
+                    android:background="@drawable/ic_delete_black_24dp"
+                    android:layout_toLeftOf="@id/input_view_marks"/>
+                <Button
+                    android:id="@+id/input_view_marks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="10dp"
+                    android:text="Marks"
+                    android:drawableRight="@drawable/ic_format_list_numbered_black_24dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawablePadding="5dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rounded_button"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:text="Subjects"
+                android:layout_marginBottom="10dp"
+                />
+            <com.nex3z.flowlayout.FlowLayout
+                android:id="@+id/input_recycler_flowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flChildSpacing="5dp"
+                app:flChildSpacingForLastRow="align"
+                app:flRowSpacing="8dp">
+
+
+            </com.nex3z.flowlayout.FlowLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

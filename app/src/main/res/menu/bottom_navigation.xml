@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home"/>
+    <item
+        android:id="@+id/nav_term"
+        android:icon="@drawable/ic_timelapse_black_24dp"
+        android:title="Terms" />
+    <item
+        android:id="@+id/nav_subjects"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="Subjects" />
+    <item
+        android:id="@+id/nav_input"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="Input"/>
+</menu>

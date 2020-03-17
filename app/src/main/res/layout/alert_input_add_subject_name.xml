@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Subject"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/alert_add_subject_progress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"
+            android:padding="3dp"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/alert_add_subject_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter subject name here"
+        android:layout_marginBottom="10dp"
+        android:minWidth="180dp"
+        android:drawableRight="@drawable/ic_mode_edit_black_24dp"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/colorText"
+        android:text=""/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/alert_add_subject_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:minWidth="0dp"
+            android:background="@drawable/rounded_button_primary"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Add"
+            android:drawableRight="@drawable/ic_add_circle_black_24dp"
+            android:drawableTint="@color/colorWhite"
+            android:drawablePadding="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"/>
+        <Button
+            android:id="@+id/alert_add_subject_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_button_accent"
+            android:textColor="@color/colorWhite"
+            android:text="Cancel"/>
+    </LinearLayout>
+
+</LinearLayout>
