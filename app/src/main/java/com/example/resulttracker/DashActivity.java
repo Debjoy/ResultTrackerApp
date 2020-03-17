@@ -136,7 +136,7 @@ public class DashActivity extends AppCompatActivity {
                         break;
                         case R.id.nav_subjects: selectedFragment =  new SubjectFragment();
                         break;
-                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this);
+                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId);
                         break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,selectedFragment).commit();
