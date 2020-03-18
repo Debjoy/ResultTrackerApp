@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,7 @@ public class InputFragment extends Fragment {
     private int user_id;
     private RecyclerView mTermsRecyclerView;
     private ImageButton mAddNewTermButton;
+    private Button mAddMarksButton;
     private LinearLayout mTermWiseSubjetsLoading;
     InputFragment(Context mContext,int user_id){
         this.mContext=mContext;
@@ -53,7 +56,48 @@ public class InputFragment extends Fragment {
         mTermsRecyclerView=view.findViewById(R.id.input_recycler_layout);
         mTermWiseSubjetsLoading=view.findViewById(R.id.input_term_wise_subjets_loading);
         mAddNewTermButton=view.findViewById(R.id.input_add_new_term);
+        mAddMarksButton=view.findViewById(R.id.input_layout_add_marks_button);
 
+        mAddMarksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String requestUrl=mainUrl+"marks_enter_check.php?stud_id="+user_id;
+                JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    if(response.getInt("code")==202){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                        LayoutInflater inflater = LayoutInflater.from(mContext);
+                                        final View alertLayout = inflater.inflate(R.layout.alert_input_marks,null);
+                                        builder.setView(alertLayout);
+                                        final AlertDialog alertD=builder.show();
+
+                                        ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                
+                                            }
+                                        });
+                                    }else{
+                                        Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                requestQueue.add(jsonObjectRequest);
+            }
+        });
         //ADDING FUNCTIONALITES OF THE ADD NEW TERM BUTTON
         mAddNewTermButton.setOnClickListener(new View.OnClickListener() {
             @Override
