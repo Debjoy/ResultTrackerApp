@@ -70,7 +70,7 @@
             <Spinner
                 android:id="@+id/alert_add_marks_subject_spinner"
                 android:layout_width="match_parent"
-                android:gravity="end"
+                android:textAlignment="textEnd"
                 android:backgroundTint="@color/colorPrimary"
                 android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
@@ -90,7 +90,6 @@
                 android:layout_width="match_parent"
                 android:backgroundTint="@color/colorPrimary"
                 android:textAlignment="textEnd"
-                android:gravity="end"
                 android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
     </LinearLayout>

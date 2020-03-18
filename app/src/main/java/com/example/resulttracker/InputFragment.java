@@ -45,6 +45,11 @@ public class InputFragment extends Fragment {
     private int mSelectedTermId;
     private int mSelectedSubjectId;
     private int mSelectedExamId;
+    private int mSelectedExamNo;
+    private int mSelectedFullMarks;
+    private JSONArray subjectListResponse=new JSONArray();
+    private JSONArray termListResponse=new JSONArray();
+    private JSONArray examListResponse=new JSONArray();
     private LinearLayout mTermWiseSubjetsLoading;
     InputFragment(Context mContext,int user_id){
         this.mContext=mContext;
@@ -81,20 +86,81 @@ public class InputFragment extends Fragment {
                                         builder.setView(alertLayout);
                                         final AlertDialog alertD=builder.show();
 
-                                        Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
-                                        JSONArray termListResponse=response.getJSONArray("response");
+                                        final Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
+                                        final Spinner spinnerSubjectList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_subject_spinner));
+                                        final Spinner spinnerExamList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_exam_spinner));
+
+                                        termListResponse=response.getJSONArray("response");
                                         ArrayList<String> termList=new ArrayList<>();
                                         for(int i=0;i<termListResponse.length();i++){
                                             termList.add(((JSONObject)termListResponse.get(i)).getString("term_name"));
                                         }
-                                        ArrayAdapter<String> termListAdapter= new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, termList);
+                                        ArrayAdapter<String> termListAdapter= new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, termList);
                                         termListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
                                         spinnerTermList.setAdapter(termListAdapter);
 
                                         spinnerTermList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                             @Override
                                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                Toast.makeText(mContext, "Position: "+i, Toast.LENGTH_SHORT).show();
+
+                                                try {
+                                                    ArrayList<String> subjectList=new ArrayList<>();
+                                                    subjectListResponse =((JSONObject)termListResponse.get(i)).getJSONArray("term_sub");
+                                                    mSelectedTermId=((JSONObject)termListResponse.get(i)).getInt("term_id");
+                                                    for(int k=0;k<subjectListResponse.length();k++){
+                                                        subjectList.add(((JSONObject)subjectListResponse.get(k)).getString("sub_name"));
+                                                    }
+                                                    ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, subjectList);
+                                                    subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                                    spinnerSubjectList.setAdapter(subjectListAdapter);
+
+                                                    spinnerSubjectList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                        @Override
+                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                            try {
+                                                                ArrayList<String> examList=new ArrayList<>();
+                                                                examListResponse = ((JSONObject)subjectListResponse.get(i)).getJSONArray("sub_ass");
+                                                                mSelectedSubjectId=((JSONObject)subjectListResponse.get(i)).getInt("sub_id");
+                                                                for(int k=0;k<examListResponse.length();k++){
+                                                                    examList.add(((JSONObject)examListResponse.get(k)).getString("ass_name")+" "+((JSONObject)examListResponse.get(k)).getString("ass_no"));
+                                                                }
+                                                                ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, examList);
+                                                                subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                                                spinnerExamList.setAdapter(subjectListAdapter);
+
+                                                                spinnerExamList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                    @Override
+                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                        try {
+                                                                            mSelectedExamId=((JSONObject)examListResponse.get(i)).getInt("ass_id");
+                                                                            mSelectedExamNo=((JSONObject)examListResponse.get(i)).getInt("ass_no");
+                                                                            mSelectedFullMarks=((JSONObject)examListResponse.get(i)).getInt("full_marks");
+                                                                        } catch (JSONException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                                    }
+                                                                });
+
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                        }
+                                                    });
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
 
                                             @Override
@@ -102,6 +168,18 @@ public class InputFragment extends Fragment {
 
                                             }
                                         });
+
+                                        (alertLayout.findViewById(R.id.alert_add_marks_submit_button)).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Toast.makeText(mContext,
+                                                        "term id: "+mSelectedTermId+"\nsubject id: "
+                                                                +mSelectedSubjectId+"\nexam id: "+mSelectedExamId
+                                                        +"\nexam no: "+mSelectedExamNo
+                                                        , Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
 
                                     }else{
                                         Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
