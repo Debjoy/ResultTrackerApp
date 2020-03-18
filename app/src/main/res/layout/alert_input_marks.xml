@@ -35,13 +35,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,14 +51,15 @@
             <Spinner
                 android:id="@+id/alert_add_marks_term_spinner"
                 android:layout_width="match_parent"
+                android:textAlignment="textEnd"
+                android:backgroundTint="@color/colorPrimary"
                 android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,24 +70,27 @@
             <Spinner
                 android:id="@+id/alert_add_marks_subject_spinner"
                 android:layout_width="match_parent"
+                android:gravity="end"
+                android:backgroundTint="@color/colorPrimary"
                 android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3. Select Exam"
-                android:textAlignment="center"
                 android:textColor="@color/colorText"
                 android:layout_marginBottom="10dp"/>
             <Spinner
                 android:id="@+id/alert_add_marks_exam_spinner"
                 android:layout_width="match_parent"
+                android:backgroundTint="@color/colorPrimary"
+                android:textAlignment="textEnd"
+                android:gravity="end"
                 android:layout_height="wrap_content"></Spinner>
         </LinearLayout>
     </LinearLayout>

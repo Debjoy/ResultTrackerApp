@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,8 +29,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class InputFragment extends Fragment {
     private String mainUrl;
@@ -38,6 +42,9 @@ public class InputFragment extends Fragment {
     private RecyclerView mTermsRecyclerView;
     private ImageButton mAddNewTermButton;
     private Button mAddMarksButton;
+    private int mSelectedTermId;
+    private int mSelectedSubjectId;
+    private int mSelectedExamId;
     private LinearLayout mTermWiseSubjetsLoading;
     InputFragment(Context mContext,int user_id){
         this.mContext=mContext;
@@ -74,12 +81,28 @@ public class InputFragment extends Fragment {
                                         builder.setView(alertLayout);
                                         final AlertDialog alertD=builder.show();
 
-                                        ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
+                                        JSONArray termListResponse=response.getJSONArray("response");
+                                        ArrayList<String> termList=new ArrayList<>();
+                                        for(int i=0;i<termListResponse.length();i++){
+                                            termList.add(((JSONObject)termListResponse.get(i)).getString("term_name"));
+                                        }
+                                        ArrayAdapter<String> termListAdapter= new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, termList);
+                                        termListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                        spinnerTermList.setAdapter(termListAdapter);
+
+                                        spinnerTermList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                             @Override
-                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                
+                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                Toast.makeText(mContext, "Position: "+i, Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onNothingSelected(AdapterView<?> adapterView) {
+
                                             }
                                         });
+
                                     }else{
                                         Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
                                     }
