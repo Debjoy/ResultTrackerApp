@@ -107,14 +107,21 @@
             android:textSize="20sp"
             />
         <EditText
+            android:id="@+id/alert_add_marks_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="100dp"
             android:inputType="number"
-            android:text="25"
+            android:text=""
             android:textAlignment="center"
             android:textSize="30sp"
             />
+        <TextView
+            android:id="@+id/alert_add_marks_full_marks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50"
+            android:textSize="25sp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

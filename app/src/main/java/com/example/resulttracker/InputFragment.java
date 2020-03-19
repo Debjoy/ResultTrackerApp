@@ -3,6 +3,7 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -73,6 +76,7 @@ public class InputFragment extends Fragment {
         mAddMarksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mAddMarksButton.setVisibility(View.INVISIBLE);
                 String requestUrl=mainUrl+"marks_enter_check.php?stud_id="+user_id;
                 JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                         new Response.Listener<JSONObject>() {
@@ -80,12 +84,15 @@ public class InputFragment extends Fragment {
                             public void onResponse(JSONObject response) {
                                 try {
                                     if(response.getInt("code")==202){
+                                        mAddMarksButton.setVisibility(View.VISIBLE);
+                                        //creating alertDialog for the marks input
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                         LayoutInflater inflater = LayoutInflater.from(mContext);
                                         final View alertLayout = inflater.inflate(R.layout.alert_input_marks,null);
                                         builder.setView(alertLayout);
                                         final AlertDialog alertD=builder.show();
 
+                                        //initializing and making the spinners constant for accessing it from listenners
                                         final Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
                                         final Spinner spinnerSubjectList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_subject_spinner));
                                         final Spinner spinnerExamList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_exam_spinner));
@@ -97,6 +104,7 @@ public class InputFragment extends Fragment {
                                         }
                                         ArrayAdapter<String> termListAdapter= new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, termList);
                                         termListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                        //when adapter is set to a this spinner the setOnItemSelectedListenner is automatically called
                                         spinnerTermList.setAdapter(termListAdapter);
 
                                         spinnerTermList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -135,6 +143,8 @@ public class InputFragment extends Fragment {
                                                                             mSelectedExamId=((JSONObject)examListResponse.get(i)).getInt("ass_id");
                                                                             mSelectedExamNo=((JSONObject)examListResponse.get(i)).getInt("ass_no");
                                                                             mSelectedFullMarks=((JSONObject)examListResponse.get(i)).getInt("full_marks");
+                                                                            ((TextView)alertLayout.findViewById(R.id.alert_add_marks_full_marks)).setText(mSelectedFullMarks+"");
+                                                                            ((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).setFilters(new InputFilter[]{new InputFilterMinMax(0,mSelectedFullMarks,mContext)});
                                                                         } catch (JSONException e) {
                                                                             e.printStackTrace();
                                                                         }
@@ -169,6 +179,14 @@ public class InputFragment extends Fragment {
                                             }
                                         });
 
+                                        (alertLayout.findViewById(R.id.alert_add_marks_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                alertD.dismiss();
+                                            }
+                                        });
+
+                                        //functionality of submit button for marks
                                         (alertLayout.findViewById(R.id.alert_add_marks_submit_button)).setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
@@ -177,6 +195,7 @@ public class InputFragment extends Fragment {
                                                                 +mSelectedSubjectId+"\nexam id: "+mSelectedExamId
                                                         +"\nexam no: "+mSelectedExamNo
                                                         , Toast.LENGTH_SHORT).show();
+                                                alertD.dismiss();
                                             }
                                         });
 
