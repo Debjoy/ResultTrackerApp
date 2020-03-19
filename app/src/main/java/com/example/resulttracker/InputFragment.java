@@ -190,12 +190,45 @@ public class InputFragment extends Fragment {
                                         (alertLayout.findViewById(R.id.alert_add_marks_submit_button)).setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
-                                                Toast.makeText(mContext,
-                                                        "term id: "+mSelectedTermId+"\nsubject id: "
-                                                                +mSelectedSubjectId+"\nexam id: "+mSelectedExamId
-                                                        +"\nexam no: "+mSelectedExamNo
-                                                        , Toast.LENGTH_SHORT).show();
-                                                alertD.dismiss();
+                                                String requestURL=mainUrl+"add_marks.php";
+                                                JSONObject postparams = new JSONObject();
+                                                int marksEntered=Integer.parseInt(((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).getText().toString());
+                                                try {
+                                                    postparams.put("marks", marksEntered);
+                                                    postparams.put("term_id",mSelectedTermId);
+                                                    postparams.put("sub_id",mSelectedSubjectId);
+                                                    postparams.put("ass_id",mSelectedExamId);
+                                                    postparams.put("ass_no",mSelectedExamNo);
+                                                }catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.VISIBLE);
+                                                JsonObjectRequest jsonObjectRequest1=new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
+                                                        new Response.Listener<JSONObject>() {
+                                                            @Override
+                                                            public void onResponse(JSONObject response) {
+                                                                try {
+                                                                    if(response.getInt("code")==202){
+                                                                        Toast.makeText(mContext, "Marks added", Toast.LENGTH_SHORT).show();
+                                                                    }else{
+                                                                        Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();                                                                    }
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
+                                                                alertD.dismiss();
+                                                            }
+                                                        },
+                                                        new Response.ErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError error) {
+                                                                Toast.makeText(mContext, "Connection error: "+error.toString(), Toast.LENGTH_SHORT).show();
+                                                                alertD.dismiss();
+                                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
+                                                            }
+                                                        });
+                                                RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                                                requestQueue.add(jsonObjectRequest1);
                                             }
                                         });
 
