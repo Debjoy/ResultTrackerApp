@@ -76,6 +76,61 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                 subjectName=subjectName.substring(0,19)+"..";
             holder.mSubjectName.setText(subjectName);
 
+            //ADDDING FUNCTIONALITY TO DELETE BUTTON
+            holder.mDeleteMarksButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder =new AlertDialog.Builder(mContext);
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    final View alertLayout=inflater.inflate(R.layout.alert_input_delete_confirmation,null);
+                    builder.setView(alertLayout);
+                    final AlertDialog alertD=builder.show();
+                    (alertLayout.findViewById(R.id.alert_delete_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertD.dismiss();
+                        }
+                    });
+                    (alertLayout.findViewById(R.id.alert_delete_ok_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String requestURL=mainURL+"del_marks.php";
+                            JSONObject postparams = new JSONObject();
+                            try {
+                                postparams.put("marks_id", marks_id);
+                            }catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if(response.getInt("code")==202)
+                                                    Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
+                                                else
+                                                    Toast.makeText(mContext,"Something is wrong", Toast.LENGTH_SHORT).show();
+                                                alertD.dismiss();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                alertD.dismiss();
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
+                                            alertD.dismiss();
+                                        }
+                                    });
+                            RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                            requestQueue.add(jsonObjectRequest);
+                        }
+                    });
+                }
+            });
+
             //ADDING FUNCTIONALITY TO THE MARKS BUTTON , ie, ALLOW EDITING THE EXISTING MARKS
             holder.mEditMarks.setOnClickListener(new View.OnClickListener() {
                 @Override
