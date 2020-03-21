@@ -18,6 +18,13 @@
             android:drawableTint="@color/colorDanger"
             android:textColor="@color/colorText"
             android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/alert_delete_progress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"
+            android:padding="3dp"/>
     </LinearLayout>
     <TextView
         android:id="@+id/alert_delete_message"

@@ -101,20 +101,23 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.VISIBLE);
                             JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
                                     new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             try {
-                                                if(response.getInt("code")==202)
+                                                if(response.getInt("code")==202) {
                                                     Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
+                                                }
                                                 else
                                                     Toast.makeText(mContext,"Something is wrong", Toast.LENGTH_SHORT).show();
-                                                alertD.dismiss();
+                                                inputTermRecyclerViewAdapter.fillWithMarksInAlertDialog(requestURLParent,alertLayoutParent,alertDParent,finalTermDataParent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
-                                                alertD.dismiss();
                                             }
+                                            alertD.dismiss();
+                                            (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
                                         }
                                     },
                                     new Response.ErrorListener() {
@@ -122,6 +125,7 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                         public void onErrorResponse(VolleyError error) {
                                             Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
                                             alertD.dismiss();
+                                            (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
                                         }
                                     });
                             RequestQueue requestQueue = Volley.newRequestQueue(mContext);
