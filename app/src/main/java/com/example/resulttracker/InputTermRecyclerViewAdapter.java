@@ -71,6 +71,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
         try {
             termData = (JSONObject) mTermsWithSubjects.get(position);
             holder.termNameText.setText(termData.getString("term_name"));
+
             term_id=termData.getString("term_id");
             final JSONArray subjectArray= termData.getJSONArray("subjects");
             for(int i=0;i<subjectArray.length();i++){
@@ -127,8 +128,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     }catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                                            requestUrl, postparams,
+                                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, requestUrl, postparams,
                                             new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
@@ -155,6 +155,64 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     requestQueue.add(jsonObjReq);
                                 }
                             });
+                            ((Button)layout.findViewById(R.id.alert_update_subject_delete_button)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
+                                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                                    final View alertLayout=inflater.inflate(R.layout.alert_input_delete_confirmation,null);
+                                    builder.setView(alertLayout);
+                                    final AlertDialog alertD2=builder.show();
+                                    ((TextView)alertLayout.findViewById(R.id.alert_delete_message)).setText("Deleting a subject will also delete all the marks of it. Are you sure?");
+                                    ((Button)alertLayout.findViewById(R.id.alert_delete_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            alertD2.dismiss();
+                                        }
+                                    });
+                                    ((Button)alertLayout.findViewById(R.id.alert_delete_ok_button)).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            String requestURL=mainURL+"del_subject.php";
+                                            JSONObject postparams = new JSONObject();
+                                            try {
+                                                postparams.put("sub_id", subjectId);
+                                            }catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.VISIBLE);
+                                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
+                                                    new Response.Listener<JSONObject>() {
+                                                        @Override
+                                                        public void onResponse(JSONObject response) {
+                                                            try {
+                                                                if(response.getInt("code")==202){
+                                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                                }else{
+                                                                    Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                            fragment.loadTermsWithSubjects();
+                                                            (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
+                                                            alertD2.dismiss();
+                                                            alertD.dismiss();
+                                                        }
+                                                    },
+                                                    new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError error) {
+                                                            Toast.makeText(mContext, "Network Error", Toast.LENGTH_SHORT).show();
+                                                            alertD2.dismiss();
+                                                        }
+                                                    });
+                                            RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                                            requestQueue.add(jsonObjectRequest);
+                                        }
+                                    });
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -164,6 +222,69 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
 
                 holder.subjectHolderFlowLayout.addView(newButton);
             }
+
+            //for deleting the terms button
+            final String finalTerm_id2 = term_id;
+            holder.mDeleteTermButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    final View alertLayout=inflater.inflate(R.layout.alert_input_delete_confirmation,null);
+                    builder.setView(alertLayout);
+                    final AlertDialog alertD=builder.show();
+                    ((TextView)alertLayout.findViewById(R.id.alert_delete_message)).setText("Deleting a term will also delete all the subjects from it along with its marks. Are you sure?");
+                    ((Button)alertLayout.findViewById(R.id.alert_delete_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertD.dismiss();
+                        }
+                    });
+                    ((Button)alertLayout.findViewById(R.id.alert_delete_ok_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String requestURL=mainURL+"del_term.php";
+                            JSONObject postparams = new JSONObject();
+                            try {
+                                postparams.put("term_id", finalTerm_id2);
+                            }catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ((ProgressBar)alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.VISIBLE);
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if(response.getInt("code")==202){
+                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            alertD.dismiss();
+                                            fragment.loadTermsWithSubjects();
+                                            ((ProgressBar)alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(mContext, "Network Error", Toast.LENGTH_SHORT).show();
+                                            ((ProgressBar)alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
+                                            alertD.dismiss();
+
+                                        }
+                                    });
+                            RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                            requestQueue.add(jsonObjectRequest);
+                        }
+                    });
+
+                }
+            });
             ImageButton newButton= new ImageButton(mContext);
             newButton.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -187,7 +308,6 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     final View layout=inflater.inflate(R.layout.alert_input_add_subject_name,null);
                     builder.setView(layout);
-                    //builder.setTitle("hello");
                     final AlertDialog alertD=builder.show();
                     ((Button)layout.findViewById(R.id.alert_add_subject_cancel_button)).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -237,6 +357,8 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                             requestQueue.add(jsonObjReq);
                         }
                     });
+
+
                 }
             });
 
@@ -318,11 +440,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
         private TextView termNameText;
         private Button viewMarksButton;
         private FlowLayout subjectHolderFlowLayout;
+        private Button mDeleteTermButton;
         public InputViewHolderTerm(@NonNull View itemView) {
             super(itemView);
             termNameText=itemView.findViewById(R.id.input_recycler_termname);
             viewMarksButton=itemView.findViewById(R.id.input_view_marks);
             subjectHolderFlowLayout=itemView.findViewById(R.id.input_recycler_flowLayout);
+            mDeleteTermButton=itemView.findViewById(R.id.input_delete_term);
         }
     }
 }
