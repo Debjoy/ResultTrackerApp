@@ -92,7 +92,8 @@ public class DashActivity extends AppCompatActivity {
                                 gotResponse = true;
                                 mDashLoading.setVisibility(View.GONE);
                                 mDashFrameLayout.setVisibility(View.VISIBLE);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame, new HomeFragment(mTermIdList, mTermNameList)).commit();
+
+                                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame, new HomeFragment()).commit();
                                 bottomNav.findViewById(R.id.nav_home).performClick();
                             }
                         } catch (JSONException e) {
@@ -130,9 +131,9 @@ public class DashActivity extends AppCompatActivity {
                     if(!gotResponse)
                         return true;
                     switch(item.getItemId()){
-                        case R.id.nav_home : selectedFragment=new HomeFragment(mTermIdList,mTermNameList);
+                        case R.id.nav_home : selectedFragment=new HomeFragment();
                         break;
-                        case R.id.nav_term: selectedFragment = new TermsFragment();
+                        case R.id.nav_term: selectedFragment = new TermsFragment(mTermIdList,mTermNameList);
                         break;
                         case R.id.nav_subjects: selectedFragment =  new SubjectFragment();
                         break;
