@@ -93,7 +93,7 @@ public class DashActivity extends AppCompatActivity {
                                 mDashLoading.setVisibility(View.GONE);
                                 mDashFrameLayout.setVisibility(View.VISIBLE);
 
-                                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame, new HomeFragment()).commit();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame, new HomeFragment(userId, DashActivity.this)).commit();
                                 bottomNav.findViewById(R.id.nav_home).performClick();
                             }
                         } catch (JSONException e) {
@@ -131,7 +131,7 @@ public class DashActivity extends AppCompatActivity {
                     if(!gotResponse)
                         return true;
                     switch(item.getItemId()){
-                        case R.id.nav_home : selectedFragment=new HomeFragment();
+                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, DashActivity.this);
                         break;
                         case R.id.nav_term: selectedFragment = new TermsFragment(mTermIdList,mTermNameList);
                         break;
