@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,10 @@ public class HomeFragment extends Fragment {
 
     private TextView mCirclarProgressText;
     private ProgressBar mCirclularProgress;
+    private TextView mTotalMarksEntry;
+
+    private ScrollView mHomeScrollView;
+    private ProgressBar mHomeProgressBar;
 
     HomeFragment(int stud_id,Context mContext){
         this.stud_id=stud_id;
@@ -69,6 +74,13 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mCirclarProgressText=view.findViewById(R.id.circularProgressBar_tv);
         mCirclularProgress=view.findViewById(R.id.circularProgressbar);
+        mTotalMarksEntry=view.findViewById(R.id.home_total_marks_entry_tv);
+
+        mHomeScrollView=view.findViewById(R.id.home_scroll_scrollView);
+        mHomeProgressBar=view.findViewById(R.id.home_progress_basic);
+
+        mHomeProgressBar.setVisibility(View.VISIBLE);
+        mHomeScrollView.setVisibility(View.GONE);
 
         loadData();
     }
@@ -80,6 +92,9 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        mHomeProgressBar.setVisibility(View.GONE);
+                        mHomeScrollView.setVisibility(View.VISIBLE);
                         try {
                             if(response.getInt("code")==202){
                                 JSONObject average=response.getJSONObject("average");
@@ -108,8 +123,6 @@ public class HomeFragment extends Fragment {
                                                 }
                                             });
                                             try {
-                                                // Sleep for 200 milliseconds.
-                                                // Just to display the progress slowly
                                                 Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
@@ -119,6 +132,39 @@ public class HomeFragment extends Fragment {
                                         mCirclarProgressText.setText(average_value + "%");
                                     }
                                 }).start();
+                                JSONObject responseAll=response.getJSONObject("all");
+                                JSONArray allMarksResponseList= responseAll.getJSONArray("response");
+
+                                final int allMarksResponseListLength=allMarksResponseList.length();
+
+                                new Thread(new Runnable() {
+                                    private int count=0;
+                                    @Override
+                                    public void run() {
+                                        // TODO Auto-generated method stub
+
+                                        while (count <= allMarksResponseListLength) {
+                                            count += 1;
+
+                                            handler.post(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    // TODO Auto-generated method stub
+                                                    mTotalMarksEntry.setText(count+"");
+
+                                                }
+                                            });
+                                            try {
+                                                Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }).start();
+
+
                             }else{
                                 Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }
