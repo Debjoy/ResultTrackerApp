@@ -70,11 +70,11 @@ public class TermsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         termAverageBarChart=view.findViewById(R.id.termwise_average_barchart);
-        mHomeRecyclerView=view.findViewById(R.id.home_recycler_view);
-        mCurrentTermName=view.findViewById(R.id.home_term_name_heading);
-        mChangeTermButton=view.findViewById(R.id.home_change_term);
+        mHomeRecyclerView=view.findViewById(R.id.term_recycler_view);
+        mCurrentTermName=view.findViewById(R.id.term_term_name_heading);
+        mChangeTermButton=view.findViewById(R.id.term_change_term);
         mContext=getContext().getApplicationContext();
-        mHomeProgressAverage=view.findViewById(R.id.home_progress_average_term);
+        mHomeProgressAverage=view.findViewById(R.id.term_progress_average_term);
 
         if(mTermIdList.size()>0)
             showTermWiseAverageChart(mTermIdList.get(mTermIdList.size()-1));

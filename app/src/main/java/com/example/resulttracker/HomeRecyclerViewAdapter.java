@@ -2,7 +2,6 @@ package com.example.resulttracker;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -54,7 +52,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
     @NonNull
     @Override
     public ViewHolderHome onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recylcer_list,parent, false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.term_recylcer_list,parent, false);
         ViewHolderHome holder=new ViewHolderHome(view);
         return holder;
     }
