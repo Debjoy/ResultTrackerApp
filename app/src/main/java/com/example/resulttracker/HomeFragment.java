@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -65,6 +66,31 @@ public class HomeFragment extends Fragment {
     private TextView mTotalMarksEntry;
     private Button mChartResetButton;
 
+    private LinearLayout mBestOneLayout;
+    private TextView mBestOneSubject;
+    private TextView mBestOneMarks;
+
+    private LinearLayout mBestTwoLayout;
+    private TextView mBestTwoSubject;
+    private TextView mBestTwoMarks;
+
+    private LinearLayout mBestThreeLayout;
+    private TextView mBestThreeSubject;
+    private TextView mBestThreeMarks;
+
+
+    private LinearLayout mWorstOneLayout;
+    private TextView mWorstOneSubject;
+    private TextView mWorstOneMarks;
+
+    private LinearLayout mWorstTwoLayout;
+    private TextView mWorstTwoSubject;
+    private TextView mWorstTwoMarks;
+
+    private LinearLayout mWorstThreeLayout;
+    private TextView mWorstThreeSubject;
+    private TextView mWorstThreeMarks;
+
     private LineChart mLineChart;
 
     private ScrollView mHomeScrollView;
@@ -89,6 +115,31 @@ public class HomeFragment extends Fragment {
         mCirclularProgress=view.findViewById(R.id.circularProgressbar);
         mTotalMarksEntry=view.findViewById(R.id.home_total_marks_entry_tv);
         mChartResetButton=view.findViewById(R.id.home_chart_reset_button);
+
+        mBestOneLayout=view.findViewById(R.id.home_best_one_layout);
+        mBestOneSubject=view.findViewById(R.id.home_best_one_subject);
+        mBestOneMarks=view.findViewById(R.id.home_best_one_marks);
+
+        mBestTwoLayout=view.findViewById(R.id.home_best_two_layout);
+        mBestTwoSubject=view.findViewById(R.id.home_best_two_subject);
+        mBestTwoMarks=view.findViewById(R.id.home_best_two_marks);
+
+        mBestThreeLayout=view.findViewById(R.id.home_best_three_layout);
+        mBestThreeSubject=view.findViewById(R.id.home_best_three_subject);
+        mBestThreeMarks=view.findViewById(R.id.home_best_three_marks);
+
+
+        mWorstOneLayout=view.findViewById(R.id.home_worst_one_layout);
+        mWorstOneSubject=view.findViewById(R.id.home_worst_one_subject);
+        mWorstOneMarks=view.findViewById(R.id.home_worst_one_marks);
+
+        mWorstTwoLayout=view.findViewById(R.id.home_worst_two_layout);
+        mWorstTwoSubject=view.findViewById(R.id.home_worst_two_subject);
+        mWorstTwoMarks=view.findViewById(R.id.home_worst_two_marks);
+
+        mWorstThreeLayout=view.findViewById(R.id.home_worst_three_layout);
+        mWorstThreeSubject=view.findViewById(R.id.home_worst_three_subject);
+        mWorstThreeMarks=view.findViewById(R.id.home_worst_three_marks);
 
         mLineChart=view.findViewById(R.id.home_line_chart);
 
@@ -255,6 +306,44 @@ public class HomeFragment extends Fragment {
                                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
                                 mLineChart.invalidate();
+
+
+                                JSONObject top_three=response.getJSONObject("top_three");
+                                JSONArray top_three_array=top_three.getJSONArray("response");
+
+                                if(top_three_array.length()>0){
+                                    mBestOneLayout.setVisibility(View.VISIBLE);
+                                    mBestOneSubject.setText(((JSONObject)top_three_array.get(0)).getString("subject_name"));
+                                    mBestOneMarks.setText((Math.round(10*((JSONObject)top_three_array.get(0)).getDouble("average"))/10f)+" %");
+                                }
+                                if(top_three_array.length()>1){
+                                    mBestTwoLayout.setVisibility(View.VISIBLE);
+                                    mBestTwoSubject.setText(((JSONObject)top_three_array.get(1)).getString("subject_name"));
+                                    mBestTwoMarks.setText((Math.round(10*((JSONObject)top_three_array.get(1)).getDouble("average"))/10f)+" %");
+                                }
+                                if(top_three_array.length()>2){
+                                    mBestThreeLayout.setVisibility(View.VISIBLE);
+                                    mBestThreeSubject.setText(((JSONObject)top_three_array.get(2)).getString("subject_name"));
+                                    mBestThreeMarks.setText((Math.round(10*((JSONObject)top_three_array.get(2)).getDouble("average"))/10f)+" %");
+                                }
+
+                                JSONObject worst_three=response.getJSONObject("bottom_three");
+                                JSONArray worst_three_array=worst_three.getJSONArray("response");
+                                if(worst_three_array.length()>0){
+                                    mWorstOneLayout.setVisibility(View.VISIBLE);
+                                    mWorstOneSubject.setText(((JSONObject)worst_three_array.get(0)).getString("subject_name"));
+                                    mWorstOneMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(0)).getDouble("average"))/10f)+" %");
+                                }
+                                if(worst_three_array.length()>1){
+                                    mWorstTwoLayout.setVisibility(View.VISIBLE);
+                                    mWorstTwoSubject.setText(((JSONObject)worst_three_array.get(1)).getString("subject_name"));
+                                    mWorstTwoMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(1)).getDouble("average"))/10f)+" %");
+                                }
+                                if(worst_three_array.length()>2){
+                                    mWorstThreeLayout.setVisibility(View.VISIBLE);
+                                    mWorstThreeSubject.setText(((JSONObject)worst_three_array.get(2)).getString("subject_name"));
+                                    mWorstThreeMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(2)).getDouble("average"))/10f)+" %");
+                                }
 
 
                             }else{
