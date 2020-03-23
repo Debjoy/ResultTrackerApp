@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,18 +31,27 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     private String mainUrl;
@@ -53,6 +63,9 @@ public class HomeFragment extends Fragment {
     private TextView mCirclarProgressText;
     private ProgressBar mCirclularProgress;
     private TextView mTotalMarksEntry;
+    private Button mChartResetButton;
+
+    private LineChart mLineChart;
 
     private ScrollView mHomeScrollView;
     private ProgressBar mHomeProgressBar;
@@ -75,12 +88,51 @@ public class HomeFragment extends Fragment {
         mCirclarProgressText=view.findViewById(R.id.circularProgressBar_tv);
         mCirclularProgress=view.findViewById(R.id.circularProgressbar);
         mTotalMarksEntry=view.findViewById(R.id.home_total_marks_entry_tv);
+        mChartResetButton=view.findViewById(R.id.home_chart_reset_button);
+
+        mLineChart=view.findViewById(R.id.home_line_chart);
+
+        mLineChart.getAxisLeft().setDrawGridLines(false);
+        mLineChart.getAxisRight().setDrawGridLines(false);
+        mLineChart.getXAxis().setDrawGridLines(false);
+
+        //mLineChart.getAxisRight().setAxisMinimum(0f);
+        //mLineChart.getAxisLeft().setAxisMinimum(0f);
+        mLineChart.getAxisRight().setAxisMaximum(100f);
+        mLineChart.getAxisLeft().setAxisMaximum(100f);
+
+        mLineChart.setPinchZoom(false);
+        //mLineChart.setTouchEnabled(false);
+        mLineChart.getDescription().setEnabled(false);
+        mLineChart.getLegend().setEnabled(false);
+        mLineChart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                if(!mLineChart.isFullyZoomedOut()){
+                    mChartResetButton.setVisibility(View.VISIBLE);
+                }else{
+                    mChartResetButton.setVisibility(View.GONE);
+                }
+                return false;
+            }
+
+        });
+
+        mChartResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLineChart.fitScreen();
+                mChartResetButton.setVisibility(View.GONE);
+            }
+        });
 
         mHomeScrollView=view.findViewById(R.id.home_scroll_scrollView);
         mHomeProgressBar=view.findViewById(R.id.home_progress_basic);
 
         mHomeProgressBar.setVisibility(View.VISIBLE);
         mHomeScrollView.setVisibility(View.GONE);
+
 
         loadData();
     }
@@ -133,7 +185,7 @@ public class HomeFragment extends Fragment {
                                     }
                                 }).start();
                                 JSONObject responseAll=response.getJSONObject("all");
-                                JSONArray allMarksResponseList= responseAll.getJSONArray("response");
+                                final JSONArray allMarksResponseList= responseAll.getJSONArray("response");
 
                                 final int allMarksResponseListLength=allMarksResponseList.length();
 
@@ -163,6 +215,46 @@ public class HomeFragment extends Fragment {
                                         }
                                     }
                                 }).start();
+
+                                List<Entry> entries = new ArrayList<Entry>();
+
+                                for(int i=0;i<allMarksResponseListLength;i++){
+                                    entries.add(new Entry((float)i, (float)((JSONObject)allMarksResponseList.get(i)).getDouble("percentage")));
+                                }
+
+                                LineDataSet dataSet = new LineDataSet(entries, "Marks");
+                                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                dataSet.setDrawFilled(true);
+                                dataSet.setFillColor(Color.parseColor("#304ffe"));
+                                dataSet.setDrawCircles(false);
+                                dataSet.setFillAlpha(255);
+                                dataSet.setDrawValues(false);
+
+                                dataSet.setColor(Color.parseColor("#263238"));
+                                LineData lineData = new LineData(dataSet);
+                                mLineChart.setData(lineData);
+
+                                ValueFormatter formatter = new ValueFormatter() {
+
+                                    @Override
+                                    public String getFormattedValue(float value) {
+                                        String label="";
+                                        try {
+                                            label= ((JSONObject)allMarksResponseList.get((int) value)).getString("term_name");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return label;
+                                    }
+
+                                    // we don't draw numbers, so no decimal digits needed
+                                };
+                                XAxis xAxis = mLineChart.getXAxis();
+                                xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                                xAxis.setValueFormatter(formatter);
+                                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+                                mLineChart.invalidate();
 
 
                             }else{

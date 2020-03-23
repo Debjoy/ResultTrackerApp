@@ -186,6 +186,7 @@ public class TermsFragment extends Fragment {
 
                             BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
                             dataset.setColor(Color.parseColor("#263238"));
+
                             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
                             dataSets.add(dataset);
                             BarData data = new BarData(dataSets);
