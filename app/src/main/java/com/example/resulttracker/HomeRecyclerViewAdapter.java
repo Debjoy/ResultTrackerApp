@@ -65,7 +65,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             holder.mHomeRecyclerSubjectName.setText(" "+mSubName.get(position).substring(0,18)+"...");
 
         //json call and populate chart here;
-        String requestUrl=mainUrl+"termwise.php?subject="+mSubId.get(position);
+        String requestUrl=mainUrl+"getsubjects.php?subject="+mSubId.get(position);
         JsonObjectRequest mJsonArrayRequest= new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -130,6 +130,8 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
                                 holder.mHomeRecyclerProgress.setVisibility(View.GONE);
                                 holder.mHomeRecyclerChart.setVisibility(View.VISIBLE);
                                 //Log.i("RESULT",holder.mHomeRecyclerChart.getBarData().getDataSets().toString());
+                            }else{
+                                Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

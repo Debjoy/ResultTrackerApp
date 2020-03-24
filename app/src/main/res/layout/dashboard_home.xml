@@ -442,7 +442,7 @@
         android:id="@+id/home_progress_basic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="150dp"
+        android:padding="170dp"
         android:visibility="gone"
         android:indeterminateTint="@color/colorPrimary"/>
 
