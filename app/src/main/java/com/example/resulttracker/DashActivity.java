@@ -135,7 +135,7 @@ public class DashActivity extends AppCompatActivity {
                         break;
                         case R.id.nav_term: selectedFragment = new TermsFragment(mTermIdList,mTermNameList);
                         break;
-                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment();
+                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, DashActivity.this);
                         break;
                         case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId);
                         break;
