@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,16 +48,17 @@ public class TermsFragment extends Fragment {
     private ArrayList<Integer> mSubid = new ArrayList<>();
     private ArrayList<String> mSubName = new ArrayList<>();
     private RecyclerView mHomeRecyclerView;
-    private ArrayList<Integer> mTermIdList;
-    private ArrayList<String> mTermNameList;
     private TextView mCurrentTermName;
     private Button mChangeTermButton;
     private ProgressBar mHomeProgressAverage;
+    private LinearLayout mTermFullView;
+    private ProgressBar mTermFullProgress;
     private Context mContext;
+    private int user_id;
 
-    TermsFragment(ArrayList<Integer> mTermIdList,ArrayList<String> mTermNameList){
-        this.mTermIdList=mTermIdList;
-        this.mTermNameList=mTermNameList;
+    TermsFragment(int user_id, Context mContext){
+        this.mContext=mContext;
+        this.user_id=user_id;
     }
     @Nullable
     @Override
@@ -73,39 +75,81 @@ public class TermsFragment extends Fragment {
         mHomeRecyclerView=view.findViewById(R.id.term_recycler_view);
         mCurrentTermName=view.findViewById(R.id.term_term_name_heading);
         mChangeTermButton=view.findViewById(R.id.term_change_term);
-        mContext=getContext().getApplicationContext();
         mHomeProgressAverage=view.findViewById(R.id.term_progress_average_term);
-
-        if(mTermIdList.size()>0)
-            showTermWiseAverageChart(mTermIdList.get(mTermIdList.size()-1));
-        mCurrentTermName.setText(mTermNameList.get(mTermNameList.size()-1));
+        mTermFullView=view.findViewById(R.id.term_full_view);
+        mTermFullProgress=view.findViewById(R.id.term_full_progress);
 
 
-        populteRecyclerSubjects(mTermNameList.size()-1);
-
-
-        mChangeTermButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String[] itemnamesArray=mTermNameList.toArray(new String[mTermNameList.size()]);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select a Term");
-                builder.setItems(itemnamesArray, new DialogInterface.OnClickListener() {
+        mTermFullView.setVisibility(View.GONE);
+        mTermFullProgress.setVisibility(View.VISIBLE);
+        String requestUrl=mainUrl+"getlistterm.php?stud_id="+user_id;
+        JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
+                requestUrl, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext().getApplicationContext(), "POSITION: "+i, Toast.LENGTH_SHORT).show();
-                        if(mTermIdList.size()>0){
-                            showTermWiseAverageChart(mTermIdList.get(i));
-                            mCurrentTermName.setText(mTermNameList.get(i));
-                            populteRecyclerSubjects(i);
-                        }else{
-                            Toast.makeText(getContext().getApplicationContext(), "No Terms Found", Toast.LENGTH_SHORT).show();
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.getInt("code")==202) {
+                                JSONArray responseArray=response.getJSONArray("response");
+
+                                final ArrayList<Integer> mTermIdList= new ArrayList<>();
+                                final ArrayList<String> mTermNameList = new ArrayList<>();
+                                for (int i = 0; i < responseArray.length(); i++) {
+                                    mTermIdList.add(responseArray.getJSONObject(i).getInt("term_id"));
+                                    mTermNameList.add(responseArray.getJSONObject(i).getString("term_name"));
+                                }
+
+                                if(mTermIdList.size()>0)
+                                    showTermWiseAverageChart(mTermIdList.get(mTermIdList.size()-1));
+                                mCurrentTermName.setText(mTermNameList.get(mTermNameList.size()-1));
+
+
+                                populteRecyclerSubjects(mTermNameList.size()-1, mTermIdList );
+
+
+                                mChangeTermButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        String[] itemnamesArray=mTermNameList.toArray(new String[mTermNameList.size()]);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        builder.setTitle("Select a Term");
+                                        builder.setItems(itemnamesArray, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                if(mTermIdList.size()>0){
+                                                    showTermWiseAverageChart(mTermIdList.get(i));
+                                                    mCurrentTermName.setText(mTermNameList.get(i));
+                                                    populteRecyclerSubjects(i, mTermIdList);
+                                                }else{
+                                                    Toast.makeText(getContext().getApplicationContext(), "No Terms Found", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                                mTermFullView.setVisibility(View.VISIBLE);
+                                mTermFullProgress.setVisibility(View.GONE);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                });
-                builder.show();
-            }
-        });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue.add(jsonArrReq);
+
+
+
+
     }
 
     public void showTermWiseAverageChart(int term_id){
@@ -210,12 +254,11 @@ public class TermsFragment extends Fragment {
                         Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         requestQueue.add(jsonArrReq);
     }
 
-    public void populteRecyclerSubjects(int term_position){
-        mContext=getActivity().getApplicationContext();
+    public void populteRecyclerSubjects(int term_position, ArrayList <Integer>mTermIdList){
         String requestUrl=mainUrl+"getsubjects.php?term_id="+mTermIdList.get(term_position);
         JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
@@ -250,7 +293,7 @@ public class TermsFragment extends Fragment {
                     }
                 }
         );
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         requestQueue.add(jsonArrReq);
     }
 }

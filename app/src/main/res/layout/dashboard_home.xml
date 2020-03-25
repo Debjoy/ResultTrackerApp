@@ -443,6 +443,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="170dp"
+        android:background="@color/colorWhite"
         android:visibility="gone"
         android:indeterminateTint="@color/colorPrimary"/>
 

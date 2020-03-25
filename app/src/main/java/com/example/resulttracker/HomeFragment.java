@@ -147,8 +147,7 @@ public class HomeFragment extends Fragment {
         mLineChart.getAxisRight().setDrawGridLines(false);
         mLineChart.getXAxis().setDrawGridLines(false);
 
-        //mLineChart.getAxisRight().setAxisMinimum(0f);
-        //mLineChart.getAxisLeft().setAxisMinimum(0f);
+
         mLineChart.getAxisRight().setAxisMaximum(100f);
         mLineChart.getAxisLeft().setAxisMaximum(100f);
 

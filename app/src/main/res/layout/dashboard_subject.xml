@@ -5,124 +5,184 @@
     android:layout_width="match_parent"
     android:background="@color/colorBackground"
     android:layout_height="match_parent">
-    <androidx.cardview.widget.CardView
+    <LinearLayout
+        android:id="@+id/subject_full_view"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/cardview_default_elevation"
-        app:contentPadding="10dp"
-        android:layout_margin="15dp"
-        app:cardCornerRadius="5dp">
-        <LinearLayout
+        android:orientation="vertical">
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="17dp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:text="Change the subject from here"
-                android:paddingHorizontal="10dp"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select"
-                android:id="@+id/subject_select_subject_button"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-                android:background="@drawable/rounded_button_primary"
-                android:textColor="@color/colorWhite"
-                android:drawableTint="@color/colorWhite"
-                android:paddingLeft="12dp"
-                android:paddingRight="7dp"
-                android:minHeight="10dp"
-                android:textSize="18sp"
-                android:paddingVertical="5dp"
-                android:textAllCaps="false"
-                android:layout_gravity="center"
-                />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-    <ScrollView
-        android:id="@+id/subject_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="0dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_height="wrap_content">
-
-
-            <androidx.cardview.widget.CardView
+            app:cardElevation="@dimen/cardview_default_elevation"
+            app:contentPadding="10dp"
+            android:layout_margin="15dp"
+            app:cardCornerRadius="5dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="@dimen/cardview_default_elevation"
-                app:contentPadding="10dp"
-                android:layout_marginBottom="15dp"
-                app:cardCornerRadius="5dp">
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:text="Change the subject from here"
+                    android:paddingHorizontal="10dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select"
+                    android:id="@+id/subject_select_subject_button"
+                    android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                    android:background="@drawable/rounded_button_primary"
+                    android:textColor="@color/colorWhite"
+                    android:drawableTint="@color/colorWhite"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="7dp"
+                    android:minHeight="10dp"
+                    android:textSize="18sp"
+                    android:paddingVertical="5dp"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <ScrollView
+            android:id="@+id/subject_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_height="wrap_content">
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    app:contentPadding="10dp"
+                    android:layout_marginBottom="15dp"
+                    app:cardCornerRadius="5dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:background="@drawable/ic_book_black_24dp"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="10dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/subject_subject_name_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorText"
+                                android:textSize="25sp"
+                                android:textStyle=""
+                                android:paddingHorizontal="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:textAlignment="gravity"
+                                android:gravity="start"
+                                android:text="Data Structures and Algorithm"/>
+                            <TextView
+                                android:id="@+id/subject_term_name_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginLeft="5dp"
+                                android:background="@drawable/rounded_button_accent"
+                                android:textColor="@color/colorWhite"
+                                android:paddingVertical="5dp"
+                                android:paddingHorizontal="10dp"
+                                android:textStyle="bold"
+                                android:text=""/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="10dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:background="@drawable/ic_book_black_24dp"
-                        />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    android:id="@+id/subject_individual_marks_view"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:paddingHorizontal="10dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/subject_subject_name_tv"
-                            android:layout_width="wrap_content"
+                        app:cardElevation="@dimen/cardview_default_elevation"
+                        app:contentPadding="10dp"
+                        android:layout_marginBottom="15dp"
+                        app:cardCornerRadius="5dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/subject_marks_list_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="@dimen/cardview_default_elevation"
+                        app:contentPadding="10dp"
+                        android:layout_marginBottom="15dp"
+                        app:cardCornerRadius="5dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorText"
-                            android:textSize="25sp"
-                            android:textStyle=""
-                            android:paddingHorizontal="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:textAlignment="gravity"
-                            android:gravity="start"
-                            android:text="Data Structures and Algorithm"/>
-                        <TextView
-                            android:id="@+id/subject_term_name_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginLeft="5dp"
-                            android:background="@drawable/rounded_button_accent"
-                            android:textColor="@color/colorWhite"
-                            android:paddingVertical="5dp"
-                            android:paddingHorizontal="10dp"
-                            android:textStyle="bold"
-                            android:text=""/>
-                    </LinearLayout>
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Marks plotted exam wise"
+                                android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
+                                android:drawableTint="@color/colorPrimary"
+                                android:drawablePadding="5dp"
+                                android:textSize="17sp"
+                                android:layout_margin="8dp"
+                                android:textColor="@color/colorText"
+                                android:textStyle="bold"/>
+                            <com.github.mikephil.charting.charts.HorizontalBarChart
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/subject_marks_charts"
+                                android:layout_marginBottom="8dp"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="@dimen/cardview_default_elevation"
-                app:contentPadding="10dp"
-                android:layout_marginBottom="15dp"
-                app:cardCornerRadius="5dp">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/subject_marks_list_recycler"
+                <ProgressBar
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
+                    android:layout_height="250dp"
+                    android:padding="165dp"
+                    android:visibility="gone"
+                    android:id="@+id/subject_individual_marks_progress"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/subject_full_progress"
+        android:padding="170dp"
+        android:visibility="gone"
+        android:background="@color/colorWhite"
+        android:indeterminateTint="@color/colorPrimary"/>
 </LinearLayout>

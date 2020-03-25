@@ -6,19 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     tools:context=".DashActivity">
-    <ProgressBar
-        android:id="@+id/dash_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="170dp"
-        android:layout_above="@id/bottom_navigation_view"
-        android:indeterminateTint="@color/colorPrimary"/>
     <FrameLayout
         android:id="@+id/main_dashboard_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:visibility="gone"
         ></FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

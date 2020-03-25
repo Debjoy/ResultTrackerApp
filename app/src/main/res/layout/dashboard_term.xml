@@ -3,118 +3,134 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:paddingBottom="0dp"
-    android:paddingLeft="15dp"
-    android:paddingTop="15dp"
-    android:paddingRight="15dp">
-    <androidx.cardview.widget.CardView
+    android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/term_full_progress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="@dimen/cardview_default_elevation"
-        app:contentPadding="10dp"
-        app:cardBackgroundColor="@color/colorAccent"
-        android:layout_marginBottom="15dp"
-        app:cardCornerRadius="5dp">
-        <RelativeLayout
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:padding="170dp"
+        android:background="@color/colorWhite"
+        android:indeterminateTint="@color/colorPrimary"/>
+    <LinearLayout
+        android:id="@+id/term_full_view"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        android:paddingBottom="0dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:orientation="vertical">
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Term: "
-                    android:id="@+id/just_a_heading_showing_results_of"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    android:drawableLeft="@drawable/ic_timelapse_black_24dp"
-                    android:drawableTint="@color/colorWhite"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/term_term_name_heading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Semester 1"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    android:textStyle="normal"/>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/term_change_term"
-                android:layout_width="110dp"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:layout_height="35dp"
-                android:text="change"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/rounded_button_primary"
-                android:textColor="@color/colorWhite"
-                android:drawableRight="@drawable/ic_mode_edit_black_24dp"
-                android:drawableTint="@color/colorWhite"
-
-                />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <androidx.cardview.widget.CardView
+            app:cardElevation="@dimen/cardview_default_elevation"
+            app:contentPadding="10dp"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="5dp">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="@dimen/cardview_default_elevation"
-                app:contentPadding="10dp"
-                app:contentPaddingBottom="10dp"
-                android:layout_marginBottom="15dp"
-                app:cardCornerRadius="5dp">
+                >
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true">
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Average Percentage Exam Wise"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorText"
-                        android:drawableTint="@color/colorPrimary"
-                        android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
-                        android:layout_margin="10dp"
-                        />
-                    <ProgressBar
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:padding="160dp"
-                        android:id="@+id/term_progress_average_term"
-                        />
-                    <com.github.mikephil.charting.charts.HorizontalBarChart
-                        android:id="@+id/termwise_average_barchart"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:visibility="gone"
-                        />
+                        android:text=" Term: "
+                        android:id="@+id/just_a_heading_showing_results_of"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:drawableLeft="@drawable/ic_timelapse_black_24dp"
+                        android:drawableTint="@color/colorWhite"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/term_term_name_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Semester 1"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp"
+                        android:textStyle="normal"/>
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-            <androidx.recyclerview.widget.RecyclerView
+                <Button
+                    android:id="@+id/term_change_term"
+                    android:layout_width="110dp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    android:layout_height="35dp"
+                    android:text="change"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/rounded_button_primary"
+                    android:textColor="@color/colorWhite"
+                    android:drawableRight="@drawable/ic_mode_edit_black_24dp"
+                    android:drawableTint="@color/colorWhite"
+
+                    />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/term_recycler_view"></androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    app:contentPadding="10dp"
+                    app:contentPaddingBottom="10dp"
+                    android:layout_marginBottom="15dp"
+                    app:cardCornerRadius="5dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" Average Percentage Exam Wise"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorText"
+                            android:drawableTint="@color/colorPrimary"
+                            android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
+                            android:layout_margin="10dp"
+                            />
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:padding="160dp"
+                            android:id="@+id/term_progress_average_term"
+                            />
+                        <com.github.mikephil.charting.charts.HorizontalBarChart
+                            android:id="@+id/termwise_average_barchart"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:visibility="gone"
+                            />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/term_recycler_view"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -37,81 +37,29 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class DashActivity extends AppCompatActivity {
-    private String mainUrl;
     private int exitFlag=1;
-    private Context mContext;
     private BottomNavigationView bottomNav;
-    private ArrayList<Integer> mTermIdList= new ArrayList<>();
-    private ArrayList<String> mTermNameList = new ArrayList<>();
-    private FrameLayout mDashFrameLayout;
-    private ProgressBar mDashLoading;
-    private boolean gotResponse;
     private String userName;
     private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gotResponse=false;
         setContentView(R.layout.activity_dash);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         exitFlag=1;
-        mContext=this;
         bottomNav=findViewById(R.id.bottom_navigation_view);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        mDashFrameLayout=findViewById(R.id.main_dashboard_frame);
-        mDashLoading=findViewById(R.id.dash_loading);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         userName=spref.getString("username",null);
         userId=spref.getInt("user_id",1);
 
-        beginWithHome();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId, DashActivity.this)).commit();
     }
 
-    public void beginWithHome(){
-        mDashLoading.setVisibility(View.VISIBLE);
-        mDashFrameLayout.setVisibility(View.GONE);
-
-        String requestUrl=mainUrl+"getlistterm.php?stud_id="+userId;
-        JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
-                requestUrl, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            if(response.getInt("code")==202) {
-                                JSONArray responseArray=response.getJSONArray("response");
-                                for (int i = 0; i < responseArray.length(); i++) {
-                                    mTermIdList.add(responseArray.getJSONObject(i).getInt("term_id"));
-                                    mTermNameList.add(responseArray.getJSONObject(i).getString("term_name"));
-                                }
-                                gotResponse = true;
-                                mDashLoading.setVisibility(View.GONE);
-                                mDashFrameLayout.setVisibility(View.VISIBLE);
-
-                                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame, new HomeFragment(userId, DashActivity.this)).commit();
-                                bottomNav.findViewById(R.id.nav_home).performClick();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
-        );
-        RequestQueue requestQueue = Volley.newRequestQueue(DashActivity.this);
-        requestQueue.add(jsonArrReq);
-
-    }
 
     public void onLogOut(){
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
@@ -128,12 +76,10 @@ public class DashActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment=null;
                     exitFlag=1;
-                    if(!gotResponse)
-                        return true;
                     switch(item.getItemId()){
                         case R.id.nav_home : selectedFragment=new HomeFragment(userId, DashActivity.this);
                         break;
-                        case R.id.nav_term: selectedFragment = new TermsFragment(mTermIdList,mTermNameList);
+                        case R.id.nav_term: selectedFragment = new TermsFragment( userId,DashActivity.this);
                         break;
                         case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, DashActivity.this);
                         break;
