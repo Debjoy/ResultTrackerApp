@@ -158,8 +158,12 @@ public class TermsFragment extends Fragment {
         termAverageBarChart.setVisibility(View.GONE);
         mHomeProgressAverage.setVisibility(View.VISIBLE);
 
+        RoundedHorizontalBarChartRenderer roundedBarChartRenderer= new RoundedHorizontalBarChartRenderer(termAverageBarChart,termAverageBarChart.getAnimator(),termAverageBarChart.getViewPortHandler());
+        roundedBarChartRenderer.setmRadius(40f);
+        termAverageBarChart.setRenderer(roundedBarChartRenderer);
         XAxis xAxis = termAverageBarChart.getXAxis();
         xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
         termAverageBarChart.getAxisLeft().setDrawGridLines(false);
         termAverageBarChart.getAxisRight().setDrawGridLines(false);
 
@@ -171,12 +175,13 @@ public class TermsFragment extends Fragment {
         termAverageBarChart.getAxisLeft().setDrawGridLines(false);
         termAverageBarChart.setPinchZoom(false);
         termAverageBarChart.setDrawBarShadow(false);
-        termAverageBarChart.setDrawGridBackground(true);
+        termAverageBarChart.setDrawGridBackground(false);
         termAverageBarChart.setContentDescription("");
         termAverageBarChart.setTouchEnabled(false);
         termAverageBarChart.setDrawBarShadow(false);
 
         termAverageBarChart.getDescription().setEnabled(false);
+        termAverageBarChart.getLegend().setEnabled(false);
 
         String requestUrl=mainUrl+"termwise.php?term="+term_id;
         JsonArrayRequest jsonArrReq = new JsonArrayRequest(Request.Method.GET,

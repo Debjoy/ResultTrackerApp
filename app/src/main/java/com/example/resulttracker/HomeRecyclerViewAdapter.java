@@ -170,8 +170,14 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             mHomeRecyclerProgress.setVisibility(View.VISIBLE);
             mHomeRecyclerChart.setVisibility(View.GONE);
 
+            RoundedHorizontalBarChartRenderer roundedBarChartRenderer= new RoundedHorizontalBarChartRenderer(mHomeRecyclerChart,mHomeRecyclerChart.getAnimator(),mHomeRecyclerChart.getViewPortHandler());
+            roundedBarChartRenderer.setmRadius(40f);
+            mHomeRecyclerChart.setRenderer(roundedBarChartRenderer);
+            mHomeRecyclerChart.getLegend().setEnabled(false);
             XAxis xAxis = mHomeRecyclerChart.getXAxis();
             xAxis.setDrawGridLines(false);
+            xAxis.setDrawGridLines(false);
+            xAxis.setDrawAxisLine(false);
             mHomeRecyclerChart.getAxisLeft().setDrawGridLines(false);
             mHomeRecyclerChart.getAxisRight().setDrawGridLines(false);
 
@@ -183,7 +189,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             mHomeRecyclerChart.getAxisLeft().setDrawGridLines(false);
             mHomeRecyclerChart.setPinchZoom(false);
             mHomeRecyclerChart.setDrawBarShadow(false);
-            mHomeRecyclerChart.setDrawGridBackground(true);
+            mHomeRecyclerChart.setDrawGridBackground(false);
             mHomeRecyclerChart.setContentDescription("");
             mHomeRecyclerChart.setTouchEnabled(false);
             mHomeRecyclerChart.setDrawBarShadow(false);

@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -86,10 +87,19 @@ public class SubjectFragment extends Fragment {
         mIndividualMarksView=view.findViewById(R.id.subject_individual_marks_view);
 
 
+        RoundedHorizontalBarChartRenderer roundedBarChartRenderer= new RoundedHorizontalBarChartRenderer(mChartSubject,mChartSubject.getAnimator(),mChartSubject.getViewPortHandler());
+        roundedBarChartRenderer.setmRadius(40f);
+        mChartSubject.setRenderer(roundedBarChartRenderer);
+
         XAxis xAxis = mChartSubject.getXAxis();
         xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+
         mChartSubject.getAxisLeft().setDrawGridLines(false);
         mChartSubject.getAxisRight().setDrawGridLines(false);
+        mChartSubject.getAxisLeft().setDrawAxisLine(true);
+        mChartSubject.getAxisRight().setDrawAxisLine(true);
+        mChartSubject.getAxisLeft().setDrawLabels(true);
 
         mChartSubject.getAxisRight().setAxisMinimum(0f);
         mChartSubject.getAxisLeft().setAxisMinimum(0f);
@@ -99,7 +109,6 @@ public class SubjectFragment extends Fragment {
         mChartSubject.getAxisLeft().setDrawGridLines(false);
         mChartSubject.setPinchZoom(false);
         mChartSubject.setDrawBarShadow(false);
-        mChartSubject.setDrawGridBackground(true);
         mChartSubject.setContentDescription("");
         mChartSubject.setTouchEnabled(false);
         mChartSubject.setDrawBarShadow(false);
