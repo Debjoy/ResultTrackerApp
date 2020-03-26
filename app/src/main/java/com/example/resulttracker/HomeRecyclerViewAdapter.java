@@ -112,12 +112,12 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
                                 };
                                 xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
                                 xAxis.setValueFormatter(formatter);
-                                xAxis.setTextColor(Color.parseColor("#FFFFFF"));
+                                xAxis.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
                                 xAxis.setXOffset(75f);
 
                                 BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
                                 //if(position%2==0)
-                                dataset.setColor(Color.parseColor("#304ffe"));
+                                dataset.setColor(mContext.getResources().getColor(R.color.colorPrimary));
                                 //else
                                 //dataset.setColor(Color.parseColor("#263238"));
                                 ArrayList<IBarDataSet> dataSets = new ArrayList<>();

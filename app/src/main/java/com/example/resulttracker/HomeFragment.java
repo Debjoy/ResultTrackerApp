@@ -275,12 +275,12 @@ public class HomeFragment extends Fragment {
                                 LineDataSet dataSet = new LineDataSet(entries, "Marks");
                                 dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
                                 dataSet.setDrawFilled(true);
-                                dataSet.setFillColor(Color.parseColor("#304ffe"));
+                                dataSet.setFillColor(getResources().getColor(R.color.colorPrimary));
                                 dataSet.setDrawCircles(false);
                                 dataSet.setFillAlpha(255);
                                 dataSet.setDrawValues(false);
 
-                                dataSet.setColor(Color.parseColor("#263238"));
+                                dataSet.setColor(getResources().getColor(R.color.colorAccent));
                                 LineData lineData = new LineData(dataSet);
                                 mLineChart.setData(lineData);
 

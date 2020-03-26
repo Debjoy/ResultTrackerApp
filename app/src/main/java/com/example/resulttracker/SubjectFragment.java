@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -56,6 +57,13 @@ public class SubjectFragment extends Fragment {
     private ProgressBar mIndividualMarksProgress;
     private LinearLayout mIndividualMarksView;
 
+    private TextView mDifferencePercentageTv;
+    private ImageView mDifferencePercentageImage;
+    private double mOASP;
+
+    private TextView mRankTv;
+    private TextView mRankTotalTv;
+
     private ArrayList<String> labels = new ArrayList<>();
 
     private HorizontalBarChart mChartSubject;
@@ -85,6 +93,13 @@ public class SubjectFragment extends Fragment {
 
         mIndividualMarksProgress=view.findViewById(R.id.subject_individual_marks_progress);
         mIndividualMarksView=view.findViewById(R.id.subject_individual_marks_view);
+
+        mDifferencePercentageTv=view.findViewById(R.id.subject_difference_tv);
+        mDifferencePercentageImage=view.findViewById(R.id.subject_difference_up_down);
+        mOASP=0.0;
+
+        mRankTv=view.findViewById(R.id.subject_rank_tv);
+        mRankTotalTv=view.findViewById(R.id.subject_rank_total_tv);
 
 
         RoundedHorizontalBarChartRenderer roundedBarChartRenderer= new RoundedHorizontalBarChartRenderer(mChartSubject,mChartSubject.getAnimator(),mChartSubject.getViewPortHandler());
@@ -136,6 +151,10 @@ public class SubjectFragment extends Fragment {
 
                                 final String[] itemnamesArray=subjectList.toArray(new String[subjectList.size()]);
 
+                                if(response.getJSONObject("average").getInt("code")==202){
+                                    mOASP=response.getJSONObject("average").getDouble("response");
+                                }
+
                                 mSelectSubjectButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -155,6 +174,7 @@ public class SubjectFragment extends Fragment {
                                 if(arraySubjects.length()>0){
                                     setSubject(0,arraySubjects);
                                 }
+                                mRankTotalTv.setText(""+arraySubjects.length());
                                 mFullViewSubject.setVisibility(View.VISIBLE);
                                 mFullSubjectProgress.setVisibility(View.GONE);
                             }else{
@@ -181,7 +201,17 @@ public class SubjectFragment extends Fragment {
         try {
             mIndividualMarksView.setVisibility(View.GONE);
             mIndividualMarksProgress.setVisibility(View.VISIBLE);
+
+            mRankTv.setText(convertIndexToRank(position));
             mSubjectNameTv.setText(((JSONObject)arraySubjects.get(position)).getString("subject_name"));
+
+            double subjectAverage=arraySubjects.getJSONObject(position).getDouble("average");
+            if(mOASP>subjectAverage){
+                mDifferencePercentageTv.setText((Math.round((mOASP-subjectAverage)*10))/10.0+"%");
+                mDifferencePercentageImage.setBackgroundResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            }else{
+                mDifferencePercentageTv.setText((Math.round((subjectAverage-mOASP)*10))/10.0+"%");
+            }
             mTermNameTv.setText(((JSONObject)arraySubjects.get(position)).getString("term_name"));
             int sub_id=((JSONObject)arraySubjects.get(position)).getInt("sub_id");
 
@@ -237,12 +267,13 @@ public class SubjectFragment extends Fragment {
                                     };
                                     xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
                                     xAxis.setValueFormatter(formatter);
-                                    xAxis.setTextColor(Color.parseColor("#FFFFFF"));
+                                    xAxis.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
                                     xAxis.setXOffset(75f);
 
                                     BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
                                     //if(position%2==0)
-                                    dataset.setColor(Color.parseColor("#263238"));
+                                    //dataset.setColor(Color.parseColor("#263238"));
+                                    dataset.setColor(mContext.getResources().getColor(R.color.colorAccent));
                                     //else
                                     //dataset.setColor(Color.parseColor("#263238"));
                                     ArrayList<IBarDataSet> dataSets = new ArrayList<>();
@@ -279,5 +310,20 @@ public class SubjectFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public String convertIndexToRank(int position){
+        position++;
+        String result="";
+        int lastDigit=position%10;
+        if(lastDigit==1){
+            result+=position+"st";
+        }else if(lastDigit==2)
+            result+=position+"nd";
+        else if(lastDigit==3)
+            result+=position+"rd";
+        else
+            result+=position+"th";
+        return result;
     }
 }
