@@ -86,152 +86,169 @@ public class InputFragment extends Fragment {
                                     if(response.getInt("code")==202){
                                         mAddMarksButton.setVisibility(View.VISIBLE);
                                         //creating alertDialog for the marks input
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                        LayoutInflater inflater = LayoutInflater.from(mContext);
-                                        final View alertLayout = inflater.inflate(R.layout.alert_input_marks,null);
-                                        builder.setView(alertLayout);
-                                        final AlertDialog alertD=builder.show();
 
-                                        //initializing and making the spinners constant for accessing it from listenners
-                                        final Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
-                                        final Spinner spinnerSubjectList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_subject_spinner));
-                                        final Spinner spinnerExamList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_exam_spinner));
+                                        if(response.getJSONArray("response").length()>0){
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                            LayoutInflater inflater = LayoutInflater.from(mContext);
+                                            final View alertLayout = inflater.inflate(R.layout.alert_input_marks,null);
+                                            builder.setView(alertLayout);
+                                            final AlertDialog alertD=builder.show();
 
-                                        termListResponse=response.getJSONArray("response");
-                                        ArrayList<String> termList=new ArrayList<>();
-                                        for(int i=0;i<termListResponse.length();i++){
-                                            termList.add(((JSONObject)termListResponse.get(i)).getString("term_name"));
-                                        }
-                                        ArrayAdapter<String> termListAdapter= new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, termList);
-                                        termListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
-                                        //when adapter is set to a this spinner the setOnItemSelectedListenner is automatically called
-                                        spinnerTermList.setAdapter(termListAdapter);
+                                            //initializing and making the spinners constant for accessing it from listenners
+                                            final Spinner spinnerTermList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_term_spinner));
+                                            final Spinner spinnerSubjectList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_subject_spinner));
+                                            final Spinner spinnerExamList = ((Spinner)alertLayout.findViewById(R.id.alert_add_marks_exam_spinner));
 
-                                        spinnerTermList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                            @Override
-                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                            termListResponse=response.getJSONArray("response");
+                                            ArrayList<String> termList=new ArrayList<>();
+                                            for(int i=0;i<termListResponse.length();i++){
+                                                termList.add(((JSONObject)termListResponse.get(i)).getString("term_name"));
+                                            }
+                                            ArrayAdapter<String> termListAdapter= new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, termList);
+                                            termListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                            //when adapter is set to a this spinner the setOnItemSelectedListenner is automatically called
+                                            spinnerTermList.setAdapter(termListAdapter);
 
-                                                try {
-                                                    ArrayList<String> subjectList=new ArrayList<>();
-                                                    subjectListResponse =((JSONObject)termListResponse.get(i)).getJSONArray("term_sub");
-                                                    mSelectedTermId=((JSONObject)termListResponse.get(i)).getInt("term_id");
-                                                    for(int k=0;k<subjectListResponse.length();k++){
-                                                        subjectList.add(((JSONObject)subjectListResponse.get(k)).getString("sub_name"));
-                                                    }
-                                                    ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, subjectList);
-                                                    subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
-                                                    spinnerSubjectList.setAdapter(subjectListAdapter);
+                                            spinnerTermList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                @Override
+                                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                                                    spinnerSubjectList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                        @Override
-                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                            try {
-                                                                ArrayList<String> examList=new ArrayList<>();
-                                                                examListResponse = ((JSONObject)subjectListResponse.get(i)).getJSONArray("sub_ass");
-                                                                mSelectedSubjectId=((JSONObject)subjectListResponse.get(i)).getInt("sub_id");
-                                                                for(int k=0;k<examListResponse.length();k++){
-                                                                    examList.add(((JSONObject)examListResponse.get(k)).getString("ass_name")+" "+((JSONObject)examListResponse.get(k)).getString("ass_no"));
-                                                                }
-                                                                ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, examList);
-                                                                subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
-                                                                spinnerExamList.setAdapter(subjectListAdapter);
-
-                                                                spinnerExamList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                                    @Override
-                                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                                        try {
-                                                                            mSelectedExamId=((JSONObject)examListResponse.get(i)).getInt("ass_id");
-                                                                            mSelectedExamNo=((JSONObject)examListResponse.get(i)).getInt("ass_no");
-                                                                            mSelectedFullMarks=((JSONObject)examListResponse.get(i)).getInt("full_marks");
-                                                                            ((TextView)alertLayout.findViewById(R.id.alert_add_marks_full_marks)).setText(mSelectedFullMarks+"");
-                                                                            ((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).setFilters(new InputFilter[]{new InputFilterMinMax(0,mSelectedFullMarks,mContext)});
-                                                                        } catch (JSONException e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                                    }
-                                                                });
-
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-
+                                                    try {
+                                                        ArrayList<String> subjectList=new ArrayList<>();
+                                                        subjectListResponse =((JSONObject)termListResponse.get(i)).getJSONArray("term_sub");
+                                                        mSelectedTermId=((JSONObject)termListResponse.get(i)).getInt("term_id");
+                                                        for(int k=0;k<subjectListResponse.length();k++){
+                                                            subjectList.add(((JSONObject)subjectListResponse.get(k)).getString("sub_name"));
                                                         }
+                                                        ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, subjectList);
+                                                        subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                                        spinnerSubjectList.setAdapter(subjectListAdapter);
 
-                                                        @Override
-                                                        public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                        }
-                                                    });
-
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                            }
-                                        });
-
-                                        (alertLayout.findViewById(R.id.alert_add_marks_cancel_button)).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                alertD.dismiss();
-                                            }
-                                        });
-
-                                        //functionality of submit button for marks
-                                        (alertLayout.findViewById(R.id.alert_add_marks_submit_button)).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                String requestURL=mainUrl+"add_marks.php";
-                                                JSONObject postparams = new JSONObject();
-                                                int marksEntered=Integer.parseInt(((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).getText().toString());
-                                                try {
-                                                    postparams.put("marks", marksEntered);
-                                                    postparams.put("term_id",mSelectedTermId);
-                                                    postparams.put("sub_id",mSelectedSubjectId);
-                                                    postparams.put("ass_id",mSelectedExamId);
-                                                    postparams.put("ass_no",mSelectedExamNo);
-                                                }catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.VISIBLE);
-                                                JsonObjectRequest jsonObjectRequest1=new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
-                                                        new Response.Listener<JSONObject>() {
+                                                        spinnerSubjectList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                             @Override
-                                                            public void onResponse(JSONObject response) {
+                                                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                                                 try {
-                                                                    if(response.getInt("code")==202){
-                                                                        Toast.makeText(mContext, "Marks added", Toast.LENGTH_SHORT).show();
-                                                                    }else{
-                                                                        Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();                                                                    }
+                                                                    ArrayList<String> examList=new ArrayList<>();
+                                                                    examListResponse = ((JSONObject)subjectListResponse.get(i)).getJSONArray("sub_ass");
+                                                                    mSelectedSubjectId=((JSONObject)subjectListResponse.get(i)).getInt("sub_id");
+                                                                    for(int k=0;k<examListResponse.length();k++){
+                                                                        examList.add(((JSONObject)examListResponse.get(k)).getString("ass_name")+" "+((JSONObject)examListResponse.get(k)).getString("ass_no"));
+                                                                    }
+                                                                    ArrayAdapter<String> subjectListAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, examList);
+                                                                    subjectListAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+                                                                    spinnerExamList.setAdapter(subjectListAdapter);
+
+                                                                    spinnerExamList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                        @Override
+                                                                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                            try {
+                                                                                mSelectedExamId=((JSONObject)examListResponse.get(i)).getInt("ass_id");
+                                                                                mSelectedExamNo=((JSONObject)examListResponse.get(i)).getInt("ass_no");
+                                                                                mSelectedFullMarks=((JSONObject)examListResponse.get(i)).getInt("full_marks");
+                                                                                ((TextView)alertLayout.findViewById(R.id.alert_add_marks_full_marks)).setText(mSelectedFullMarks+"");
+                                                                                ((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).setFilters(new InputFilter[]{new InputFilterMinMax(0,mSelectedFullMarks,mContext)});
+                                                                            } catch (JSONException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                                        }
+                                                                    });
+
                                                                 } catch (JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
-                                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
-                                                                alertD.dismiss();
+
                                                             }
-                                                        },
-                                                        new Response.ErrorListener() {
+
                                                             @Override
-                                                            public void onErrorResponse(VolleyError error) {
-                                                                Toast.makeText(mContext, "Connection error: "+error.toString(), Toast.LENGTH_SHORT).show();
-                                                                alertD.dismiss();
-                                                                alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
+                                                            public void onNothingSelected(AdapterView<?> adapterView) {
+
                                                             }
                                                         });
-                                                RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-                                                requestQueue.add(jsonObjectRequest1);
-                                            }
-                                        });
 
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                }
+                                            });
+
+                                            (alertLayout.findViewById(R.id.alert_add_marks_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    alertD.dismiss();
+                                                }
+                                            });
+
+                                            //functionality of submit button for marks
+                                            (alertLayout.findViewById(R.id.alert_add_marks_submit_button)).setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    String requestURL=mainUrl+"add_marks.php";
+                                                    JSONObject postparams = new JSONObject();
+                                                    int marksEntered=Integer.parseInt(((EditText)alertLayout.findViewById(R.id.alert_add_marks_edit_text)).getText().toString());
+                                                    try {
+                                                        postparams.put("marks", marksEntered);
+                                                        postparams.put("term_id",mSelectedTermId);
+                                                        postparams.put("sub_id",mSelectedSubjectId);
+                                                        postparams.put("ass_id",mSelectedExamId);
+                                                        postparams.put("ass_no",mSelectedExamNo);
+                                                    }catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.VISIBLE);
+                                                    JsonObjectRequest jsonObjectRequest1=new JsonObjectRequest(Request.Method.POST, requestURL, postparams,
+                                                            new Response.Listener<JSONObject>() {
+                                                                @Override
+                                                                public void onResponse(JSONObject response) {
+                                                                    try {
+                                                                        if(response.getInt("code")==202){
+                                                                            Toast.makeText(mContext, "Marks added", Toast.LENGTH_SHORT).show();
+                                                                        }else{
+                                                                            Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();                                                                    }
+                                                                    } catch (JSONException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
+                                                                    alertD.dismiss();
+                                                                }
+                                                            },
+                                                            new Response.ErrorListener() {
+                                                                @Override
+                                                                public void onErrorResponse(VolleyError error) {
+                                                                    Toast.makeText(mContext, "Connection error: "+error.toString(), Toast.LENGTH_SHORT).show();
+                                                                    alertD.dismiss();
+                                                                    alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
+                                                                }
+                                                            });
+                                                    RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                                                    requestQueue.add(jsonObjectRequest1);
+                                                }
+                                            });
+
+                                        }
+                                        else{
+                                            AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
+                                            LayoutInflater inflater = LayoutInflater.from(mContext);
+                                            final View alertLayout = inflater.inflate(R.layout.alert_input_info_no_marks,null);
+                                            builder.setView(alertLayout);
+                                            final AlertDialog alertD=builder.show();
+                                            alertLayout.findViewById(R.id.alert_input_no_marks_cancel_button).setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    alertD.dismiss();
+                                                }
+                                            });
+
+                                        }
 
                                     }else{
                                         Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();

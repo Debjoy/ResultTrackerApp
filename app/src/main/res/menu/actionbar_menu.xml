@@ -7,4 +7,10 @@
         android:title="Log Out"
         android:iconTint="@color/colorWhite"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_general"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Log Out"
+        android:iconTint="@color/colorWhite"
+        app:showAsAction="always"/>
 </menu>

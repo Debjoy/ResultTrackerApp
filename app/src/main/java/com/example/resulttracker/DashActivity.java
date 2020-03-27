@@ -49,6 +49,7 @@ public class DashActivity extends AppCompatActivity {
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+
         exitFlag=1;
         bottomNav=findViewById(R.id.bottom_navigation_view);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -115,6 +116,11 @@ public class DashActivity extends AppCompatActivity {
         DrawableCompat.setTint(drawable, ContextCompat.getColor(this,R.color.colorWhite));
         menu.findItem(R.id.action_logout).setIcon(drawable);
 
+        drawable = menu.findItem(R.id.action_general).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this,R.color.colorWhite));
+        menu.findItem(R.id.action_general).setIcon(drawable);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -140,6 +146,10 @@ public class DashActivity extends AppCompatActivity {
                             }
                         }).show();
 
+                break;
+            case R.id.action_general:
+                Intent loginActiviity = new Intent(DashActivity.this, GeneralActivity.class);
+                startActivity(loginActiviity);
                 break;
             default:
                 break;
