@@ -64,6 +64,7 @@
             android:paddingHorizontal="20dp"
             />
         <TextView
+            android:id="@+id/general_exam_structure_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Exam Structure"

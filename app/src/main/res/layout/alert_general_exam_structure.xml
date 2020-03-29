@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
+    android:padding="20dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/alert_general_exam_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exam Structure"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/ic_device_hub_black_24dp"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            android:layout_alignParentLeft="true"
+            android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/alert_general_exam_structure_progress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/alert_general_exam_heading"
+            android:padding="3dp"/>
+        <Button
+            android:id="@+id/alert_general_exam_structure_cancel"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_close_black_24dp"/>
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alert_general_exam_recycler_list"
+        android:layout_width="match_parent"
+        android:scrollbars="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableRight="@drawable/ic_add_black_24dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/rounded_button_primary"
+        android:drawableTint="@color/colorWhite"
+        android:paddingVertical="5dp"/>
+
+
+</LinearLayout>

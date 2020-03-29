@@ -43,7 +43,7 @@ public class InputFragment extends Fragment {
     private Context mContext;
     private int user_id;
     private RecyclerView mTermsRecyclerView;
-    private ImageButton mAddNewTermButton;
+    private Button mAddNewTermButton;
     private Button mAddMarksButton;
     private int mSelectedTermId;
     private int mSelectedSubjectId;

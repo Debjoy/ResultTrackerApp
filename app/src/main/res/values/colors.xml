@@ -8,5 +8,5 @@
     <color name="colorPlaceholder">#9cb0ff</color>
     <color name="colorText">#272727</color>
     <color name="colorDanger">#e53935</color>
-    <color name="colorBackground">#eaeaea</color>
+    <color name="colorBackground">#f7f7f7</color>
 </resources>

@@ -145,7 +145,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:layout_marginRight="5dp">
                 <LinearLayout
                     android:id="@+id/input_term_wise_subjets_loading"
                     android:layout_width="wrap_content"
@@ -166,12 +167,17 @@
                         android:layout_height="18dp"
                         android:layout_marginLeft="10dp"/>
                 </LinearLayout>
-                <ImageButton
+                <Button
                     android:id="@+id/input_add_new_term"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_add_circle_black_24dp"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:background="@drawable/rounded_button_accent"
+                    android:drawableRight="@drawable/ic_add_black_24dp"
+                    android:drawableTint="@color/colorWhite"
+                    android:minHeight="0dp"
+                    android:paddingVertical="3dp"
+                    android:paddingHorizontal="15dp"
+                    android:minWidth="0dp"
                     android:layout_alignParentRight="true"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -179,7 +185,7 @@
                     android:text="Add new term"
                     android:textSize="14sp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="8dp"
                     android:textColor="@color/colorText"
                     android:textStyle="bold"
                     android:layout_toLeftOf="@id/input_add_new_term"/>

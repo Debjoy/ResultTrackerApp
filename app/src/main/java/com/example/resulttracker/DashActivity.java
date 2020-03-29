@@ -56,7 +56,7 @@ public class DashActivity extends AppCompatActivity {
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         userName=spref.getString("username",null);
-        userId=spref.getInt("user_id",1);
+        userId=spref.getInt("user_id",-99);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId, DashActivity.this)).commit();
     }

@@ -60,6 +60,9 @@ public class TermsFragment extends Fragment {
         this.mContext=mContext;
         this.user_id=user_id;
     }
+    public TermsFragment() {
+        // doesn't do anything special
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
