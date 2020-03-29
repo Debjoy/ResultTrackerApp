@@ -20,7 +20,7 @@
             android:textColor="@color/colorText"
             android:textStyle="bold"/>
         <ProgressBar
-            android:id="@+id/alert_update_subject_progress"
+            android:id="@+id/alert_edit_name_progress"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"

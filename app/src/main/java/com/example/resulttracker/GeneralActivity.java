@@ -114,43 +114,56 @@ public class GeneralActivity extends AppCompatActivity {
                     }
                 });
 
-                alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.VISIBLE);
+                loadExamStructure(alertLayout);
 
-                String requestUrl=mainUrl+"get_exam.php?stud_id="+stud_id;
-
-                JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    if(response.getInt("code")==202){
-                                        JSONArray responseArray=response.getJSONArray("response");
-                                        AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray);
-                                        RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
-                                        mExamListRecycler.setAdapter(adapter);
-
-                                        mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
-                                        alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
-                                    }else{
-                                        Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                                        alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(GeneralActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
-                requestQueue.add(jsonObjectRequest);
 
             }
         });
+    }
+
+    public void loadExamStructure(final View alertLayout){
+
+        alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.VISIBLE);
+        String requestUrl=mainUrl+"get_exam.php?stud_id="+stud_id;
+
+        //ADD Functionality for adding exam
+        alertLayout.findViewById(R.id.alert_general_exam_add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(GeneralActivity.this, "Function Disabled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.getInt("code")==202){
+                                JSONArray responseArray=response.getJSONArray("response");
+                                AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,GeneralActivity.this, alertLayout);
+                                RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
+                                mExamListRecycler.setAdapter(adapter);
+
+                                mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
+                                alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                            }else{
+                                Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(GeneralActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
+        requestQueue.add(jsonObjectRequest);
     }
 
     public void onLogOut(){
