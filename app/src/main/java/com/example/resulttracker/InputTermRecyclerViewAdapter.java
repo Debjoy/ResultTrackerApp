@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -103,24 +104,28 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                             LayoutInflater inflater = LayoutInflater.from(mContext);
-                            final View layout=inflater.inflate(R.layout.alert_input_edit_subject_name,null);
+                            final View layout=inflater.inflate(R.layout.alert_edit_name,null);
                             builder.setView(layout);
                             //builder.setTitle("hello");
                             final AlertDialog alertD=builder.show();
-                            ((TextView)layout.findViewById(R.id.alert_update_subject_edit_text)).setText(subjectName);
-                            ((Button)layout.findViewById(R.id.alert_update_subject_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                            ((TextView)layout.findViewById(R.id.alert_edit_name_title)).setText("Edit Subject Name:");
+                            final EditText mSubjectNameEditTextt=layout.findViewById(R.id.alert_edit_name_edit_text);
+                            mSubjectNameEditTextt.setHint("Enter the subject name here");
+
+                            mSubjectNameEditTextt.setText(subjectName);
+                            ((Button)layout.findViewById(R.id.alert_edit_name_cancel_button)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     alertD.dismiss();
                                 }
                             });
-                            ((Button)layout.findViewById(R.id.alert_update_subject_update_button)).setOnClickListener(new View.OnClickListener() {
+                            ((Button)layout.findViewById(R.id.alert_edit_name_update_button)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(final View view) {
                                     //alertD.dismiss();
-                                    String subject_name=((TextView)layout.findViewById(R.id.alert_update_subject_edit_text)).getText().toString();
+                                    String subject_name=mSubjectNameEditTextt.getText().toString();
                                     String requestUrl=mainURL+"update_subject_name.php";
-                                    ((ProgressBar)layout.findViewById(R.id.alert_update_subject_progress)).setVisibility(View.VISIBLE);
+                                    ((ProgressBar)layout.findViewById(R.id.alert_edit_name_progress)).setVisibility(View.VISIBLE);
                                     JSONObject postparams = new JSONObject();
                                     try {
                                         postparams.put("sub_id", subjectId);
@@ -132,7 +137,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
-                                                    ((ProgressBar)layout.findViewById(R.id.alert_update_subject_progress)).setVisibility(View.GONE);
+                                                    ((ProgressBar)layout.findViewById(R.id.alert_edit_name_progress)).setVisibility(View.GONE);
                                                     try {
                                                         if(response.getInt("code")==202) {
                                                             Toast.makeText(mContext, "Subject name updated.", Toast.LENGTH_SHORT).show();
@@ -155,7 +160,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     requestQueue.add(jsonObjReq);
                                 }
                             });
-                            ((Button)layout.findViewById(R.id.alert_update_subject_delete_button)).setOnClickListener(new View.OnClickListener() {
+                            ((Button)layout.findViewById(R.id.alert_edit_name_delete_button)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
