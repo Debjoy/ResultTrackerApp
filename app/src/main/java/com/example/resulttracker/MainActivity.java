@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private final int ALERT_DANGER=-1;
     private final int ALERT_INFO=0;
     private final int ALERT_SUCCESS=1;
+    private final int ALERT_OK_QUIT=9;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         //Failure Callback
                         Intent loginActiviity = new Intent(mContext, LoginActivity.class);
-                        loginActiviity.putExtra("msg", "ERROR: "+error.getMessage());
-                        loginActiviity.putExtra("alert", ALERT_DANGER);
+                        loginActiviity.putExtra("msg", "Network error");
+                        loginActiviity.putExtra("alert", ALERT_OK_QUIT);
                         startActivity(loginActiviity);
                         finishAffinity();
                     }

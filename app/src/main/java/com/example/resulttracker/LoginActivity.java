@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -141,6 +142,34 @@ public class LoginActivity extends AppCompatActivity {
 
     public void displayDialog(String msg, int alertType){
 
+
+        if(alertType==9)// for network error
+        {
+            new AlertDialog.Builder(new ContextThemeWrapper(LoginActivity.this, R.style.AppTheme))
+                    .setTitle("Error")
+                    .setMessage(msg)
+                    .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent mainActivity=new Intent(mContext, MainActivity.class);
+                            startActivity(mainActivity);
+                        }
+                    })
+                    .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finishAffinity();
+                        }
+                    })
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+            return;
+        }
         AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);
         LayoutInflater inflater= LoginActivity.this.getLayoutInflater();
         View layout=inflater.inflate(R.layout.alert_default,null);
