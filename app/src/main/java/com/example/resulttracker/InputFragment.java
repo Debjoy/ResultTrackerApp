@@ -336,7 +336,7 @@ public class InputFragment extends Fragment {
 
     public void loadTermsWithSubjects(){
         mTermWiseSubjetsLoading.setVisibility(View.VISIBLE);
-        String requestUrl=mainUrl+"termwisesubjects.php?stud_id=1";
+        String requestUrl=mainUrl+"termwisesubjects.php?stud_id="+user_id;
         JsonObjectRequest jsonObjectRequest= new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {

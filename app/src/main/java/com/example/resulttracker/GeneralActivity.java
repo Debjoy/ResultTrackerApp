@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,6 +43,10 @@ public class GeneralActivity extends AppCompatActivity {
 
     private int stud_id;
     private String mainUrl;
+    Context mGeneral;
+    String profile_full_name;
+    String profile_email;
+    String profile_username;
 
     //defining AwesomeValidation object
     private AwesomeValidation awesomeValidation;
@@ -55,6 +60,7 @@ public class GeneralActivity extends AppCompatActivity {
         mGeneralButton=findViewById(R.id.general_help_link);
         mExamStructureButton=findViewById(R.id.general_exam_structure_button);
         mProfileEditButton=findViewById(R.id.general_edit_profile_button);
+        mGeneral=GeneralActivity.this;
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         stud_id=spref.getInt("user_id",-99);
@@ -129,6 +135,57 @@ public class GeneralActivity extends AppCompatActivity {
             }
         });
 
+        loadProfileInfo();
+
+    }
+
+    public void loadProfileInfo(){
+        findViewById(R.id.general_profile_info_layout).setVisibility(View.GONE);
+        findViewById(R.id.general_profile_info_progress).setVisibility(View.VISIBLE);
+
+        profile_full_name="";
+        profile_email="";
+        profile_username="";
+
+        String requestUrl= mainUrl+"basic_details.php?profile&stud_id="+stud_id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.getInt("code")==202){
+                                profile_full_name=response.getJSONObject("response").getString("full_name");
+                                profile_email=response.getJSONObject("response").getString("email");
+                                profile_username=response.getJSONObject("response").getString("username");
+
+                                ((TextView)findViewById(R.id.general_profile_info_name)).setText(profile_full_name);
+                                ((TextView)findViewById(R.id.general_profile_info_email)).setText(profile_email);
+                                ((TextView)findViewById(R.id.general_profile_info_username)).setText(profile_username);
+
+
+                            }else{
+                                Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        findViewById(R.id.general_profile_info_progress).setVisibility(View.GONE);
+                        findViewById(R.id.general_profile_info_layout).setVisibility(View.VISIBLE);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(mGeneral, "Network error", Toast.LENGTH_SHORT).show();
+                        findViewById(R.id.general_profile_info_progress).setVisibility(View.GONE);
+                        findViewById(R.id.general_profile_info_layout).setVisibility(View.VISIBLE);
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
+        requestQueue.add(jsonObjectRequest);
+
+
         mProfileEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,21 +197,20 @@ public class GeneralActivity extends AppCompatActivity {
 
                 awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
-                EditText mFullNameEdit=alertLayout.findViewById(R.id.alert_edit_profile_full_name);
-                EditText mEmailEdit =  alertLayout.findViewById(R.id.alert_edit_profile_email_id);
-                EditText mUsername = alertLayout.findViewById(R.id.alert_edit_profile_username);
+                final EditText mFullNameEdit=alertLayout.findViewById(R.id.alert_edit_profile_full_name);
+                final EditText mEmailEdit =  alertLayout.findViewById(R.id.alert_edit_profile_email_id);
+                final EditText mUsername = alertLayout.findViewById(R.id.alert_edit_profile_username);
+
+                mFullNameEdit.setText(profile_full_name);
+                mEmailEdit.setText(profile_email);
+                mUsername.setText(profile_username );
 
 
                 awesomeValidation.addValidation(mFullNameEdit, "^[A-Za-z ]{1,}$", "Should contain only aphabets and space");
                 awesomeValidation.addValidation(mEmailEdit, Patterns.EMAIL_ADDRESS, "Enter proper email address");
-                awesomeValidation.addValidation(mUsername, new SimpleCustomValidation() {
-                    @Override
-                    public boolean compare(String s) {
-
-                        return false;
-                    }
-                },"error");
-
+                awesomeValidation.addValidation(mUsername, "^[a-z0-9_-]+$","Username should only contain alphabets, numbers and underscore");
+                awesomeValidation.addValidation(mUsername, "^.{3,}$","Username should atleast contain 4 characters");
+                awesomeValidation.addValidation(mUsername, "^.{0,16}$","Username should not exceed 16 characters");
                 alertLayout.findViewById(R.id.alert_edit_profile_cancel_button).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -163,12 +219,56 @@ public class GeneralActivity extends AppCompatActivity {
                 });
 
                 alertLayout.findViewById(R.id.alert_edit_profile_save_button).setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         if(awesomeValidation.validate()){
-                             Toast.makeText(GeneralActivity.this, "perfect", Toast.LENGTH_SHORT).show();
-                         }
-                     }
+                    @Override
+                    public void onClick(View v) {
+                        if(awesomeValidation.validate()){
+                            Toast.makeText(GeneralActivity.this, "perfect", Toast.LENGTH_SHORT).show();
+
+                            String requestUrl=mainUrl+"register.php";
+
+                            JSONObject postparams = new JSONObject();
+                            try {
+                                postparams.put("stud_id", stud_id);
+                                postparams.put("name", mFullNameEdit.getText().toString());
+                                postparams.put("email", mEmailEdit.getText().toString());
+                                postparams.put("username", mUsername.getText().toString());
+                            }catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.VISIBLE);
+                            JsonObjectRequest jsonObjectRequest1=new JsonObjectRequest(Request.Method.POST, requestUrl, postparams,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if(response.getInt("code")==202){
+                                                    Toast.makeText(GeneralActivity.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+                                                    alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
+                                                    alertD.dismiss();
+                                                    loadProfileInfo();
+                                                }else if(response.getInt("code")==463){
+                                                    Toast.makeText(GeneralActivity.this, "Username Exists", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(GeneralActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                                            alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
+                                        }
+                                    });
+                            RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
+                            requestQueue.add(jsonObjectRequest1);
+                        }
+                    }
                 });
 
 
