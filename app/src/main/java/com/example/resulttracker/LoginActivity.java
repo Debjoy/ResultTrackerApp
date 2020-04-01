@@ -32,6 +32,9 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity {
     private Fragment signInFragment;
     private String mainUrl;
@@ -80,7 +83,17 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("data_user", MODE_PRIVATE); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("username", mUsernameEdit1.getText().toString());
+
+        String email="";
+        String username="";
+        if(isEmailValid(mUsernameEdit1.getText().toString())){
+            email=mUsernameEdit1.getText().toString();
+        }else{
+            username=mUsernameEdit1.getText().toString();
+        }
+
+        editor.putString("username",username);
+        editor.putString("email",email);
         editor.putString("pwd", mPasswordEdit1.getText().toString());
         editor.commit();
 
@@ -88,6 +101,14 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(mainActivity);
 
     }
+
+    public boolean isEmailValid(String str){
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
+
     public void onSignUpSubmit(View view){
         exitFlag=1;
         String requestUrl=mainUrl+"register.php";

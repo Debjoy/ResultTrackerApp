@@ -33,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
         mainUrl="https://atdebjoy.com/others/api/trackerapp/";
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         if (spref.contains("username")) {
-            String username=spref.getString("username",null);
-            String pwd=spref.getString("pwd",null);
-            check_login( username, pwd);
+            String username=spref.getString("username","");
+            String pwd=spref.getString("pwd","");
+            String email=spref.getString("email","");
+            check_login( username, pwd, email);
         } else {
             goTo();
         }
@@ -48,12 +49,15 @@ public class MainActivity extends AppCompatActivity {
         finishAffinity();
     }
 
-    public void check_login(String username, String pwd){
+    public void check_login(String username, String pwd, String email){
         String requestUrl=mainUrl+"login.php";
 
         JSONObject postparams = new JSONObject();
         try {
-            postparams.put("username", username);
+            if(username.equals(""))
+                postparams.put("email", email);
+            else
+                postparams.put("username", username);
             postparams.put("pwd",pwd);
         }catch (JSONException e) {
             e.printStackTrace();
