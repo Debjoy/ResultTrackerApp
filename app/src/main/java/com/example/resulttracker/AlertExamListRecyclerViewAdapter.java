@@ -53,6 +53,13 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
             holder.mExamNo.setText(examListArray.getJSONObject(position).getString("exam_no"));
             holder.mFullMarks.setText(examListArray.getJSONObject(position).getString("full_marks"));
 
+            holder.mDeleteExamButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "Function Disabled", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             holder.mEditExamButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -148,12 +155,14 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
         TextView mExamNo;
         TextView mFullMarks;
         Button mEditExamButton;
+        Button mDeleteExamButton;
         public AlertExamListViewHolder(@NonNull View itemView) {
             super(itemView);
             mExamName=itemView.findViewById(R.id.alert_exam_list_name);
             mExamNo=itemView.findViewById(R.id.alert_exam_list_exam_no);
             mFullMarks=itemView.findViewById(R.id.alert_exam_list_full_marks);
             mEditExamButton=itemView.findViewById(R.id.alert_exam_list_edit_name_button);
+            mDeleteExamButton=itemView.findViewById(R.id.alert_exam_list_delete_button);
         }
     }
 }

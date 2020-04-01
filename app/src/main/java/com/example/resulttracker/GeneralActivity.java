@@ -50,6 +50,8 @@ public class GeneralActivity extends AppCompatActivity {
 
     //defining AwesomeValidation object
     private AwesomeValidation awesomeValidation;
+    //for exam add validation
+    private AwesomeValidation addExamValidation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,7 +224,6 @@ public class GeneralActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if(awesomeValidation.validate()){
-                            Toast.makeText(GeneralActivity.this, "perfect", Toast.LENGTH_SHORT).show();
 
                             String requestUrl=mainUrl+"register.php";
 
@@ -285,7 +286,77 @@ public class GeneralActivity extends AppCompatActivity {
         alertLayout.findViewById(R.id.alert_general_exam_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GeneralActivity.this, "Function Disabled", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(GeneralActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(GeneralActivity.this);
+                final View layout = inflater.inflate(R.layout.alert_add_exam,null);
+                builder.setView(layout);
+                final AlertDialog alertDialog=builder.show();
+
+                layout.findViewById(R.id.alert_add_exam_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                addExamValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
+                final EditText mAddExamName=layout.findViewById(R.id.alert_add_exam_name);
+                final EditText mAddExamFullMarks=layout.findViewById(R.id.alert_add_exam_full_marks);
+                final EditText mAddExamFrequency=layout.findViewById(R.id.alert_add_exam_frequency);
+
+                addExamValidation.addValidation(mAddExamName,"^.{1,}","Exam name cannot be empty");
+                addExamValidation.addValidation(mAddExamFullMarks,"^.{1,}$","Full marks cannot be empty");
+                addExamValidation.addValidation(mAddExamFrequency, "^0*([1-9]|1[0-9]|2[0-4])$","Frequency allowed from 1 till 24");
+
+                layout.findViewById(R.id.alert_add_exam_submit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(addExamValidation.validate()){
+                            String requestUrl=mainUrl+"update_exam.php";
+
+                            JSONObject postparms= new JSONObject();
+                            try {
+                                postparms.put("exam_name",((EditText)layout.findViewById(R.id.alert_add_exam_name)).getText().toString());
+                                postparms.put("full_marks",((EditText)layout.findViewById(R.id.alert_add_exam_full_marks)).getText().toString());
+                                postparms.put("exam_no",((EditText)layout.findViewById(R.id.alert_add_exam_frequency)).getText().toString());
+                                postparms.put("stud_id",stud_id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            layout.findViewById(R.id.alert_add_exam_progress).setVisibility(View.VISIBLE);
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrl, postparms,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if(response.getInt("code")==202){
+                                                    Toast.makeText(GeneralActivity.this, "Exam successfully added", Toast.LENGTH_SHORT).show();
+                                                    alertDialog.dismiss();
+                                                    loadExamStructure(alertLayout);
+                                                }else{
+                                                    Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            layout.findViewById(R.id.alert_add_exam_progress).setVisibility(View.GONE);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(GeneralActivity.this, "Network error :", Toast.LENGTH_SHORT).show();
+                                            layout.findViewById(R.id.alert_add_exam_progress).setVisibility(View.GONE);
+                                        }
+                                    });
+                            RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
+                            requestQueue.add(jsonObjectRequest);
+                        }
+                    }
+                });
+
             }
         });
 

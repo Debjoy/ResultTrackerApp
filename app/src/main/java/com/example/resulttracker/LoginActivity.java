@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     private final int ALERT_DANGER=-1;
     private final int ALERT_INFO=0;
     private final int ALERT_SUCCESS=1;
+
+    AwesomeValidation signUpValidation;
 
     private int exitFlag=1;
     @Override
@@ -91,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         mEmailEdit2=findViewById(R.id.email_edit_text_2);
         mPasswordEdit2=findViewById(R.id.password_edit_text_2);
 
+        signUpValidation=  new AwesomeValidation(ValidationStyle.BASIC);
         JSONObject postparams = new JSONObject();
         try {
             postparams.put("username", this.mUsernameEdit2.getText().toString());
@@ -100,6 +106,16 @@ public class LoginActivity extends AppCompatActivity {
         }catch (JSONException e) {
             e.printStackTrace();
         }
+
+        signUpValidation.addValidation(mUsernameEdit2, "^[a-z0-9_-]+$","Username should only contain alphabets, numbers and underscore");
+        signUpValidation.addValidation(mUsernameEdit2, "^.{3,}$","Username should atleast contain 4 characters");
+        signUpValidation.addValidation(mUsernameEdit2, "^.{0,16}$","Username should not exceed 16 characters");
+
+        signUpValidation.addValidation(mNameEdit2,"^[A-Za-z ]{1,}$", "Should contain only aphabets and space");
+        signUpValidation.addValidation(mEmailEdit2, Patterns.EMAIL_ADDRESS, "Should contain only aphabets and space");
+        signUpValidation.addValidation(mPasswordEdit2, "^.{8,}$", "Should contain atleast 8 characters");
+
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 requestUrl, postparams,
                 new Response.Listener<JSONObject>() {
@@ -136,8 +152,10 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(mContext, "ERROR: "+error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
+        if(signUpValidation.validate()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(jsonObjReq);
+        }
     }
 
     public void displayDialog(String msg, int alertType){
