@@ -107,12 +107,12 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        signUpValidation.addValidation(mUsernameEdit2, "^[a-z0-9_-]+$","Username should only contain alphabets, numbers and underscore");
-        signUpValidation.addValidation(mUsernameEdit2, "^.{3,}$","Username should atleast contain 4 characters");
-        signUpValidation.addValidation(mUsernameEdit2, "^.{0,16}$","Username should not exceed 16 characters");
 
         signUpValidation.addValidation(mNameEdit2,"^[A-Za-z ]{1,}$", "Should contain only aphabets and space");
         signUpValidation.addValidation(mEmailEdit2, Patterns.EMAIL_ADDRESS, "Should contain only aphabets and space");
+        signUpValidation.addValidation(mUsernameEdit2, "^[a-z0-9_-]+$","Username should only contain alphabets, numbers and underscore");
+        signUpValidation.addValidation(mUsernameEdit2, "^.{3,}$","Username should atleast contain 4 characters");
+        signUpValidation.addValidation(mUsernameEdit2, "^.{0,16}$","Username should not exceed 16 characters");
         signUpValidation.addValidation(mPasswordEdit2, "^.{8,}$", "Should contain atleast 8 characters");
 
 
@@ -125,7 +125,8 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             int code=response.getInt("code");
                             String msg=response.getString("msg");
-
+                            mEmailEdit2.setError(null);
+                            mUsernameEdit2.setError(null);
                             if(code==202){
                                 int user_id=response.getInt("user");
                                 SharedPreferences pref = getApplicationContext().getSharedPreferences("data_user", MODE_PRIVATE); // 0 - for private mode
@@ -134,15 +135,27 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("user_id", user_id+"");
                                 editor.putString("pwd", mPasswordEdit2.getText().toString());
                                 editor.commit();
-
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 startActivity(mainActivity);
+                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                            }else if(code==261 || code==263 ){
+                                if(code==261){
+                                    mEmailEdit2.requestFocus();
+                                    mEmailEdit2.setError("Email ID exists");
+                                }
+                                if(code==263){
+                                    mUsernameEdit2.requestFocus();
+                                    mUsernameEdit2.setError("Username exists");
+                                }
+
                             }else{
                                 Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        findViewById(R.id.sign_up_button).setVisibility(View.VISIBLE);
+                        findViewById(R.id.sign_up_progress).setVisibility(View.GONE);
                     }
                 },
                 new Response.ErrorListener() {
@@ -150,9 +163,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         //Failure Callback
                         Toast.makeText(mContext, "ERROR: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                        findViewById(R.id.sign_up_button).setVisibility(View.VISIBLE);
+                        findViewById(R.id.sign_up_progress).setVisibility(View.GONE);
                     }
                 });
         if(signUpValidation.validate()) {
+            findViewById(R.id.sign_up_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_up_progress).setVisibility(View.VISIBLE);
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(jsonObjReq);
         }

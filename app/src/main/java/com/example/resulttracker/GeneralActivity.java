@@ -243,13 +243,25 @@ public class GeneralActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             try {
-                                                if(response.getInt("code")==202){
+
+                                                mEmailEdit.setError(null);
+                                                mUsername.setError(null);
+                                                int code=response.getInt("code");
+                                                if(code==202){
                                                     Toast.makeText(GeneralActivity.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
                                                     alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
                                                     alertD.dismiss();
                                                     loadProfileInfo();
-                                                }else if(response.getInt("code")==463){
-                                                    Toast.makeText(GeneralActivity.this, "Username Exists", Toast.LENGTH_SHORT).show();
+                                                }else if(code==261 || code==263 ){
+                                                    if(code==261){
+                                                        mEmailEdit.requestFocus();
+                                                        mEmailEdit.setError("Email ID exists");
+                                                    }
+                                                    if(code==263){
+                                                        mUsername.requestFocus();
+                                                        mUsername.setError("Username exists");
+                                                    }
+
                                                 }else{
                                                     Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
