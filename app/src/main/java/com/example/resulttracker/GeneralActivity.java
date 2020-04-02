@@ -292,6 +292,7 @@ public class GeneralActivity extends AppCompatActivity {
     public void loadExamStructure(final View alertLayout){
 
         alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.VISIBLE);
+        alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.GONE);
         String requestUrl=mainUrl+"get_exam.php?stud_id="+stud_id;
 
         //ADD Functionality for adding exam
@@ -379,12 +380,18 @@ public class GeneralActivity extends AppCompatActivity {
                         try {
                             if(response.getInt("code")==202){
                                 JSONArray responseArray=response.getJSONArray("response");
-                                AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,GeneralActivity.this, alertLayout);
-                                RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
-                                mExamListRecycler.setAdapter(adapter);
+                                if(responseArray.length()>0){
+                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,GeneralActivity.this, alertLayout);
+                                    RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
+                                    mExamListRecycler.setAdapter(adapter);
 
-                                mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
-                                alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                                    mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
+                                    alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                                }else{
+                                    alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                                    alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.VISIBLE);
+                                }
+
                             }else{
                                 Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                 alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);

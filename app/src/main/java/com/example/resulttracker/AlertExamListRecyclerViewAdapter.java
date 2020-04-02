@@ -30,6 +30,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
     private Context mContext;
     private View alertLayoutParent;
     private GeneralActivity generalActivity;
+    private InputFragment inputFragment;
     private String mainUrl;
     AlertExamListRecyclerViewAdapter(JSONArray examListArray, GeneralActivity mContext, View alertLayoutParent){
         this.examListArray=examListArray;
@@ -37,6 +38,15 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
         this.alertLayoutParent=alertLayoutParent;
         this.generalActivity=mContext;
     }
+    AlertExamListRecyclerViewAdapter(JSONArray examListArray, Context mContext, InputFragment inputFragment, View alertLayoutParent){
+        this.examListArray=examListArray;
+        this.mContext=mContext;
+        this.alertLayoutParent=alertLayoutParent;
+        this.inputFragment=inputFragment;
+    }
+
+
+
     @NonNull
     @Override
     public AlertExamListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -115,7 +125,11 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                                 if(response.getInt("code")==202){
                                                     alertLayout.findViewById(R.id.alert_edit_name_progress).setVisibility(View.GONE);
                                                     Toast.makeText(mContext, "Successfully updated", Toast.LENGTH_SHORT).show();
-                                                    generalActivity.loadExamStructure(alertLayoutParent);
+
+                                                    if(generalActivity==null)
+                                                        inputFragment.loadExamStructure(alertLayoutParent);
+                                                    else
+                                                        generalActivity.loadExamStructure(alertLayoutParent);
                                                     alertD.dismiss();
                                                 }else{
                                                     Toast.makeText(mContext, "Something went wrong"+response.toString(), Toast.LENGTH_SHORT).show();

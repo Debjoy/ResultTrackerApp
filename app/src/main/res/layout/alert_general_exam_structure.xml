@@ -40,8 +40,30 @@
         android:layout_width="match_parent"
         android:scrollbars="vertical"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="15dp">
+        <TextView
+            android:id="@+id/alert_general_exam_no_exams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            android:text="Add an exam to the exam structure by clicking the button below."/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="(note: Frequency is the number of times the same type of exams repeats per Term)"/>
+
+    </LinearLayout>
     <Button
         android:id="@+id/alert_general_exam_add_button"
         android:layout_width="wrap_content"
