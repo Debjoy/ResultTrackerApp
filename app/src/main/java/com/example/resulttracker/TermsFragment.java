@@ -34,6 +34,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +54,10 @@ public class TermsFragment extends Fragment {
     private ProgressBar mHomeProgressAverage;
     private LinearLayout mTermFullView;
     private ProgressBar mTermFullProgress;
+    private LinearLayout mTermFullnoTerm;
     private Context mContext;
     private int user_id;
+    private View mainView;
 
     TermsFragment(int user_id, Context mContext){
         this.mContext=mContext;
@@ -74,6 +77,7 @@ public class TermsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainView=view;
         termAverageBarChart=view.findViewById(R.id.termwise_average_barchart);
         mHomeRecyclerView=view.findViewById(R.id.term_recycler_view);
         mCurrentTermName=view.findViewById(R.id.term_term_name_heading);
@@ -81,9 +85,11 @@ public class TermsFragment extends Fragment {
         mHomeProgressAverage=view.findViewById(R.id.term_progress_average_term);
         mTermFullView=view.findViewById(R.id.term_full_view);
         mTermFullProgress=view.findViewById(R.id.term_full_progress);
+        mTermFullnoTerm=view.findViewById(R.id.term_full_no_term);
 
 
         mTermFullView.setVisibility(View.GONE);
+        mTermFullnoTerm.setVisibility(View.GONE);
         mTermFullProgress.setVisibility(View.VISIBLE);
         String requestUrl=mainUrl+"getlistterm.php?stud_id="+user_id;
         JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
@@ -102,13 +108,24 @@ public class TermsFragment extends Fragment {
                                     mTermNameList.add(responseArray.getJSONObject(i).getString("term_name"));
                                 }
 
-                                if(mTermIdList.size()>0)
+                                if(mTermIdList.size()>0){
                                     showTermWiseAverageChart(mTermIdList.get(mTermIdList.size()-1));
-                                mCurrentTermName.setText(mTermNameList.get(mTermNameList.size()-1));
+                                    mCurrentTermName.setText(mTermNameList.get(mTermNameList.size()-1));
+                                    populteRecyclerSubjects(mTermNameList.size()-1, mTermIdList );
+                                }else{
+                                    //GO TO THE INPUT FRAGMENT OR DO SOMETHING
+                                    mTermFullView.setVisibility(View.GONE);
+                                    mTermFullnoTerm.setVisibility(View.VISIBLE);
+                                    mTermFullProgress.setVisibility(View.GONE);
+                                }
 
-
-                                populteRecyclerSubjects(mTermNameList.size()-1, mTermIdList );
-
+                                mainView.findViewById(R.id.term_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, user_id)).commit();
+                                        ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                    }
+                                });
 
                                 mChangeTermButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -131,8 +148,6 @@ public class TermsFragment extends Fragment {
                                         builder.show();
                                     }
                                 });
-                                mTermFullView.setVisibility(View.VISIBLE);
-                                mTermFullProgress.setVisibility(View.GONE);
 
                             }
                         } catch (JSONException e) {
@@ -195,59 +210,73 @@ public class TermsFragment extends Fragment {
                         //Success Callback
 
                         try {
-                            ArrayList<BarEntry> entries = new ArrayList<>();
-                            ViewGroup.LayoutParams params = termAverageBarChart.getLayoutParams();
-                            params.height=117*response.length();
-                            termAverageBarChart.setLayoutParams(params);
-                            for(int i=0;i<response.length();i++){
-                                JSONObject obj= (JSONObject) response.get(i);
-                                double average=obj.getDouble("avg");
-                                double full_marks=obj.getDouble("full_marks");
-                                double percentage=(average/full_marks)*100;
-                                String exam_name=obj.getString("exam_name");
-                                String exam_number=obj.getString("assesment_number");
-                                String final_label=exam_name;
-                                if(final_label.length()<11){
-                                    int number=11-final_label.length();
-                                    for(int j=0;j<number;j++)
-                                        final_label+="  ";
-                                }else{
-                                    final_label=final_label.substring(0,9)+"..";
+
+                            if(response.length()>0){
+                                ArrayList<BarEntry> entries = new ArrayList<>();
+                                ViewGroup.LayoutParams params = termAverageBarChart.getLayoutParams();
+                                params.height=117*response.length();
+                                termAverageBarChart.setLayoutParams(params);
+                                for(int i=0;i<response.length();i++){
+                                    JSONObject obj= (JSONObject) response.get(i);
+                                    double average=obj.getDouble("avg");
+                                    double full_marks=obj.getDouble("full_marks");
+                                    double percentage=(average/full_marks)*100;
+                                    String exam_name=obj.getString("exam_name");
+                                    String exam_number=obj.getString("assesment_number");
+                                    String final_label=exam_name;
+                                    if(final_label.length()<11){
+                                        int number=11-final_label.length();
+                                        for(int j=0;j<number;j++)
+                                            final_label+="  ";
+                                    }else{
+                                        final_label=final_label.substring(0,9)+"..";
+                                    }
+                                    final_label=final_label+" #"+exam_number;
+                                    labels.add(final_label);
+                                    entries.add(new BarEntry((i+1),(float)percentage));
                                 }
-                                final_label=final_label+" #"+exam_number;
-                                labels.add(final_label);
-                                entries.add(new BarEntry((i+1),(float)percentage));
+
+
+                                XAxis xAxis = termAverageBarChart.getXAxis();
+                                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+
+                                ValueFormatter formatter = new ValueFormatter() {
+
+
+                                    @Override
+                                    public String getFormattedValue(float value) {
+                                        return labels.get((int) value-1);
+                                    }
+                                };
+                                xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                                xAxis.setValueFormatter(formatter);
+                                xAxis.setTextColor(Color.parseColor("#FFFFFF"));
+                                xAxis.setXOffset(75f);
+
+                                BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
+                                dataset.setColor(Color.parseColor("#263238"));
+
+                                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+                                dataSets.add(dataset);
+                                BarData data = new BarData(dataSets);
+                                termAverageBarChart.setData(data);
+                                termAverageBarChart.setNoDataText("data not available");
+                                termAverageBarChart.invalidate();
+
+                                termAverageBarChart.setVisibility(View.VISIBLE);
+                                mHomeProgressAverage.setVisibility(View.GONE);
+
+                                mTermFullView.setVisibility(View.VISIBLE);
+                                mTermFullnoTerm.setVisibility(View.GONE);
+                                mTermFullProgress.setVisibility(View.GONE);
+                            }else {
+                                mTermFullView.setVisibility(View.GONE);
+                                mTermFullnoTerm.setVisibility(View.VISIBLE);
+                                mTermFullProgress.setVisibility(View.GONE);
+                                ((TextView)mainView.findViewById(R.id.term_full_no_term_heading)).setText("Hey, seems like you have not added any Marks");
+                                ((TextView)mainView.findViewById(R.id.term_full_no_term_content)).setText("Go to the input section,\nadd a subject in a term, \n" +
+                                        "and then finally add some marks\n to view this page");
                             }
-
-
-                            XAxis xAxis = termAverageBarChart.getXAxis();
-                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
-
-                            ValueFormatter formatter = new ValueFormatter() {
-
-
-                                @Override
-                                public String getFormattedValue(float value) {
-                                    return labels.get((int) value-1);
-                                }
-                            };
-                            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-                            xAxis.setValueFormatter(formatter);
-                            xAxis.setTextColor(Color.parseColor("#FFFFFF"));
-                            xAxis.setXOffset(75f);
-
-                            BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
-                            dataset.setColor(Color.parseColor("#263238"));
-
-                            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-                            dataSets.add(dataset);
-                            BarData data = new BarData(dataSets);
-                            termAverageBarChart.setData(data);
-                            termAverageBarChart.setNoDataText("data not available");
-                            termAverageBarChart.invalidate();
-
-                            termAverageBarChart.setVisibility(View.VISIBLE);
-                            mHomeProgressAverage.setVisibility(View.GONE);
 
                             //Log.i("RESULT",termAverageBarChart.getBarData().getDataSets().toString());
                         } catch (JSONException e) {

@@ -46,6 +46,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,6 +96,8 @@ public class HomeFragment extends Fragment {
 
     private ScrollView mHomeScrollView;
     private ProgressBar mHomeProgressBar;
+    private LinearLayout mHomeNoMarks;
+    private View mainView;
 
     HomeFragment(int stud_id,Context mContext){
         this.stud_id=stud_id;
@@ -111,6 +114,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainView=view;
         mCirclarProgressText=view.findViewById(R.id.circularProgressBar_tv);
         mCirclularProgress=view.findViewById(R.id.circularProgressbar);
         mTotalMarksEntry=view.findViewById(R.id.home_total_marks_entry_tv);
@@ -179,9 +183,11 @@ public class HomeFragment extends Fragment {
 
         mHomeScrollView=view.findViewById(R.id.home_scroll_scrollView);
         mHomeProgressBar=view.findViewById(R.id.home_progress_basic);
+        mHomeNoMarks=view.findViewById(R.id.home_full_no_term);
 
         mHomeProgressBar.setVisibility(View.VISIBLE);
         mHomeScrollView.setVisibility(View.GONE);
+        mHomeNoMarks.setVisibility(View.GONE);
 
 
         loadData();
@@ -195,154 +201,172 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        mHomeProgressBar.setVisibility(View.GONE);
-                        mHomeScrollView.setVisibility(View.VISIBLE);
+
                         try {
                             if(response.getInt("code")==202){
                                 JSONObject average=response.getJSONObject("average");
                                 JSONObject average_response=average.getJSONObject("response");
-                                final double average_value=Math.round(average_response.getDouble("value") * 10) / 10.0;;
 
-                                mCirclularProgress.setProgress(0);   // Main Progress
-                                mCirclularProgress.setSecondaryProgress(100); // Secondary Progress
-                                mCirclularProgress.setMax(100); // Maximum Progress
-                                new Thread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        // TODO Auto-generated method stub
-                                        while (pStatus < average_value) {
-                                            pStatus += 1;
-
-                                            handler.post(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    // TODO Auto-generated method stub
-                                                    mCirclularProgress.setProgress(pStatus);
-                                                    mCirclarProgressText.setText(pStatus + "%");
-
-                                                }
-                                            });
-                                            try {
-                                                Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        mCirclularProgress.setProgress((int)average_value);
-                                        mCirclarProgressText.setText(average_value + "%");
-                                    }
-                                }).start();
                                 JSONObject responseAll=response.getJSONObject("all");
                                 final JSONArray allMarksResponseList= responseAll.getJSONArray("response");
 
-                                final int allMarksResponseListLength=allMarksResponseList.length();
+                                if(allMarksResponseList.length()>2){
+                                    final double average_value=Math.round(average_response.getDouble("value") * 10) / 10.0;;
 
-                                new Thread(new Runnable() {
-                                    private int count=0;
-                                    @Override
-                                    public void run() {
-                                        // TODO Auto-generated method stub
+                                    mCirclularProgress.setProgress(0);   // Main Progress
+                                    mCirclularProgress.setSecondaryProgress(100); // Secondary Progress
+                                    mCirclularProgress.setMax(100); // Maximum Progress
+                                    new Thread(new Runnable() {
 
-                                        while (count <= allMarksResponseListLength) {
-                                            count += 1;
+                                        @Override
+                                        public void run() {
+                                            // TODO Auto-generated method stub
+                                            while (pStatus < average_value) {
+                                                pStatus += 1;
 
-                                            handler.post(new Runnable() {
+                                                handler.post(new Runnable() {
 
-                                                @Override
-                                                public void run() {
-                                                    // TODO Auto-generated method stub
-                                                    mTotalMarksEntry.setText(count+"");
+                                                    @Override
+                                                    public void run() {
+                                                        // TODO Auto-generated method stub
+                                                        mCirclularProgress.setProgress(pStatus);
+                                                        mCirclarProgressText.setText(pStatus + "%");
 
+                                                    }
+                                                });
+                                                try {
+                                                    Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            });
-                                            try {
-                                                Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
+                                            }
+                                            mCirclularProgress.setProgress((int)average_value);
+                                            mCirclarProgressText.setText(average_value + "%");
+                                        }
+                                    }).start();
+                                    final int allMarksResponseListLength=allMarksResponseList.length();
+
+                                    new Thread(new Runnable() {
+                                        private int count=0;
+                                        @Override
+                                        public void run() {
+                                            // TODO Auto-generated method stub
+
+                                            while (count < allMarksResponseListLength) {
+                                                count += 1;
+
+                                                handler.post(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        // TODO Auto-generated method stub
+                                                        mTotalMarksEntry.setText(count+"");
+
+                                                    }
+                                                });
+                                                try {
+                                                    Thread.sleep(16); //thread will take approx 3 seconds to finish,change its value according to your needs
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         }
+                                    }).start();
+
+                                    List<Entry> entries = new ArrayList<Entry>();
+
+                                    for(int i=0;i<allMarksResponseListLength;i++){
+                                        entries.add(new Entry((float)i, (float)((JSONObject)allMarksResponseList.get(i)).getDouble("percentage")));
                                     }
-                                }).start();
 
-                                List<Entry> entries = new ArrayList<Entry>();
+                                    LineDataSet dataSet = new LineDataSet(entries, "Marks");
+                                    dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                                    dataSet.setDrawFilled(true);
+                                    dataSet.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
+                                    dataSet.setDrawCircles(false);
+                                    dataSet.setFillAlpha(255);
+                                    dataSet.setDrawValues(false);
 
-                                for(int i=0;i<allMarksResponseListLength;i++){
-                                    entries.add(new Entry((float)i, (float)((JSONObject)allMarksResponseList.get(i)).getDouble("percentage")));
-                                }
+                                    dataSet.setColor(mContext.getResources().getColor(R.color.colorAccent));
+                                    LineData lineData = new LineData(dataSet);
+                                    mLineChart.setData(lineData);
 
-                                LineDataSet dataSet = new LineDataSet(entries, "Marks");
-                                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                                dataSet.setDrawFilled(true);
-                                dataSet.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
-                                dataSet.setDrawCircles(false);
-                                dataSet.setFillAlpha(255);
-                                dataSet.setDrawValues(false);
+                                    ValueFormatter formatter = new ValueFormatter() {
 
-                                dataSet.setColor(mContext.getResources().getColor(R.color.colorAccent));
-                                LineData lineData = new LineData(dataSet);
-                                mLineChart.setData(lineData);
-
-                                ValueFormatter formatter = new ValueFormatter() {
-
-                                    @Override
-                                    public String getFormattedValue(float value) {
-                                        String label="";
-                                        try {
-                                            label= ((JSONObject)allMarksResponseList.get((int) value)).getString("term_name");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        @Override
+                                        public String getFormattedValue(float value) {
+                                            String label="";
+                                            try {
+                                                label= ((JSONObject)allMarksResponseList.get((int) value)).getString("term_name");
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            return label;
                                         }
-                                        return label;
+
+                                        // we don't draw numbers, so no decimal digits needed
+                                    };
+                                    XAxis xAxis = mLineChart.getXAxis();
+                                    xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                                    xAxis.setValueFormatter(formatter);
+                                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+                                    mLineChart.invalidate();
+
+
+                                    JSONObject top_three=response.getJSONObject("top_three");
+                                    JSONArray top_three_array=top_three.getJSONArray("response");
+
+                                    if(top_three_array.length()>0){
+                                        mBestOneLayout.setVisibility(View.VISIBLE);
+                                        mBestOneSubject.setText(((JSONObject)top_three_array.get(0)).getString("subject_name"));
+                                        mBestOneMarks.setText((Math.round(10*((JSONObject)top_three_array.get(0)).getDouble("average"))/10f)+" %");
+                                    }
+                                    if(top_three_array.length()>1){
+                                        mBestTwoLayout.setVisibility(View.VISIBLE);
+                                        mBestTwoSubject.setText(((JSONObject)top_three_array.get(1)).getString("subject_name"));
+                                        mBestTwoMarks.setText((Math.round(10*((JSONObject)top_three_array.get(1)).getDouble("average"))/10f)+" %");
+                                    }
+                                    if(top_three_array.length()>2){
+                                        mBestThreeLayout.setVisibility(View.VISIBLE);
+                                        mBestThreeSubject.setText(((JSONObject)top_three_array.get(2)).getString("subject_name"));
+                                        mBestThreeMarks.setText((Math.round(10*((JSONObject)top_three_array.get(2)).getDouble("average"))/10f)+" %");
                                     }
 
-                                    // we don't draw numbers, so no decimal digits needed
-                                };
-                                XAxis xAxis = mLineChart.getXAxis();
-                                xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-                                xAxis.setValueFormatter(formatter);
-                                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                                    JSONObject worst_three=response.getJSONObject("bottom_three");
+                                    JSONArray worst_three_array=worst_three.getJSONArray("response");
+                                    if(worst_three_array.length()>0){
+                                        mWorstOneLayout.setVisibility(View.VISIBLE);
+                                        mWorstOneSubject.setText(((JSONObject)worst_three_array.get(0)).getString("subject_name"));
+                                        mWorstOneMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(0)).getDouble("average"))/10f)+" %");
+                                    }
+                                    if(worst_three_array.length()>1){
+                                        mWorstTwoLayout.setVisibility(View.VISIBLE);
+                                        mWorstTwoSubject.setText(((JSONObject)worst_three_array.get(1)).getString("subject_name"));
+                                        mWorstTwoMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(1)).getDouble("average"))/10f)+" %");
+                                    }
+                                    if(worst_three_array.length()>2){
+                                        mWorstThreeLayout.setVisibility(View.VISIBLE);
+                                        mWorstThreeSubject.setText(((JSONObject)worst_three_array.get(2)).getString("subject_name"));
+                                        mWorstThreeMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(2)).getDouble("average"))/10f)+" %");
+                                    }
+                                    mHomeProgressBar.setVisibility(View.GONE);
+                                    mHomeScrollView.setVisibility(View.VISIBLE);
+                                    mHomeNoMarks.setVisibility(View.GONE);
+                                }else{
+                                    mHomeProgressBar.setVisibility(View.GONE);
+                                    mHomeScrollView.setVisibility(View.GONE);
+                                    mHomeNoMarks.setVisibility(View.VISIBLE);
 
-                                mLineChart.invalidate();
-
-
-                                JSONObject top_three=response.getJSONObject("top_three");
-                                JSONArray top_three_array=top_three.getJSONArray("response");
-
-                                if(top_three_array.length()>0){
-                                    mBestOneLayout.setVisibility(View.VISIBLE);
-                                    mBestOneSubject.setText(((JSONObject)top_three_array.get(0)).getString("subject_name"));
-                                    mBestOneMarks.setText((Math.round(10*((JSONObject)top_three_array.get(0)).getDouble("average"))/10f)+" %");
-                                }
-                                if(top_three_array.length()>1){
-                                    mBestTwoLayout.setVisibility(View.VISIBLE);
-                                    mBestTwoSubject.setText(((JSONObject)top_three_array.get(1)).getString("subject_name"));
-                                    mBestTwoMarks.setText((Math.round(10*((JSONObject)top_three_array.get(1)).getDouble("average"))/10f)+" %");
-                                }
-                                if(top_three_array.length()>2){
-                                    mBestThreeLayout.setVisibility(View.VISIBLE);
-                                    mBestThreeSubject.setText(((JSONObject)top_three_array.get(2)).getString("subject_name"));
-                                    mBestThreeMarks.setText((Math.round(10*((JSONObject)top_three_array.get(2)).getDouble("average"))/10f)+" %");
+                                    mainView.findViewById(R.id.home_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id)).commit();
+                                            ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                        }
+                                    });
                                 }
 
-                                JSONObject worst_three=response.getJSONObject("bottom_three");
-                                JSONArray worst_three_array=worst_three.getJSONArray("response");
-                                if(worst_three_array.length()>0){
-                                    mWorstOneLayout.setVisibility(View.VISIBLE);
-                                    mWorstOneSubject.setText(((JSONObject)worst_three_array.get(0)).getString("subject_name"));
-                                    mWorstOneMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(0)).getDouble("average"))/10f)+" %");
-                                }
-                                if(worst_three_array.length()>1){
-                                    mWorstTwoLayout.setVisibility(View.VISIBLE);
-                                    mWorstTwoSubject.setText(((JSONObject)worst_three_array.get(1)).getString("subject_name"));
-                                    mWorstTwoMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(1)).getDouble("average"))/10f)+" %");
-                                }
-                                if(worst_three_array.length()>2){
-                                    mWorstThreeLayout.setVisibility(View.VISIBLE);
-                                    mWorstThreeSubject.setText(((JSONObject)worst_three_array.get(2)).getString("subject_name"));
-                                    mWorstThreeMarks.setText((Math.round(10*((JSONObject)worst_three_array.get(2)).getDouble("average"))/10f)+" %");
-                                }
 
 
                             }else{

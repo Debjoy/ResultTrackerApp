@@ -35,6 +35,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class SubjectFragment extends Fragment {
     private RecyclerView mSubjectRecyclerMarks;
     private ProgressBar mFullSubjectProgress;
     private LinearLayout mFullViewSubject;
+    private LinearLayout mFullNoSubject;
 
     private ProgressBar mIndividualMarksProgress;
     private LinearLayout mIndividualMarksView;
@@ -63,6 +65,7 @@ public class SubjectFragment extends Fragment {
 
     private TextView mRankTv;
     private TextView mRankTotalTv;
+    private View mainView;
 
     private ArrayList<String> labels = new ArrayList<>();
 
@@ -83,6 +86,7 @@ public class SubjectFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainView=view;
         mSelectSubjectButton=view.findViewById(R.id.subject_select_subject_button);
         mSubjectNameTv=view.findViewById(R.id.subject_subject_name_tv);
         mTermNameTv=view.findViewById(R.id.subject_term_name_tv);
@@ -90,6 +94,7 @@ public class SubjectFragment extends Fragment {
         mChartSubject=view.findViewById(R.id.subject_marks_charts);
         mFullViewSubject=view.findViewById(R.id.subject_full_view);
         mFullSubjectProgress=view.findViewById(R.id.subject_full_progress);
+        mFullNoSubject=view.findViewById(R.id.subject_full_no_term);
 
         mIndividualMarksProgress=view.findViewById(R.id.subject_individual_marks_progress);
         mIndividualMarksView=view.findViewById(R.id.subject_individual_marks_view);
@@ -135,6 +140,7 @@ public class SubjectFragment extends Fragment {
 
         mFullViewSubject.setVisibility(View.GONE);
         mFullSubjectProgress.setVisibility(View.VISIBLE);
+        mFullNoSubject.setVisibility(View.GONE);
         String requestUrl=mainUrl+"getsubjects.php?stud_id="+stud_id;
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -143,40 +149,51 @@ public class SubjectFragment extends Fragment {
                         try {
                             if(response.getInt("code")==202){
                                 final JSONArray arraySubjects=response.getJSONArray("response");
-
-                                final ArrayList<String> subjectList= new ArrayList<>();
-                                for(int i=0;i<arraySubjects.length();i++){
-                                    subjectList.add(((JSONObject)arraySubjects.get(i)).getString("subject_name"));
-                                }
-
-                                final String[] itemnamesArray=subjectList.toArray(new String[subjectList.size()]);
-
-                                if(response.getJSONObject("average").getInt("code")==202){
-                                    mOASP=response.getJSONObject("average").getDouble("response");
-                                }
-
-                                mSelectSubjectButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                        builder.setTitle("Select a Subject");
-                                        builder.setItems(itemnamesArray, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int item) {
-
-                                               setSubject(item,arraySubjects);
-                                                dialog.dismiss();
-
-                                            }
-                                        }).show();
-
-                                    }
-                                });
                                 if(arraySubjects.length()>0){
-                                    setSubject(0,arraySubjects);
+                                    final ArrayList<String> subjectList= new ArrayList<>();
+                                    for(int i=0;i<arraySubjects.length();i++){
+                                        subjectList.add(((JSONObject)arraySubjects.get(i)).getString("subject_name"));
+                                    }
+
+                                    final String[] itemnamesArray=subjectList.toArray(new String[subjectList.size()]);
+
+                                    if(response.getJSONObject("average").getInt("code")==202){
+                                        mOASP=response.getJSONObject("average").getDouble("response");
+                                    }
+
+                                    mSelectSubjectButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                            builder.setTitle("Select a Subject");
+                                            builder.setItems(itemnamesArray, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int item) {
+                                                    setSubject(item,arraySubjects);
+                                                    dialog.dismiss();
+                                                }
+                                            }).show();
+                                        }
+                                    });
+                                    if(arraySubjects.length()>0){
+                                        setSubject(0,arraySubjects);
+                                    }
+                                    mRankTotalTv.setText(""+arraySubjects.length());
+                                    mFullViewSubject.setVisibility(View.VISIBLE);
+                                    mFullSubjectProgress.setVisibility(View.GONE);
+                                    mFullNoSubject.setVisibility(View.GONE);
+                                }else{
+                                    mFullViewSubject.setVisibility(View.GONE);
+                                    mFullSubjectProgress.setVisibility(View.GONE);
+                                    mFullNoSubject.setVisibility(View.VISIBLE);
+
+                                    mainView.findViewById(R.id.subject_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id)).commit();
+                                            ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                        }
+                                    });
                                 }
-                                mRankTotalTv.setText(""+arraySubjects.length());
-                                mFullViewSubject.setVisibility(View.VISIBLE);
-                                mFullSubjectProgress.setVisibility(View.GONE);
                             }else{
                                 Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }
