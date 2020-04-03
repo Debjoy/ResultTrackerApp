@@ -38,18 +38,18 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorText"
                 android:layout_marginBottom="5dp"
-                android:text="Debjoy Bhowal"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/general_profile_info_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="debjoybhowal7@gmail.com"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/general_profile_info_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="debjoy"
+                android:text=""
                 android:textColor="@color/colorPrimary"
                 android:textStyle="italic"
                 android:textSize="17sp"/>

@@ -64,7 +64,7 @@ and then finally add some marks\n to view this page"/>
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="to know about terms, \nclick this icon in the action bar"
+            android:text="to know about terms or marks, \nclick this icon in the action bar"
             android:drawableBottom="@drawable/ic_help_outline_black_24dp"
             android:drawablePadding="5dp"
             android:drawableTint="@android:color/tertiary_text_light"/>

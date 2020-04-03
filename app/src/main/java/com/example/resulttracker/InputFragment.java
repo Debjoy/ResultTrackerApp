@@ -2,6 +2,7 @@ package com.example.resulttracker;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -56,6 +57,14 @@ public class InputFragment extends Fragment {
     private JSONArray termListResponse=new JSONArray();
     private JSONArray examListResponse=new JSONArray();
     private LinearLayout mTermWiseSubjetsLoading;
+    private LinearLayout mTermWiseSubjectNoTerm;
+
+
+    private ProgressBar mTermFullProgress;
+    private LinearLayout mTermFullNoExam;
+    private LinearLayout mTermFullView;
+
+    private View mainView;
 
 
     private AwesomeValidation addExamValidation;
@@ -74,11 +83,91 @@ public class InputFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainView=view;
         mTermsRecyclerView=view.findViewById(R.id.input_recycler_layout);
         mTermWiseSubjetsLoading=view.findViewById(R.id.input_term_wise_subjets_loading);
+        mTermWiseSubjectNoTerm=view.findViewById(R.id.input_term_no_term);
         mAddNewTermButton=view.findViewById(R.id.input_add_new_term);
         mAddMarksButton=view.findViewById(R.id.input_layout_add_marks_button);
+        mTermFullProgress=view.findViewById(R.id.input_full_progress);
+        mTermFullNoExam=view.findViewById(R.id.input_full_no_exam);
+        mTermFullView=view.findViewById(R.id.input_full_view);
 
+
+
+        check_exam_structure();
+
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    public void check_exam_structure(){
+
+        mTermFullView.setVisibility(View.GONE);
+        mTermFullProgress.setVisibility(View.VISIBLE);
+        mTermFullNoExam.setVisibility(View.GONE);
+
+        String requestUrl=mainUrl+"get_exam.php?stud_id="+user_id;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.getInt("code")==202){
+                                JSONArray responseArray= response.getJSONArray("response");
+                                if(responseArray.length()>0){
+                                    mTermFullView.setVisibility(View.VISIBLE);
+                                    mTermFullProgress.setVisibility(View.GONE);
+                                    mTermFullNoExam.setVisibility(View.GONE);
+                                    loadTermPage();
+                                }else{
+                                    mTermFullView.setVisibility(View.GONE);
+                                    mTermFullProgress.setVisibility(View.GONE);
+                                    mTermFullNoExam.setVisibility(View.VISIBLE);
+                                    mainView.findViewById(R.id.input_full_no_exam_add).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                            LayoutInflater inflater = LayoutInflater.from(mContext);
+                                            final View alertLayout = inflater.inflate(R.layout.alert_general_exam_structure,null);
+                                            builder.setView(alertLayout);
+                                            final AlertDialog alertD=builder.show();
+                                            alertLayout.findViewById(R.id.alert_general_exam_also).setVisibility(View.VISIBLE);
+                                            alertD.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialog) {
+                                                    check_exam_structure();
+                                                }
+                                            });
+
+                                            alertLayout.findViewById(R.id.alert_general_exam_structure_cancel).setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    alertD.dismiss();
+                                                }
+                                            });
+
+                                            loadExamStructure(alertLayout);
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void loadTermPage(){
         mAddMarksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -279,20 +368,7 @@ public class InputFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                LayoutInflater inflater = LayoutInflater.from(mContext);
-//                final View alertLayout = inflater.inflate(R.layout.alert_general_exam_structure,null);
-//                builder.setView(alertLayout);
-//                final AlertDialog alertD=builder.show();
-//
-//                alertLayout.findViewById(R.id.alert_general_exam_structure_cancel).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        alertD.dismiss();
-//                    }
-//                });
-//
-//                loadExamStructure(alertLayout);
+
                 AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 final View alertLayout = inflater.inflate(R.layout.alert_input_add_new_term,null);
@@ -352,11 +428,11 @@ public class InputFragment extends Fragment {
             }
         });
         loadTermsWithSubjects();
-        super.onViewCreated(view, savedInstanceState);
     }
 
     public void loadTermsWithSubjects(){
         mTermWiseSubjetsLoading.setVisibility(View.VISIBLE);
+        mTermWiseSubjectNoTerm.setVisibility(View.GONE);
         String requestUrl=mainUrl+"termwisesubjects.php?stud_id="+user_id;
         JsonObjectRequest jsonObjectRequest= new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
@@ -364,10 +440,18 @@ public class InputFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+
                             if(response.getInt("code")==202){
-                                InputTermRecyclerViewAdapter termAdapter= new InputTermRecyclerViewAdapter(response.getJSONArray("response"),mContext, InputFragment.this);
+
+                                JSONArray responseArray=response.getJSONArray("response");
+                                if(responseArray.length()==0){
+                                    mTermWiseSubjectNoTerm.setVisibility(View.VISIBLE);
+                                }
+                                InputTermRecyclerViewAdapter termAdapter= new InputTermRecyclerViewAdapter(responseArray,mContext, InputFragment.this);
                                 mTermsRecyclerView.setAdapter(termAdapter);
                                 mTermsRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -381,7 +465,7 @@ public class InputFragment extends Fragment {
                         mTermWiseSubjetsLoading.setVisibility(View.GONE);
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext().getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -399,6 +483,7 @@ public class InputFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 final View layout = inflater.inflate(R.layout.alert_add_exam,null);
                 builder.setView(layout);
+
                 final androidx.appcompat.app.AlertDialog alertDialog=builder.show();
 
                 layout.findViewById(R.id.alert_add_exam_cancel).setOnClickListener(new View.OnClickListener() {

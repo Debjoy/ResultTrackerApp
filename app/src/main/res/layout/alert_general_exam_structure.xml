@@ -50,7 +50,7 @@
         android:layout_marginBottom="15dp">
         <TextView
             android:id="@+id/alert_general_exam_no_exams"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20sp"
@@ -58,7 +58,15 @@
             android:textColor="@color/colorText"
             android:text="Add an exam to the exam structure by clicking the button below."/>
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/alert_general_exam_also"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:text="You can add exams later from the settings menu."/>
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="(note: Frequency is the number of times the same type of exams repeats per Term)"/>
