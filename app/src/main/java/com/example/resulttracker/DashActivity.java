@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -130,21 +131,14 @@ public class DashActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.action_logout:
-                new AlertDialog.Builder(DashActivity.this)
-                        .setTitle("Confirm")
-                        .setMessage("Are you sure you want to logout?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                onLogOut();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).show();
+                String url = "https://www.youtube.com/watch?v=wZZ7oFKsKzY";
+                Uri uri = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                // Verify that the intent will resolve to an activity
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    // Here we use an intent without a Chooser unlike the next example
+                    startActivity(intent);
+                }
 
                 break;
             case R.id.action_general:
