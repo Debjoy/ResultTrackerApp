@@ -63,14 +63,7 @@ public class DashActivity extends AppCompatActivity {
     }
 
 
-    public void onLogOut(){
-        SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
-        SharedPreferences.Editor sprefEditor=spref.edit();
-        sprefEditor.clear();
-        sprefEditor.commit();
-        Intent mainActivity=new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
-    }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {

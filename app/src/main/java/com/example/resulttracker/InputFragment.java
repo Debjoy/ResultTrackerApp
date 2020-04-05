@@ -562,7 +562,7 @@ public class InputFragment extends Fragment {
                             if(response.getInt("code")==202){
                                 JSONArray responseArray=response.getJSONArray("response");
                                 if(responseArray.length()>0){
-                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,mContext,InputFragment.this , alertLayout);
+                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,mContext,InputFragment.this , alertLayout,user_id);
                                     RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
                                     mExamListRecycler.setAdapter(adapter);
 

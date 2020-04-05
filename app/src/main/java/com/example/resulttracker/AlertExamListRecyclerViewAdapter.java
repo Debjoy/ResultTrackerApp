@@ -2,6 +2,8 @@ package com.example.resulttracker;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<AlertExamListRecyclerViewAdapter.AlertExamListViewHolder> {
 
     private JSONArray examListArray;
@@ -32,17 +36,20 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
     private GeneralActivity generalActivity;
     private InputFragment inputFragment;
     private String mainUrl;
-    AlertExamListRecyclerViewAdapter(JSONArray examListArray, GeneralActivity mContext, View alertLayoutParent){
+    private int stud_id;
+    AlertExamListRecyclerViewAdapter(JSONArray examListArray, GeneralActivity mContext, View alertLayoutParent,int stud_id){
         this.examListArray=examListArray;
         this.mContext=mContext;
         this.alertLayoutParent=alertLayoutParent;
         this.generalActivity=mContext;
+        this.stud_id=stud_id;
     }
-    AlertExamListRecyclerViewAdapter(JSONArray examListArray, Context mContext, InputFragment inputFragment, View alertLayoutParent){
+    AlertExamListRecyclerViewAdapter(JSONArray examListArray, Context mContext, InputFragment inputFragment, View alertLayoutParent, int stud_id){
         this.examListArray=examListArray;
         this.mContext=mContext;
         this.alertLayoutParent=alertLayoutParent;
         this.inputFragment=inputFragment;
+        this.stud_id=stud_id;
     }
 
 
@@ -66,7 +73,70 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
             holder.mDeleteExamButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "Function Disabled", Toast.LENGTH_SHORT).show();
+
+                    AlertDialog.Builder builder= new AlertDialog.Builder(mContext);
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    final View alertLayout=inflater.inflate(R.layout.alert_input_delete_confirmation,null);
+                    builder.setView(alertLayout);
+                    final AlertDialog alertD2=builder.show();
+                    ((TextView)alertLayout.findViewById(R.id.alert_delete_message)).setText("Deleting a Exam will also delete all the marks of it. Are you sure?");
+                    ((Button)alertLayout.findViewById(R.id.alert_delete_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertD2.dismiss();
+                        }
+                    });
+                    ((Button)alertLayout.findViewById(R.id.alert_delete_ok_button)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences spref = mContext.getSharedPreferences("data_user", MODE_PRIVATE);
+                            String password=spref.getString("pwd","");
+                            String requestUrl=mainUrl+"del_exam.php";
+                            JSONObject postparams=new JSONObject();
+                            try {
+                                postparams.put("stud_id",stud_id);
+                                postparams.put("pass",password);
+                                postparams.put("ass_id",examListArray.getJSONObject(position).getInt("ass_id"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            alertLayout.findViewById(R.id.alert_delete_progress).setVisibility(View.VISIBLE);
+                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrl, postparams,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if(response.getInt("code")==202){
+                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                    if(generalActivity==null)
+                                                    inputFragment.loadExamStructure(alertLayoutParent);
+                                                    else
+                                                    generalActivity.loadExamStructure(alertLayoutParent);
+                                                    alertD2.dismiss();
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
+                                                }else{
+                                                    Toast.makeText(mContext,"Some thing went wrong: "+response.toString(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            alertLayout.findViewById(R.id.alert_delete_progress).setVisibility(View.GONE);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(mContext, "Network error "+error.toString(), Toast.LENGTH_SHORT).show();
+                                            alertLayout.findViewById(R.id.alert_delete_progress).setVisibility(View.GONE);
+                                        }
+                                    });
+                            RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+                            requestQueue.add(jsonObjectRequest);
+                        }
+                    });
                 }
             });
 

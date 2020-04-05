@@ -7,7 +7,7 @@
         android:id="@+id/input_full_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="170dp"
+        android:padding="150dp"
         android:visibility="gone"
         android:indeterminateTint="@color/colorPrimary"/>
     <LinearLayout
