@@ -4,6 +4,7 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private String mainUrl;
     private int stud_id;
+    private String stud_pass;
     private Context mContext;
     int pStatus = 0;
     private Handler handler = new Handler();
@@ -99,15 +101,16 @@ public class HomeFragment extends Fragment {
     private LinearLayout mHomeNoMarks;
     private View mainView;
 
-    HomeFragment(int stud_id,Context mContext){
+    HomeFragment(int stud_id, String stud_pass,Context mContext){
         this.stud_id=stud_id;
         this.mContext=mContext;
+        this.stud_pass=stud_pass;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.dashboard_home,container,false);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         return v;
     }
 
@@ -194,7 +197,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void loadData(){
-        String requestUrl=mainUrl+"basic_details.php?stud_id="+stud_id;
+        String requestUrl=mainUrl+"basic_details.php?stud_id="+stud_id+"&pass="+stud_pass;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -361,7 +364,7 @@ public class HomeFragment extends Fragment {
                                     mainView.findViewById(R.id.home_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id)).commit();
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id,stud_pass)).commit();
                                             ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
                                         }
                                     });
@@ -369,6 +372,10 @@ public class HomeFragment extends Fragment {
 
 
 
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
                             }else{
                                 Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }

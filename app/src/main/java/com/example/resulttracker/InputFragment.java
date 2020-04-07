@@ -3,6 +3,7 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class InputFragment extends Fragment {
     private String mainUrl;
     private Context mContext;
     private int user_id;
+    private String user_pass;
     private RecyclerView mTermsRecyclerView;
     private Button mAddNewTermButton;
     private Button mAddMarksButton;
@@ -69,9 +71,10 @@ public class InputFragment extends Fragment {
 
     private AwesomeValidation addExamValidation;
 
-    InputFragment(Context mContext,int user_id){
+    InputFragment(Context mContext,int user_id, String user_pass){
         this.mContext=mContext;
         this.user_id=user_id;
+        this.user_pass=user_pass;
     }
     @Nullable
     @Override
@@ -82,7 +85,7 @@ public class InputFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         mainView=view;
         mTermsRecyclerView=view.findViewById(R.id.input_recycler_layout);
         mTermWiseSubjetsLoading=view.findViewById(R.id.input_term_wise_subjets_loading);
@@ -107,7 +110,7 @@ public class InputFragment extends Fragment {
         mTermFullProgress.setVisibility(View.VISIBLE);
         mTermFullNoExam.setVisibility(View.GONE);
 
-        String requestUrl=mainUrl+"get_exam.php?stud_id="+user_id;
+        String requestUrl=mainUrl+"get_exam.php?stud_id="+user_id+"&pass="+user_pass;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -151,6 +154,12 @@ public class InputFragment extends Fragment {
                                         }
                                     });
                                 }
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
+                            }else{
+                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -172,7 +181,7 @@ public class InputFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mAddMarksButton.setVisibility(View.INVISIBLE);
-                String requestUrl=mainUrl+"marks_enter_check.php?stud_id="+user_id;
+                String requestUrl=mainUrl+"marks_enter_check.php?stud_id="+user_id+"&pass="+user_pass;
                 JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -296,6 +305,8 @@ public class InputFragment extends Fragment {
                                                         postparams.put("sub_id",mSelectedSubjectId);
                                                         postparams.put("ass_id",mSelectedExamId);
                                                         postparams.put("ass_no",mSelectedExamNo);
+                                                        postparams.put("stud_id",user_id);
+                                                        postparams.put("pass",user_pass);
                                                     }catch (JSONException e) {
                                                         e.printStackTrace();
                                                     }
@@ -307,6 +318,10 @@ public class InputFragment extends Fragment {
                                                                     try {
                                                                         if(response.getInt("code")==202){
                                                                             Toast.makeText(mContext, "Marks added", Toast.LENGTH_SHORT).show();
+                                                                        }else if(response.getInt("code")==351){
+                                                                            Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                                            Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                                            mContext.startActivity(mainActivity);
                                                                         }else{
                                                                             Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();                                                                    }
                                                                     } catch (JSONException e) {
@@ -345,6 +360,10 @@ public class InputFragment extends Fragment {
 
                                         }
 
+                                    }else if(response.getInt("code")==351){
+                                        Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                        Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                        mContext.startActivity(mainActivity);
                                     }else{
                                         Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
                                     }
@@ -389,6 +408,7 @@ public class InputFragment extends Fragment {
                         try {
                             postparams.put("stud_id", user_id);
                             postparams.put("term_name",termName);
+                            postparams.put("pass",user_pass);
                         }catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -401,6 +421,10 @@ public class InputFragment extends Fragment {
                                             if(response.getInt("code")==202){
                                                 Toast.makeText(mContext, "Term created successfully", Toast.LENGTH_SHORT).show();
                                                 loadTermsWithSubjects();
+                                            }else if(response.getInt("code")==351){
+                                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                mContext.startActivity(mainActivity);
                                             }else{
                                                 Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                                             }
@@ -433,7 +457,7 @@ public class InputFragment extends Fragment {
     public void loadTermsWithSubjects(){
         mTermWiseSubjetsLoading.setVisibility(View.VISIBLE);
         mTermWiseSubjectNoTerm.setVisibility(View.GONE);
-        String requestUrl=mainUrl+"termwisesubjects.php?stud_id="+user_id;
+        String requestUrl=mainUrl+"term_wise_subjects.php?stud_id="+user_id+"&pass="+user_pass;
         JsonObjectRequest jsonObjectRequest= new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -447,11 +471,17 @@ public class InputFragment extends Fragment {
                                 if(responseArray.length()==0){
                                     mTermWiseSubjectNoTerm.setVisibility(View.VISIBLE);
                                 }
-                                InputTermRecyclerViewAdapter termAdapter= new InputTermRecyclerViewAdapter(responseArray,mContext, InputFragment.this);
+                                InputTermRecyclerViewAdapter termAdapter= new InputTermRecyclerViewAdapter(responseArray,mContext, InputFragment.this, user_id, user_pass);
                                 mTermsRecyclerView.setAdapter(termAdapter);
                                 mTermsRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
 
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
+                            }else{
+                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -473,7 +503,7 @@ public class InputFragment extends Fragment {
 
         alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.VISIBLE);
         alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.GONE);
-        String requestUrl=mainUrl+"get_exam.php?stud_id="+user_id;
+        String requestUrl=mainUrl+"get_exam.php?stud_id="+user_id+"&pass="+user_pass;
 
         //ADD Functionality for adding exam
         alertLayout.findViewById(R.id.alert_general_exam_add_button).setOnClickListener(new View.OnClickListener() {
@@ -515,6 +545,7 @@ public class InputFragment extends Fragment {
                                 postparms.put("full_marks",((EditText)layout.findViewById(R.id.alert_add_exam_full_marks)).getText().toString());
                                 postparms.put("exam_no",((EditText)layout.findViewById(R.id.alert_add_exam_frequency)).getText().toString());
                                 postparms.put("stud_id",user_id);
+                                postparms.put("pass", user_pass);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -529,6 +560,10 @@ public class InputFragment extends Fragment {
                                                     Toast.makeText(mContext, "Exam successfully added", Toast.LENGTH_SHORT).show();
                                                     alertDialog.dismiss();
                                                     loadExamStructure(alertLayout);
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
                                                 }else{
                                                     Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
@@ -562,12 +597,16 @@ public class InputFragment extends Fragment {
                             if(response.getInt("code")==202){
                                 JSONArray responseArray=response.getJSONArray("response");
                                 if(responseArray.length()>0){
-                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,mContext,InputFragment.this , alertLayout,user_id);
+                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,mContext,InputFragment.this , alertLayout,user_id,user_pass);
                                     RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
                                     mExamListRecycler.setAdapter(adapter);
 
                                     mExamListRecycler.setLayoutManager(new LinearLayoutManager(mContext));
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                                }else if(response.getInt("code")==351){
+                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                    mContext.startActivity(mainActivity);
                                 }else{
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                                     alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.VISIBLE);

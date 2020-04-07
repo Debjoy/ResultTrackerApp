@@ -1,6 +1,7 @@
 package com.example.resulttracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +41,16 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
     private ArrayList<String> labels = new ArrayList<>();
     private Context mContext;
     private String mainUrl;
+    private int stud_id;
+    private String stud_pass;
 
-    public HomeRecyclerViewAdapter( Context mContext,ArrayList<Integer> mSubId, ArrayList<String> mSubName) {
+    public HomeRecyclerViewAdapter( Context mContext,ArrayList<Integer> mSubId, ArrayList<String> mSubName, int stud_id, String stud_pass) {
         this.mSubId = mSubId;
         this.mContext = mContext;
         this.mSubName = mSubName;
-        this.mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        this.mainUrl="https://atdebjoy.com/others/api/perform/";
+        this.stud_id=stud_id;
+        this.stud_pass=stud_pass;
     }
 
 
@@ -65,7 +70,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             holder.mHomeRecyclerSubjectName.setText(" "+mSubName.get(position).substring(0,18)+"...");
 
         //json call and populate chart here;
-        String requestUrl=mainUrl+"getsubjects.php?subject="+mSubId.get(position);
+        String requestUrl=mainUrl+"get_subjects.php?subject="+mSubId.get(position)+"&stud_id="+stud_id+"&pass="+stud_pass;
         JsonObjectRequest mJsonArrayRequest= new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -130,6 +135,10 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
                                 holder.mHomeRecyclerProgress.setVisibility(View.GONE);
                                 holder.mHomeRecyclerChart.setVisibility(View.VISIBLE);
                                 //Log.i("RESULT",holder.mHomeRecyclerChart.getBarData().getDataSets().toString());
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
                             }else{
                                 Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }

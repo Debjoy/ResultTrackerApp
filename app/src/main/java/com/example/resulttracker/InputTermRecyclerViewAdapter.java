@@ -2,6 +2,7 @@ package com.example.resulttracker;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -40,11 +41,15 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
     private Context mContext;
     private String mainURL;
     private InputFragment fragment;
-    InputTermRecyclerViewAdapter(JSONArray mTermsWithSubjects,Context mContext, InputFragment fragment){
+    private int stud_id;
+    private String stud_pass;
+    InputTermRecyclerViewAdapter(JSONArray mTermsWithSubjects,Context mContext, InputFragment fragment, int stud_id, String stud_pass){
         this.mTermsWithSubjects=mTermsWithSubjects;
         this.mContext=mContext;
         this.fragment=fragment;
-        mainURL="https://atdebjoy.com/others/api/trackerapp/";
+        mainURL="https://atdebjoy.com/others/api/perform/";
+        this.stud_id=stud_id;
+        this.stud_pass=stud_pass;
     }
 
     @NonNull
@@ -130,6 +135,9 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     try {
                                         postparams.put("sub_id", subjectId);
                                         postparams.put("sub_name",subject_name);
+                                        postparams.put("stud_id",stud_id);
+                                        postparams.put("pass",stud_pass);
+
                                     }catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -141,6 +149,12 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                                     try {
                                                         if(response.getInt("code")==202) {
                                                             Toast.makeText(mContext, "Subject name updated.", Toast.LENGTH_SHORT).show();
+                                                        }else if(response.getInt("code")==351){
+                                                            Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                            Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                            mContext.startActivity(mainActivity);
+                                                        }else{
+                                                            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }catch (JSONException e) {
                                                         e.printStackTrace();
@@ -182,6 +196,8 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             JSONObject postparams = new JSONObject();
                                             try {
                                                 postparams.put("sub_id", subjectId);
+                                                postparams.put("stud_id",stud_id);
+                                                postparams.put("pass",stud_pass);
                                             }catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -193,8 +209,12 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                                             try {
                                                                 if(response.getInt("code")==202){
                                                                     Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                                }else if(response.getInt("code")==351){
+                                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                                    mContext.startActivity(mainActivity);
                                                                 }else{
-                                                                    Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();
@@ -252,6 +272,8 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                             JSONObject postparams = new JSONObject();
                             try {
                                 postparams.put("term_id", finalTerm_id2);
+                                postparams.put("stud_id",stud_id);
+                                postparams.put("pass",stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -263,6 +285,10 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             try {
                                                 if(response.getInt("code")==202){
                                                     Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
                                                 }else{
                                                     Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                                                 }
@@ -331,6 +357,8 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                             try {
                                 postparams.put("term_id", finalTerm_id);
                                 postparams.put("sub_name",subject_name);
+                                postparams.put("stud_id",stud_id);
+                                postparams.put("pass",stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -343,6 +371,12 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             try {
                                                 if(response.getInt("code")==202) {
                                                     Toast.makeText(mContext, "Subject name added.", Toast.LENGTH_SHORT).show();
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
+                                                }else{
+                                                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
                                             }catch (JSONException e) {
                                                 e.printStackTrace();
@@ -393,7 +427,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                     }
                 });
 
-                String requestURL=mainURL+"termwise.php?all&term="+ finalTerm_id1;
+                String requestURL=mainURL+"get_term_wise.php?all&term="+ finalTerm_id1+"&stud_id="+stud_id+"&pass="+stud_pass;
 
                 fillWithMarksInAlertDialog(requestURL,alertLayout,alertD,finalTermData);
 
@@ -412,12 +446,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                     public void onResponse(JSONArray response) {
 
                         //RECYCLER VIEW FOR THE LIST OF MARKS LOADING INSIDE THE ALERT DIALOG
-                        AlertMarksListRecyclerViewAdapter adapter= new AlertMarksListRecyclerViewAdapter(response,mContext,inputTermRecyclerViewAdapter,requestURL,alertLayout,alertD,finalTermData );
-                        RecyclerView showMakrsListRecycler=(alertLayout.findViewById(R.id.alert_show_marks_recycler_list));
-                        showMakrsListRecycler.setAdapter(adapter);
-                        showMakrsListRecycler.setLayoutManager(new LinearLayoutManager(mContext));
-                        ((ProgressBar)alertLayout.findViewById(R.id.alert_show_marks_progress)).setVisibility(View.GONE);
-                        try {
+                        try{
+                            AlertMarksListRecyclerViewAdapter adapter= new AlertMarksListRecyclerViewAdapter(response,mContext,inputTermRecyclerViewAdapter,requestURL,alertLayout,alertD,finalTermData, stud_id, stud_pass );
+                            RecyclerView showMakrsListRecycler=(alertLayout.findViewById(R.id.alert_show_marks_recycler_list));
+                            showMakrsListRecycler.setAdapter(adapter);
+                            showMakrsListRecycler.setLayoutManager(new LinearLayoutManager(mContext));
+                            ((ProgressBar)alertLayout.findViewById(R.id.alert_show_marks_progress)).setVisibility(View.GONE);
+
                             ((TextView)alertLayout.findViewById(R.id.alert_show_marks_term_name)).setText(finalTermData.getString("term_name"));
                         } catch (JSONException e) {
                             e.printStackTrace();

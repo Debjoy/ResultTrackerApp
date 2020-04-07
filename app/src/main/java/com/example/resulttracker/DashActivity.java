@@ -42,6 +42,7 @@ public class DashActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
     private String userName;
     private int userId;
+    private String user_pass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +59,10 @@ public class DashActivity extends AppCompatActivity {
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         userName=spref.getString("username",null);
         userId=spref.getInt("user_id",-99);
+        user_pass=spref.getString("pwd", "");
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId, DashActivity.this)).commit();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId,user_pass, DashActivity.this)).commit();
     }
 
 
@@ -72,13 +75,13 @@ public class DashActivity extends AppCompatActivity {
                     Fragment selectedFragment=null;
                     exitFlag=1;
                     switch(item.getItemId()){
-                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, DashActivity.this);
+                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this);
                         break;
-                        case R.id.nav_term: selectedFragment = new TermsFragment( userId,DashActivity.this);
+                        case R.id.nav_term: selectedFragment = new TermsFragment( userId,user_pass,DashActivity.this);
                         break;
-                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, DashActivity.this);
+                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this);
                         break;
-                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId);
+                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId,user_pass);
                         break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,selectedFragment).commit();

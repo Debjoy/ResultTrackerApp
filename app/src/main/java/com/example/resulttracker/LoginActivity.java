@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         signInFragment = new SignInFragment();
         FragmentManager fm=getSupportFragmentManager();
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         mContext=this;
         exitFlag=1;
         Intent intent = getIntent();

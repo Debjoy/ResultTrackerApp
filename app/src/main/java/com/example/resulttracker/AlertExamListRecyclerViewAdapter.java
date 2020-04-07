@@ -37,19 +37,22 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
     private InputFragment inputFragment;
     private String mainUrl;
     private int stud_id;
-    AlertExamListRecyclerViewAdapter(JSONArray examListArray, GeneralActivity mContext, View alertLayoutParent,int stud_id){
+    private String stud_pass;
+    AlertExamListRecyclerViewAdapter(JSONArray examListArray, GeneralActivity mContext, View alertLayoutParent,int stud_id, String stud_pass){
         this.examListArray=examListArray;
         this.mContext=mContext;
         this.alertLayoutParent=alertLayoutParent;
         this.generalActivity=mContext;
         this.stud_id=stud_id;
+        this.stud_pass=stud_pass;
     }
-    AlertExamListRecyclerViewAdapter(JSONArray examListArray, Context mContext, InputFragment inputFragment, View alertLayoutParent, int stud_id){
+    AlertExamListRecyclerViewAdapter(JSONArray examListArray, Context mContext, InputFragment inputFragment, View alertLayoutParent, int stud_id,String stud_pass){
         this.examListArray=examListArray;
         this.mContext=mContext;
         this.alertLayoutParent=alertLayoutParent;
         this.inputFragment=inputFragment;
         this.stud_id=stud_id;
+        this.stud_pass=stud_pass;
     }
 
 
@@ -59,7 +62,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
     public AlertExamListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_general_exam_structure,parent, false);
         AlertExamListViewHolder holder= new AlertExamListViewHolder(view);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         return holder;
     }
 
@@ -183,6 +186,8 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                             try {
                                 postparams.put("ass_id", examListArray.getJSONObject(position).getString("ass_id"));
                                 postparams.put("exam_name",mExamNameEditTextt.getText().toString());
+                                postparams.put("stud_id",stud_id);
+                                postparams.put("pass",stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -201,6 +206,10 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                                     else
                                                         generalActivity.loadExamStructure(alertLayoutParent);
                                                     alertD.dismiss();
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
                                                 }else{
                                                     Toast.makeText(mContext, "Something went wrong"+response.toString(), Toast.LENGTH_SHORT).show();
                                                     alertLayout.findViewById(R.id.alert_edit_name_progress).setVisibility(View.GONE);

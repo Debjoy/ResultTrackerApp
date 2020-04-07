@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext=this;
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         if (spref.contains("username")) {
             String username=spref.getString("username","");

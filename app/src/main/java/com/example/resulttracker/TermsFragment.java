@@ -3,6 +3,7 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,11 +58,13 @@ public class TermsFragment extends Fragment {
     private LinearLayout mTermFullnoTerm;
     private Context mContext;
     private int user_id;
+    private String user_pass;
     private View mainView;
 
-    TermsFragment(int user_id, Context mContext){
+    TermsFragment(int user_id, String user_pass, Context mContext){
         this.mContext=mContext;
         this.user_id=user_id;
+        this.user_pass=user_pass;
     }
     public TermsFragment() {
         // doesn't do anything special
@@ -70,7 +73,7 @@ public class TermsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.dashboard_term,container,false);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         return v;
     }
 
@@ -91,7 +94,7 @@ public class TermsFragment extends Fragment {
         mTermFullView.setVisibility(View.GONE);
         mTermFullnoTerm.setVisibility(View.GONE);
         mTermFullProgress.setVisibility(View.VISIBLE);
-        String requestUrl=mainUrl+"getlistterm.php?stud_id="+user_id;
+        String requestUrl=mainUrl+"get_list_term.php?stud_id="+user_id+"&pass="+user_pass;
         JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -122,7 +125,7 @@ public class TermsFragment extends Fragment {
                                 mainView.findViewById(R.id.term_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, user_id)).commit();
+                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, user_id, user_pass)).commit();
                                         ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
                                     }
                                 });
@@ -149,6 +152,12 @@ public class TermsFragment extends Fragment {
                                     }
                                 });
 
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
+                            }else{
+                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -201,7 +210,7 @@ public class TermsFragment extends Fragment {
         termAverageBarChart.getDescription().setEnabled(false);
         termAverageBarChart.getLegend().setEnabled(false);
 
-        String requestUrl=mainUrl+"termwise.php?term="+term_id;
+        String requestUrl=mainUrl+"get_term_wise.php?term="+term_id+"&stud_id="+user_id+"&pass="+user_pass;
         JsonArrayRequest jsonArrReq = new JsonArrayRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONArray>() {
@@ -296,7 +305,7 @@ public class TermsFragment extends Fragment {
     }
 
     public void populteRecyclerSubjects(int term_position, ArrayList <Integer>mTermIdList){
-        String requestUrl=mainUrl+"getsubjects.php?term_id="+mTermIdList.get(term_position);
+        String requestUrl=mainUrl+"get_subjects.php?term_id="+mTermIdList.get(term_position)+"&stud_id="+user_id+"&pass="+user_pass;
         JsonObjectRequest jsonArrReq = new JsonObjectRequest(Request.Method.GET,
                 requestUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -312,10 +321,16 @@ public class TermsFragment extends Fragment {
                                     mSubName.add(responseArray.getJSONObject(i).getString("sub_name"));
                                 }
 
-                                HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(mContext, mSubid, mSubName);
+                                HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(mContext, mSubid, mSubName, user_id, user_pass);
                                 mHomeRecyclerView.setAdapter(adapter);
                                 mHomeRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                                 //mHomeRecyclerView.setNestedScrollingEnabled(false);
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
+                            }else{
+                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {

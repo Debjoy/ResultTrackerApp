@@ -42,6 +42,7 @@ public class GeneralActivity extends AppCompatActivity {
     private TextView mProfileEditButton;
 
     private int stud_id;
+    private String stud_pass;
     private String mainUrl;
     Context mGeneral;
     String profile_full_name;
@@ -56,7 +57,7 @@ public class GeneralActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         mLogoutButton=findViewById(R.id.general_logout_button);
         mGithubButton=findViewById(R.id.general_github_link);
         mGeneralButton=findViewById(R.id.general_help_link);
@@ -66,6 +67,7 @@ public class GeneralActivity extends AppCompatActivity {
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         stud_id=spref.getInt("user_id",-99);
+        stud_pass=spref.getString("pwd","");
 
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +151,7 @@ public class GeneralActivity extends AppCompatActivity {
         profile_email="";
         profile_username="";
 
-        String requestUrl= mainUrl+"basic_details.php?profile&stud_id="+stud_id;
+        String requestUrl= mainUrl+"basic_details.php?profile&stud_id="+stud_id+"&pass="+stud_pass;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -165,6 +167,10 @@ public class GeneralActivity extends AppCompatActivity {
                                 ((TextView)findViewById(R.id.general_profile_info_username)).setText(profile_username);
 
 
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
+                                startActivity(mainActivity);
                             }else{
                                 Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                             }
@@ -233,6 +239,7 @@ public class GeneralActivity extends AppCompatActivity {
                                 postparams.put("name", mFullNameEdit.getText().toString());
                                 postparams.put("email", mEmailEdit.getText().toString());
                                 postparams.put("username", mUsername.getText().toString());
+                                postparams.put("pass", stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -262,6 +269,10 @@ public class GeneralActivity extends AppCompatActivity {
                                                         mUsername.setError("Username exists");
                                                     }
 
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
+                                                    startActivity(mainActivity);
                                                 }else{
                                                     Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
@@ -293,7 +304,7 @@ public class GeneralActivity extends AppCompatActivity {
 
         alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.VISIBLE);
         alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.GONE);
-        String requestUrl=mainUrl+"get_exam.php?stud_id="+stud_id;
+        String requestUrl=mainUrl+"get_exam.php?stud_id="+stud_id+"&pass="+stud_pass;
 
         //ADD Functionality for adding exam
         alertLayout.findViewById(R.id.alert_general_exam_add_button).setOnClickListener(new View.OnClickListener() {
@@ -334,6 +345,7 @@ public class GeneralActivity extends AppCompatActivity {
                                 postparms.put("full_marks",((EditText)layout.findViewById(R.id.alert_add_exam_full_marks)).getText().toString());
                                 postparms.put("exam_no",((EditText)layout.findViewById(R.id.alert_add_exam_frequency)).getText().toString());
                                 postparms.put("stud_id",stud_id);
+                                postparms.put("pass",stud_pass);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -348,6 +360,10 @@ public class GeneralActivity extends AppCompatActivity {
                                                     Toast.makeText(GeneralActivity.this, "Exam successfully added", Toast.LENGTH_SHORT).show();
                                                     alertDialog.dismiss();
                                                     loadExamStructure(alertLayout);
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
+                                                    startActivity(mainActivity);
                                                 }else{
                                                     Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
@@ -381,17 +397,25 @@ public class GeneralActivity extends AppCompatActivity {
                             if(response.getInt("code")==202){
                                 JSONArray responseArray=response.getJSONArray("response");
                                 if(responseArray.length()>0){
-                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,GeneralActivity.this, alertLayout, stud_id);
+                                    AlertExamListRecyclerViewAdapter adapter= new AlertExamListRecyclerViewAdapter(responseArray,GeneralActivity.this, alertLayout, stud_id, stud_pass);
                                     RecyclerView mExamListRecycler=alertLayout.findViewById(R.id.alert_general_exam_recycler_list);
                                     mExamListRecycler.setAdapter(adapter);
 
                                     mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
+                                }else if(response.getInt("code")==351){
+                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                    Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
+                                    startActivity(mainActivity);
                                 }else{
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                                     alertLayout.findViewById(R.id.alert_general_exam_no_exams).setVisibility(View.VISIBLE);
                                 }
 
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
+                                startActivity(mainActivity);
                             }else{
                                 Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                                 alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);

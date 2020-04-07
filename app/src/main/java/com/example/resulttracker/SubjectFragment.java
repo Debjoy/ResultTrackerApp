@@ -2,6 +2,7 @@ package com.example.resulttracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class SubjectFragment extends Fragment {
 
     private String mainUrl="";
     private int stud_id;
+    private String stud_pass;
     private Context mContext;
     private Button mSelectSubjectButton;
     private TextView mSubjectNameTv;
@@ -71,15 +73,16 @@ public class SubjectFragment extends Fragment {
 
     private HorizontalBarChart mChartSubject;
 
-    SubjectFragment(int stud_id, Context mContext){
+    SubjectFragment(int stud_id, String stud_pass, Context mContext){
         this.stud_id=stud_id;
         this.mContext=mContext;
+        this.stud_pass=stud_pass;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.dashboard_subject,container,false);
-        mainUrl="https://atdebjoy.com/others/api/trackerapp/";
+        mainUrl="https://atdebjoy.com/others/api/perform/";
         return v;
     }
 
@@ -141,7 +144,7 @@ public class SubjectFragment extends Fragment {
         mFullViewSubject.setVisibility(View.GONE);
         mFullSubjectProgress.setVisibility(View.VISIBLE);
         mFullNoSubject.setVisibility(View.GONE);
-        String requestUrl=mainUrl+"getsubjects.php?stud_id="+stud_id;
+        String requestUrl=mainUrl+"get_subjects.php?stud_id="+stud_id+"&pass="+stud_pass;
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -189,11 +192,15 @@ public class SubjectFragment extends Fragment {
                                     mainView.findViewById(R.id.subject_full_no_term_input_section).setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id)).commit();
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id, stud_pass)).commit();
                                             ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
                                         }
                                     });
                                 }
+                            }else if(response.getInt("code")==351){
+                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                mContext.startActivity(mainActivity);
                             }else{
                                 Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                             }
@@ -233,7 +240,7 @@ public class SubjectFragment extends Fragment {
             int sub_id=((JSONObject)arraySubjects.get(position)).getInt("sub_id");
 
 
-            String requestUrl=mainUrl+"getsubjects.php?subject="+sub_id;
+            String requestUrl=mainUrl+"get_subjects.php?subject="+sub_id+"&stud_id="+stud_id+"&pass="+stud_pass;
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, requestUrl, null,
                     new Response.Listener<JSONObject>() {
@@ -303,6 +310,10 @@ public class SubjectFragment extends Fragment {
                                     mIndividualMarksView.setVisibility(View.VISIBLE);
                                     mIndividualMarksProgress.setVisibility(View.GONE);
 
+                                }else if(response.getInt("code")==351){
+                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                    mContext.startActivity(mainActivity);
                                 }else{
                                     Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
                                 }

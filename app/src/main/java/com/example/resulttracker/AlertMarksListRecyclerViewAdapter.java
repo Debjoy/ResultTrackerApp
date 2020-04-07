@@ -2,6 +2,7 @@ package com.example.resulttracker;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,17 +40,22 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
     View alertLayoutParent;
     AlertDialog alertDParent;
     JSONObject finalTermDataParent;
+    private int stud_id;
+    private String stud_pass;
     AlertMarksListRecyclerViewAdapter(JSONArray mMarksList, Context mContext, InputTermRecyclerViewAdapter inputTermRecyclerViewAdapter
-            , String requestURLParent,View alertLayoutParent,AlertDialog alertDParent,JSONObject finalTermDataParent){
+            , String requestURLParent,View alertLayoutParent,AlertDialog alertDParent,JSONObject finalTermDataParent, int stud_id, String stud_pass){
         this.mMarksList=mMarksList;
         this.mContext=mContext;
-        mainURL="https://atdebjoy.com/others/api/trackerapp/";
+        mainURL="https://atdebjoy.com/others/api/perform/";
         this.inputTermRecyclerViewAdapter=inputTermRecyclerViewAdapter;
 
         this.requestURLParent=requestURLParent;
         this.alertLayoutParent=alertLayoutParent;
         this.alertDParent=alertDParent;
         this.finalTermDataParent=finalTermDataParent;
+
+        this.stud_id=stud_id;
+        this.stud_pass=stud_pass;
     }
     @NonNull
     @Override
@@ -60,7 +66,7 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AlertMarksListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final AlertMarksListViewHolder holder, final int position) {
         try {
             final String marks=((JSONObject)mMarksList.get(position)).getString("marks");
             final String marks_id=((JSONObject)mMarksList.get(position)).getString("marks_id");
@@ -98,6 +104,8 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                             JSONObject postparams = new JSONObject();
                             try {
                                 postparams.put("marks_id", marks_id);
+                                postparams.put("stud_id",stud_id);
+                                postparams.put("pass",stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -109,6 +117,10 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                             try {
                                                 if(response.getInt("code")==202) {
                                                     Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
                                                 }
                                                 else
                                                     Toast.makeText(mContext,"Something is wrong", Toast.LENGTH_SHORT).show();
@@ -168,6 +180,8 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                             try {
                                 postparams.put("marks_id", marks_id);
                                 postparams.put("marks",marksNew);
+                                postparams.put("stud_id", stud_id);
+                                postparams.put("pass", stud_pass);
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -181,6 +195,12 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                                     Toast.makeText(mContext, "Marks Updated", Toast.LENGTH_SHORT).show();
                                                     ((ProgressBar)alertLayout.findViewById(R.id.alert_update_marks_progress)).setVisibility(View.GONE);
                                                     inputTermRecyclerViewAdapter.fillWithMarksInAlertDialog(requestURLParent,alertLayoutParent,alertDParent,finalTermDataParent);
+                                                }else if(response.getInt("code")==351){
+                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                                    mContext.startActivity(mainActivity);
+                                                }else{
+                                                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 ((ProgressBar)alertLayout.findViewById(R.id.alert_update_marks_progress)).setVisibility(View.GONE);
