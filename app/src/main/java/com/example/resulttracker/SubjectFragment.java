@@ -236,7 +236,7 @@ public class SubjectFragment extends Fragment {
             }else{
                 mDifferencePercentageTv.setText((Math.round((subjectAverage-mOASP)*10))/10.0+"%");
             }
-            mTermNameTv.setText(((JSONObject)arraySubjects.get(position)).getString("term_name"));
+            mTermNameTv.setText(short_Term(((JSONObject)arraySubjects.get(position)).getString("term_name")));
             int sub_id=((JSONObject)arraySubjects.get(position)).getInt("sub_id");
 
 
@@ -353,5 +353,13 @@ public class SubjectFragment extends Fragment {
         else
             result+=position+"th";
         return result;
+    }
+
+    public String short_Term(String term){
+        String return_Term="";
+        if(term.length()>6){
+            return_Term=term.substring(0,2)+".."+term.substring(term.length()-2);
+        }
+        return return_Term;
     }
 }

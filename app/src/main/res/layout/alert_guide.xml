@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guide"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/colorPrimary"
+            android:textColor="@color/colorText"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Here are some basic terminology guide"
+        android:textSize="17sp"
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms:"
+        android:textStyle="bold"
+        android:drawableTint="@color/colorAccent"
+        android:drawableLeft="@drawable/ic_looks_one_black_24dp"
+        android:textColor="@color/colorText"
+        android:drawablePadding="5dp"
+        android:layout_marginBottom="5dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="These are bascally the academic period where the exam structure remains the same
+and have the same set of subjects. It can be also called as an academic year. eg. Classes, Semesters, etc."
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="10dp"
+        android:drawablePadding="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exam Structure:"
+        android:textStyle="bold"
+        android:drawableTint="@color/colorAccent"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/ic_looks_two_black_24dp"
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="5dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This is basically the set of exams which repeats every term. eg. unit tests, internals, semesters, etc."
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="5dp"
+        android:drawablePadding="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subjects:"
+        android:textStyle="bold"
+        android:drawableTint="@color/colorAccent"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/ic_looks_3_black_24dp"
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="5dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="A group of subject will create a term and each subject will be able to give any exam from exam structure once. eg. Physics, Chemestry"
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="5dp"
+        android:drawablePadding="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Marks:"
+        android:textStyle="bold"
+        android:drawableTint="@color/colorAccent"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/ic_looks_4_black_24dp"
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="5dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="These are the most basic units of this app. Marks will be there for every exam per subject."
+        android:textColor="@color/colorText"
+        android:layout_marginBottom="20dp"
+        android:drawablePadding="10dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
+        <Button
+            android:id="@+id/alert_guide_learn_more_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_button_primary"
+            android:minWidth="70dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Learn More"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite" />
+        <Button
+            android:id="@+id/alert_guide_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_button_accent"
+            android:minWidth="70dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Ok"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+
+</LinearLayout>

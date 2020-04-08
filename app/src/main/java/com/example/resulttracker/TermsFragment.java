@@ -259,11 +259,11 @@ public class TermsFragment extends Fragment {
                                 };
                                 xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
                                 xAxis.setValueFormatter(formatter);
-                                xAxis.setTextColor(Color.parseColor("#FFFFFF"));
+                                xAxis.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
                                 xAxis.setXOffset(75f);
 
                                 BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
-                                dataset.setColor(Color.parseColor("#263238"));
+                                dataset.setColor(mContext.getResources().getColor(R.color.colorAccent));
 
                                 ArrayList<IBarDataSet> dataSets = new ArrayList<>();
                                 dataSets.add(dataset);

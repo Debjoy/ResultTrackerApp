@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -108,10 +109,10 @@ public class DashActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu, menu);
 
-        Drawable drawable = menu.findItem(R.id.action_logout).getIcon();
+        Drawable drawable = menu.findItem(R.id.action_guide).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(this,R.color.colorWhite));
-        menu.findItem(R.id.action_logout).setIcon(drawable);
+        menu.findItem(R.id.action_guide).setIcon(drawable);
 
         drawable = menu.findItem(R.id.action_general).getIcon();
         drawable = DrawableCompat.wrap(drawable);
@@ -126,15 +127,34 @@ public class DashActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
-            case R.id.action_logout:
-                String url = "https://www.youtube.com/watch?v=wZZ7oFKsKzY";
-                Uri uri = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                // Verify that the intent will resolve to an activity
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    // Here we use an intent without a Chooser unlike the next example
-                    startActivity(intent);
-                }
+            case R.id.action_guide:
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DashActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(DashActivity.this);
+                final View layout = inflater.inflate(R.layout.alert_guide,null);
+                builder.setView(layout);
+
+                final AlertDialog alertDialog=builder.show();
+                layout.findViewById(R.id.alert_guide_cancel_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                layout.findViewById(R.id.alert_guide_learn_more_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = "https://www.youtube.com/watch?v=-50NdPawLVY&feature=youtu.be&t=30";
+                        Uri uri = Uri.parse(url);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        // Verify that the intent will resolve to an activity
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            // Here we use an intent without a Chooser unlike the next example
+                            startActivity(intent);
+                        }
+                    }
+                });
 
                 break;
             case R.id.action_general:

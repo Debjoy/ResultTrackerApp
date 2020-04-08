@@ -300,7 +300,7 @@ public class HomeFragment extends Fragment {
                                         public String getFormattedValue(float value) {
                                             String label="";
                                             try {
-                                                label= ((JSONObject)allMarksResponseList.get((int) value)).getString("term_name");
+                                                label= short_Term(((JSONObject)allMarksResponseList.get((int) value)).getString("term_name"));
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -392,6 +392,14 @@ public class HomeFragment extends Fragment {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public String short_Term(String term){
+        String return_Term="";
+        if(term.length()>6){
+            return_Term=term.substring(0,2)+".."+term.substring(term.length()-2);
+        }
+        return return_Term;
     }
 
 
