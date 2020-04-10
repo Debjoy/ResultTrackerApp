@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -237,6 +238,9 @@ public class SubjectFragment extends Fragment {
                 mDifferencePercentageTv.setText((Math.round((subjectAverage-mOASP)*10))/10.0+"%");
             }
             mTermNameTv.setText(short_Term(((JSONObject)arraySubjects.get(position)).getString("term_name")));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                mTermNameTv.setTooltipText(((JSONObject)arraySubjects.get(position)).getString("term_name"));
+            }
             int sub_id=((JSONObject)arraySubjects.get(position)).getInt("sub_id");
 
 

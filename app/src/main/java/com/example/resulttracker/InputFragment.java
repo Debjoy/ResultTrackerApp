@@ -60,6 +60,7 @@ public class InputFragment extends Fragment {
     private JSONArray examListResponse=new JSONArray();
     private LinearLayout mTermWiseSubjetsLoading;
     private LinearLayout mTermWiseSubjectNoTerm;
+    private TextView mNoOfExamsTV;
 
 
     private ProgressBar mTermFullProgress;
@@ -95,6 +96,7 @@ public class InputFragment extends Fragment {
         mTermFullProgress=view.findViewById(R.id.input_full_progress);
         mTermFullNoExam=view.findViewById(R.id.input_full_no_exam);
         mTermFullView=view.findViewById(R.id.input_full_view);
+        mNoOfExamsTV=view.findViewById(R.id.input_no_of_exams);
 
 
 
@@ -122,6 +124,12 @@ public class InputFragment extends Fragment {
                                     mTermFullView.setVisibility(View.VISIBLE);
                                     mTermFullProgress.setVisibility(View.GONE);
                                     mTermFullNoExam.setVisibility(View.GONE);
+                                    mNoOfExamsTV.setText(responseArray.length()+"");
+                                    int counter=0;
+                                    for(int index=0;index<responseArray.length();index++){
+                                        counter=counter+responseArray.getJSONObject(index).getInt("exam_no");
+                                    }
+                                    mNoOfExamsTV.setText(counter+"");
                                     loadTermPage();
                                 }else{
                                     mTermFullView.setVisibility(View.GONE);
