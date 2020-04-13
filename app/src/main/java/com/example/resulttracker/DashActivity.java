@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
-
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -19,24 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import es.dmoral.toasty.Toasty;
 
 public class DashActivity extends AppCompatActivity {
     private int exitFlag=1;
@@ -61,6 +43,7 @@ public class DashActivity extends AppCompatActivity {
         userName=spref.getString("username",null);
         userId=spref.getInt("user_id",-99);
         user_pass=spref.getString("pwd", "");
+        Toasty.info(DashActivity.this,"Welcome "+userName,Toasty.LENGTH_SHORT,false).show();
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId,user_pass, DashActivity.this)).commit();
@@ -94,7 +77,7 @@ public class DashActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(getSupportFragmentManager().getBackStackEntryCount()==0){
             if(exitFlag==1){
-                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+                Toasty.normal(this, "Press back again to exit", Toasty.LENGTH_SHORT).show();
                 exitFlag=0;
                 return;
             }

@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
     private Fragment signInFragment;
@@ -158,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.commit();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 startActivity(mainActivity);
-                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                                Toasty.success(mContext, msg, Toasty.LENGTH_LONG).show();
                             }else if(code==261 || code==263 ){
                                 if(code==261){
                                     mEmailEdit2.requestFocus();
@@ -170,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
 
                             }else{
-                                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                Toasty.warning(LoginActivity.this, msg, Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -183,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //Failure Callback
-                        Toast.makeText(mContext, "ERROR: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "ERROR: "+error.getMessage(), Toasty.LENGTH_SHORT).show();
                         findViewById(R.id.sign_up_button).setVisibility(View.VISIBLE);
                         findViewById(R.id.sign_up_progress).setVisibility(View.GONE);
                     }
@@ -257,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(getSupportFragmentManager().getBackStackEntryCount()==0){
             if(exitFlag==1){
-                Toast.makeText(mContext, "Press back again to exit", Toast.LENGTH_SHORT).show();
+                Toasty.normal(mContext, "Press back again to exit", Toasty.LENGTH_SHORT).show();
                 exitFlag=0;
                 return;
             }

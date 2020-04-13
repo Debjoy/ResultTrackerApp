@@ -3,7 +3,8 @@ package com.example.resulttracker;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.widget.Toast;
+
+import es.dmoral.toasty.Toasty;
 
 public class InputFilterMinMax implements InputFilter {
 
@@ -38,7 +39,7 @@ public class InputFilterMinMax implements InputFilter {
     private boolean isInRange(int a, int b, int c) {
         boolean value=b > a ? c >= a && c <= b : c >= b && c <= a;
         if(!value){
-            Toast.makeText(mContext, "Value should be less than full marks", Toast.LENGTH_SHORT).show();
+            Toasty.info(mContext, "Value should be less than full marks", Toasty.LENGTH_SHORT).show();
         }
         return value;
     }

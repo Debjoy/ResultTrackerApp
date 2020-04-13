@@ -3,7 +3,6 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +29,8 @@ import com.nex3z.flowlayout.FlowLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
+
+import es.dmoral.toasty.Toasty;
 
 public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTermRecyclerViewAdapter.InputViewHolderTerm>{
 
@@ -148,13 +145,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                                     ((ProgressBar)layout.findViewById(R.id.alert_edit_name_progress)).setVisibility(View.GONE);
                                                     try {
                                                         if(response.getInt("code")==202) {
-                                                            Toast.makeText(mContext, "Subject name updated.", Toast.LENGTH_SHORT).show();
+                                                            Toasty.success(mContext, "Subject name updated.", Toasty.LENGTH_SHORT).show();
                                                         }else if(response.getInt("code")==351){
-                                                            Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                            Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                             Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                             mContext.startActivity(mainActivity);
                                                         }else{
-                                                            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                            Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                         }
                                                     }catch (JSONException e) {
                                                         e.printStackTrace();
@@ -166,7 +163,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    Toast.makeText(mContext, "Connection Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                                                     alertD.dismiss();
                                                 }
                                             });
@@ -208,13 +205,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                                         public void onResponse(JSONObject response) {
                                                             try {
                                                                 if(response.getInt("code")==202){
-                                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                                    Toasty.success(mContext, "Deleted", Toasty.LENGTH_SHORT).show();
                                                                 }else if(response.getInt("code")==351){
-                                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                                     mContext.startActivity(mainActivity);
                                                                 }else{
-                                                                    Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                                                                    Toasty.warning(mContext, "Something went wrong.", Toasty.LENGTH_SHORT).show();
                                                                 }
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();
@@ -228,7 +225,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                                     new Response.ErrorListener() {
                                                         @Override
                                                         public void onErrorResponse(VolleyError error) {
-                                                            Toast.makeText(mContext, "Network Error", Toast.LENGTH_SHORT).show();
+                                                            Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                                                             alertD2.dismiss();
                                                         }
                                                     });
@@ -284,13 +281,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202){
-                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Deleted", Toasty.LENGTH_SHORT).show();
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -303,7 +300,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Network Error", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                                             ((ProgressBar)alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
                                             alertD.dismiss();
 
@@ -370,13 +367,13 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                             ((ProgressBar)layout.findViewById(R.id.alert_add_subject_progress)).setVisibility(View.GONE);
                                             try {
                                                 if(response.getInt("code")==202) {
-                                                    Toast.makeText(mContext, "Subject name added.", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Subject name added.", Toasty.LENGTH_SHORT).show();
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                 }
                                             }catch (JSONException e) {
                                                 e.printStackTrace();
@@ -388,7 +385,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Connection Error", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                                             alertD.dismiss();
                                         }
                                     });
@@ -462,7 +459,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                 new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mContext, "Connection Error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                         ((ProgressBar)alertLayout.findViewById(R.id.alert_show_marks_progress)).setVisibility(View.GONE);
                         alertD.dismiss();
                     }

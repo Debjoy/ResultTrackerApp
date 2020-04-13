@@ -13,12 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,9 +36,10 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class InputFragment extends Fragment {
     private String mainUrl;
@@ -163,11 +162,11 @@ public class InputFragment extends Fragment {
                                     });
                                 }
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -177,7 +176,7 @@ public class InputFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -325,13 +324,13 @@ public class InputFragment extends Fragment {
                                                                 public void onResponse(JSONObject response) {
                                                                     try {
                                                                         if(response.getInt("code")==202){
-                                                                            Toast.makeText(mContext, "Marks added", Toast.LENGTH_SHORT).show();
+                                                                            Toasty.success(mContext, "Marks added", Toasty.LENGTH_SHORT).show();
                                                                         }else if(response.getInt("code")==351){
-                                                                            Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                                            Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                                             Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                                             mContext.startActivity(mainActivity);
                                                                         }else{
-                                                                            Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();                                                                    }
+                                                                            Toasty.warning(mContext, "Something is wrong", Toasty.LENGTH_SHORT).show();                                                                    }
                                                                     } catch (JSONException e) {
                                                                         e.printStackTrace();
                                                                     }
@@ -342,7 +341,7 @@ public class InputFragment extends Fragment {
                                                             new Response.ErrorListener() {
                                                                 @Override
                                                                 public void onErrorResponse(VolleyError error) {
-                                                                    Toast.makeText(mContext, "Connection error: "+error.toString(), Toast.LENGTH_SHORT).show();
+                                                                    Toasty.warning(mContext, "Network error: "+error.toString(), Toasty.LENGTH_SHORT).show();
                                                                     alertD.dismiss();
                                                                     alertLayout.findViewById(R.id.alert_add_marks_progress).setVisibility(View.GONE);
                                                                 }
@@ -369,11 +368,11 @@ public class InputFragment extends Fragment {
                                         }
 
                                     }else if(response.getInt("code")==351){
-                                        Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                        Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                         Intent mainActivity=new Intent(mContext, MainActivity.class);
                                         mContext.startActivity(mainActivity);
                                     }else{
-                                        Toast.makeText(mContext, "Something is wrong.", Toast.LENGTH_SHORT).show();
+                                        Toasty.warning(mContext, "Something went wrong.", Toasty.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -383,7 +382,7 @@ public class InputFragment extends Fragment {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-
+                                Toasty.warning(mContext, "Network error.", Toasty.LENGTH_SHORT).show();
                             }
                         });
                 RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -427,14 +426,14 @@ public class InputFragment extends Fragment {
                                     public void onResponse(JSONObject response) {
                                         try {
                                             if(response.getInt("code")==202){
-                                                Toast.makeText(mContext, "Term created successfully", Toast.LENGTH_SHORT).show();
+                                                Toasty.success(mContext, "Term created", Toasty.LENGTH_SHORT).show();
                                                 loadTermsWithSubjects();
                                             }else if(response.getInt("code")==351){
-                                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                 mContext.startActivity(mainActivity);
                                             }else{
-                                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                             }
                                             ((ProgressBar)alertLayout.findViewById(R.id.alert_add_term_progress)).setVisibility(View.GONE);
                                             alertD.dismiss();
@@ -448,7 +447,7 @@ public class InputFragment extends Fragment {
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(mContext, "Connection error", Toast.LENGTH_SHORT).show();
+                                        Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                                         ((ProgressBar)alertLayout.findViewById(R.id.alert_add_term_progress)).setVisibility(View.GONE);
                                         alertD.dismiss();
                                     }
@@ -485,11 +484,11 @@ public class InputFragment extends Fragment {
 
 
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -565,15 +564,15 @@ public class InputFragment extends Fragment {
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202){
-                                                    Toast.makeText(mContext, "Exam successfully added", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Exam added", Toasty.LENGTH_SHORT).show();
                                                     alertDialog.dismiss();
                                                     loadExamStructure(alertLayout);
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -584,7 +583,7 @@ public class InputFragment extends Fragment {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Network error :", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network error :", Toasty.LENGTH_SHORT).show();
                                             layout.findViewById(R.id.alert_add_exam_progress).setVisibility(View.GONE);
                                         }
                                     });
@@ -612,7 +611,7 @@ public class InputFragment extends Fragment {
                                     mExamListRecycler.setLayoutManager(new LinearLayoutManager(mContext));
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                                 }else if(response.getInt("code")==351){
-                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                     mContext.startActivity(mainActivity);
                                 }else{
@@ -621,7 +620,7 @@ public class InputFragment extends Fragment {
                                 }
 
                             }else{
-                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                 alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
@@ -632,7 +631,7 @@ public class InputFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mContext, "Network Error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "Network Error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);

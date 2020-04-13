@@ -1,11 +1,8 @@
 package com.example.resulttracker;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,36 +14,23 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -55,6 +39,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class HomeFragment extends Fragment {
     private String mainUrl;
@@ -373,11 +359,11 @@ public class HomeFragment extends Fragment {
 
 
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something is wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -387,7 +373,7 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -398,6 +384,8 @@ public class HomeFragment extends Fragment {
         String return_Term="";
         if(term.length()>6){
             return_Term=term.substring(0,2)+".."+term.substring(term.length()-2);
+        }else{
+            return_Term=term;
         }
         return return_Term;
     }

@@ -3,7 +3,6 @@ package com.example.resulttracker;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +29,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -44,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class SubjectFragment extends Fragment {
 
@@ -199,11 +198,11 @@ public class SubjectFragment extends Fragment {
                                     });
                                 }
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
 
 
@@ -215,7 +214,7 @@ public class SubjectFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -315,11 +314,11 @@ public class SubjectFragment extends Fragment {
                                     mIndividualMarksProgress.setVisibility(View.GONE);
 
                                 }else if(response.getInt("code")==351){
-                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
-                                    Intent mainActivity=new Intent(mContext, MainActivity.class);
+                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
+                                    Intent mainActivity=new Intent(mContext, Toasty.class);
                                     mContext.startActivity(mainActivity);
                                 }else{
-                                    Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                    Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -329,7 +328,7 @@ public class SubjectFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
+                            Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                         }
                     });
             RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -363,6 +362,8 @@ public class SubjectFragment extends Fragment {
         String return_Term="";
         if(term.length()>6){
             return_Term=term.substring(0,2)+".."+term.substring(term.length()-2);
+        }else{
+            return_Term=term;
         }
         return return_Term;
     }

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +24,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -110,18 +111,18 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202){
-                                                    Toast.makeText(mContext, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Successfully Deleted", Toasty.LENGTH_SHORT).show();
                                                     if(generalActivity==null)
                                                     inputFragment.loadExamStructure(alertLayoutParent);
                                                     else
                                                     generalActivity.loadExamStructure(alertLayoutParent);
                                                     alertD2.dismiss();
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext,"Some thing went wrong: "+response.toString(), Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext,"Some thing went wrong: "+response.toString(), Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -132,7 +133,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Network error "+error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toasty.error(mContext, "Network error "+error.toString(), Toasty.LENGTH_SHORT).show();
                                             alertLayout.findViewById(R.id.alert_delete_progress).setVisibility(View.GONE);
                                         }
                                     });
@@ -168,16 +169,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                         }
                     });
 
-
-                    alertLayout.findViewById(R.id.alert_edit_name_delete_button).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(mContext, "Function Disabled", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-
+                    alertLayout.findViewById(R.id.alert_edit_name_delete_button).setVisibility(View.GONE);
                     alertLayout.findViewById(R.id.alert_edit_name_update_button).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -199,7 +191,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                             try {
                                                 if(response.getInt("code")==202){
                                                     alertLayout.findViewById(R.id.alert_edit_name_progress).setVisibility(View.GONE);
-                                                    Toast.makeText(mContext, "Successfully updated", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Successfully updated", Toasty.LENGTH_SHORT).show();
 
                                                     if(generalActivity==null)
                                                         inputFragment.loadExamStructure(alertLayoutParent);
@@ -207,11 +199,11 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                                         generalActivity.loadExamStructure(alertLayoutParent);
                                                     alertD.dismiss();
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext, "Something went wrong"+response.toString(), Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Something went wrong"+response.toString(), Toasty.LENGTH_SHORT).show();
                                                     alertLayout.findViewById(R.id.alert_edit_name_progress).setVisibility(View.GONE);
                                                 }
                                             } catch (JSONException e) {
@@ -222,7 +214,7 @@ public class AlertExamListRecyclerViewAdapter extends RecyclerView.Adapter<Alert
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Network", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                                             alertLayout.findViewById(R.id.alert_edit_name_progress).setVisibility(View.GONE);
 
                                         }

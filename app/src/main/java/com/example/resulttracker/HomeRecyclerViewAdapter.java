@@ -2,13 +2,11 @@ package com.example.resulttracker;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolderHome>{
     private static final String TAG = "HomeRecyclerViewAdapter";
@@ -136,11 +136,11 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
                                 holder.mHomeRecyclerChart.setVisibility(View.VISIBLE);
                                 //Log.i("RESULT",holder.mHomeRecyclerChart.getBarData().getDataSets().toString());
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something is wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something is wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -153,7 +153,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Failure Callback
-                Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toasty.warning(mContext, error.getMessage(), Toasty.LENGTH_SHORT).show();
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);

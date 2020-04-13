@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class TermsFragment extends Fragment {
     private String mainUrl;
@@ -144,7 +144,7 @@ public class TermsFragment extends Fragment {
                                                     mCurrentTermName.setText(mTermNameList.get(i));
                                                     populteRecyclerSubjects(i, mTermIdList);
                                                 }else{
-                                                    Toast.makeText(getContext().getApplicationContext(), "No Terms Found", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(getContext().getApplicationContext(), "No Terms Found", Toasty.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
@@ -153,11 +153,11 @@ public class TermsFragment extends Fragment {
                                 });
 
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -297,7 +297,7 @@ public class TermsFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //Failure Callback
-                        Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
@@ -326,11 +326,11 @@ public class TermsFragment extends Fragment {
                                 mHomeRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                                 //mHomeRecyclerView.setNestedScrollingEnabled(false);
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(mContext, MainActivity.class);
                                 mContext.startActivity(mainActivity);
                             }else{
-                                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {

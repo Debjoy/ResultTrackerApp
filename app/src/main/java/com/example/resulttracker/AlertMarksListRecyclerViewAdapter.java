@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +24,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import es.dmoral.toasty.Toasty;
 
 public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<AlertMarksListRecyclerViewAdapter.AlertMarksListViewHolder> {
         /*
@@ -116,14 +117,14 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202) {
-                                                    Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Deleted", Toasty.LENGTH_SHORT).show();
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }
                                                 else
-                                                    Toast.makeText(mContext,"Something is wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext,"Something is wrong", Toasty.LENGTH_SHORT).show();
                                                 inputTermRecyclerViewAdapter.fillWithMarksInAlertDialog(requestURLParent,alertLayoutParent,alertDParent,finalTermDataParent);
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -135,7 +136,7 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(mContext, "Network error", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network error", Toasty.LENGTH_SHORT).show();
                                             alertD.dismiss();
                                             (alertLayout.findViewById(R.id.alert_delete_progress)).setVisibility(View.GONE);
                                         }
@@ -192,15 +193,15 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202){
-                                                    Toast.makeText(mContext, "Marks Updated", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(mContext, "Marks Updated", Toasty.LENGTH_SHORT).show();
                                                     ((ProgressBar)alertLayout.findViewById(R.id.alert_update_marks_progress)).setVisibility(View.GONE);
                                                     inputTermRecyclerViewAdapter.fillWithMarksInAlertDialog(requestURLParent,alertLayoutParent,alertDParent,finalTermDataParent);
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(mContext, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(mContext, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(mContext, MainActivity.class);
                                                     mContext.startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(mContext, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 ((ProgressBar)alertLayout.findViewById(R.id.alert_update_marks_progress)).setVisibility(View.GONE);
@@ -213,7 +214,7 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             ((ProgressBar)alertLayout.findViewById(R.id.alert_update_marks_progress)).setVisibility(View.GONE);
-                                            Toast.makeText(mContext, "Connection Error"+error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(mContext, "Network Error"+error.toString(), Toasty.LENGTH_SHORT).show();
                                             alertD.dismiss();
                                         }
                                     });

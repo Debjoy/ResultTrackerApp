@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +31,8 @@ import com.basgeekball.awesomevalidation.utility.custom.SimpleCustomValidation;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import es.dmoral.toasty.Toasty;
 
 public class GeneralActivity extends AppCompatActivity {
 
@@ -203,14 +204,15 @@ public class GeneralActivity extends AppCompatActivity {
                                                 public void onResponse(JSONObject response) {
                                                     try {
                                                         if (response.getInt("code") == 202) {
-                                                            Toast.makeText(GeneralActivity.this, "Password Changed", Toast.LENGTH_SHORT).show();
+                                                            Toasty.success(GeneralActivity.this, "Password Changed", Toasty.LENGTH_SHORT).show();
+
                                                             alertD.dismiss();
                                                             onLogOut();
                                                         } else if (response.getInt("code") == 351) {
-                                                            Toast.makeText(GeneralActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                            Toasty.error(GeneralActivity.this, "Incorrect Password", Toasty.LENGTH_SHORT).show();
                                                             onLogOut();
                                                         } else {
-                                                            Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                            Toasty.warning(GeneralActivity.this, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                         }
                                                     } catch (JSONException e) {
                                                         e.printStackTrace();
@@ -222,7 +224,7 @@ public class GeneralActivity extends AppCompatActivity {
                                             new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    Toast.makeText(GeneralActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(GeneralActivity.this, "Network error", Toasty.LENGTH_SHORT).show();
                                                     alertLayout.findViewById(R.id.alert_change_password_progress).setVisibility(View.GONE);
                                                 }
                                             });
@@ -266,11 +268,11 @@ public class GeneralActivity extends AppCompatActivity {
 
 
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(GeneralActivity.this, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
                                 startActivity(mainActivity);
                             }else{
-                                Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(GeneralActivity.this, "Something went wrong", Toasty.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -282,7 +284,7 @@ public class GeneralActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mGeneral, "Network error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mGeneral, "Network error", Toasty.LENGTH_SHORT).show();
                         findViewById(R.id.general_profile_info_progress).setVisibility(View.GONE);
                         findViewById(R.id.general_profile_info_layout).setVisibility(View.VISIBLE);
                     }
@@ -353,7 +355,7 @@ public class GeneralActivity extends AppCompatActivity {
                                                 mUsername.setError(null);
                                                 int code=response.getInt("code");
                                                 if(code==202){
-                                                    Toast.makeText(GeneralActivity.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(GeneralActivity.this,"Profile Updated",Toasty.LENGTH_SHORT).show();
                                                     alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
                                                     alertD.dismiss();
                                                     loadProfileInfo();
@@ -368,11 +370,11 @@ public class GeneralActivity extends AppCompatActivity {
                                                     }
 
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(GeneralActivity.this,"Authentication Error",Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
                                                     startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(GeneralActivity.this,"Something went wrong",Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -383,7 +385,7 @@ public class GeneralActivity extends AppCompatActivity {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(GeneralActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(GeneralActivity.this,"Network error",Toasty.LENGTH_SHORT).show();
                                             alertLayout.findViewById(R.id.alert_edit_profile_progress).setVisibility(View.GONE);
                                         }
                                     });
@@ -455,15 +457,15 @@ public class GeneralActivity extends AppCompatActivity {
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 if(response.getInt("code")==202){
-                                                    Toast.makeText(GeneralActivity.this, "Exam successfully added", Toast.LENGTH_SHORT).show();
+                                                    Toasty.success(GeneralActivity.this, "Exam  added", Toasty.LENGTH_SHORT).show();
                                                     alertDialog.dismiss();
                                                     loadExamStructure(alertLayout);
                                                 }else if(response.getInt("code")==351){
-                                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                                    Toasty.error(GeneralActivity.this, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                                     Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
                                                     startActivity(mainActivity);
                                                 }else{
-                                                    Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                    Toasty.warning(GeneralActivity.this, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -474,7 +476,7 @@ public class GeneralActivity extends AppCompatActivity {
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(GeneralActivity.this, "Network error :", Toast.LENGTH_SHORT).show();
+                                            Toasty.warning(GeneralActivity.this, "Network error :", Toasty.LENGTH_SHORT).show();
                                             layout.findViewById(R.id.alert_add_exam_progress).setVisibility(View.GONE);
                                         }
                                     });
@@ -502,7 +504,7 @@ public class GeneralActivity extends AppCompatActivity {
                                     mExamListRecycler.setLayoutManager(new LinearLayoutManager(GeneralActivity.this));
                                     alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                                 }else if(response.getInt("code")==351){
-                                    Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                    Toasty.error(GeneralActivity.this, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                     Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
                                     startActivity(mainActivity);
                                 }else{
@@ -511,11 +513,11 @@ public class GeneralActivity extends AppCompatActivity {
                                 }
 
                             }else if(response.getInt("code")==351){
-                                Toast.makeText(GeneralActivity.this, "Authentication Error", Toast.LENGTH_SHORT).show();
+                                Toasty.error(GeneralActivity.this, "Authentication Error", Toasty.LENGTH_SHORT).show();
                                 Intent mainActivity=new Intent(GeneralActivity.this, MainActivity.class);
                                 startActivity(mainActivity);
                             }else{
-                                Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toasty.warning(GeneralActivity.this, "Something went wrong", Toasty.LENGTH_SHORT).show();
                                 alertLayout.findViewById(R.id.alert_general_exam_structure_progress).setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
@@ -526,7 +528,7 @@ public class GeneralActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(GeneralActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(GeneralActivity.this, "Network Error", Toasty.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
