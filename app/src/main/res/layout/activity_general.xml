@@ -91,6 +91,21 @@
             android:paddingHorizontal="20dp"
             />
         <TextView
+            android:id="@+id/general_change_password_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:textColor="@color/colorText"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_lock_black_24dp"
+            android:drawableTint="@color/colorText"
+            android:drawablePadding="10dp"
+            android:textSize="17sp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"
+            />
+        <TextView
             android:id="@+id/general_logout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,6 +120,7 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="20dp"
             />
+
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"

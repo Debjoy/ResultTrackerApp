@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class GeneralActivity extends AppCompatActivity {
     private TextView mLogoutButton;
     private TextView mGithubButton;
     private TextView mGeneralButton;
+    private TextView mChangePasswordButton;
 
     private TextView mExamStructureButton;
     private TextView mProfileEditButton;
@@ -48,6 +50,8 @@ public class GeneralActivity extends AppCompatActivity {
     String profile_full_name;
     String profile_email;
     String profile_username;
+
+    AwesomeValidation passwordValidation;
 
     //defining AwesomeValidation object
     private AwesomeValidation awesomeValidation;
@@ -63,6 +67,7 @@ public class GeneralActivity extends AppCompatActivity {
         mGeneralButton=findViewById(R.id.general_help_link);
         mExamStructureButton=findViewById(R.id.general_exam_structure_button);
         mProfileEditButton=findViewById(R.id.general_edit_profile_button);
+        mChangePasswordButton=findViewById(R.id.general_change_password_button);
         mGeneral=GeneralActivity.this;
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
@@ -136,6 +141,99 @@ public class GeneralActivity extends AppCompatActivity {
 
                 loadExamStructure(alertLayout);
 
+            }
+        });
+
+        mChangePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(GeneralActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(GeneralActivity.this);
+                final View alertLayout = inflater.inflate(R.layout.alert_change_password,null);
+                builder.setView(alertLayout);
+                final AlertDialog alertD=builder.show();
+                alertLayout.findViewById(R.id.alert_change_password_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertD.dismiss();
+                    }
+                });
+                alertLayout.findViewById(R.id.alert_change_password_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        passwordValidation=  new AwesomeValidation(ValidationStyle.BASIC);
+
+                        passwordValidation.addValidation((EditText)alertLayout.findViewById(R.id.alert_change_password_current),"^.{8,}$", "Should contain atleast 8 characters");
+                        passwordValidation.addValidation((EditText)alertLayout.findViewById(R.id.alert_change_password_new),"^.{8,}$", "Should contain atleast 8 characters");
+
+                        if(passwordValidation.validate()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(GeneralActivity.this);
+                            LayoutInflater inflater = LayoutInflater.from(GeneralActivity.this);
+                            final View layout1 = inflater.inflate(R.layout.alert_input_delete_confirmation, null);
+                            builder.setView(layout1);
+                            final AlertDialog alertD2 = builder.show();
+                            ((TextView) layout1.findViewById(R.id.alert_delete_message)).setText("Are you sure you want to change your password? You'll have to login again in any case");
+                            ((Button) layout1.findViewById(R.id.alert_delete_cancel_button)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    alertD2.dismiss();
+                                }
+                            });
+
+                            layout1.findViewById(R.id.alert_delete_ok_button).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    alertLayout.findViewById(R.id.alert_change_password_progress).setVisibility(View.VISIBLE);
+                                    String requestUrl = mainUrl + "register.php";
+                                    alertD2.dismiss();
+                                    JSONObject postparams = new JSONObject();
+                                    try {
+                                        postparams.put("stud_id", stud_id);
+                                        postparams.put("pass", ((TextView) alertLayout.findViewById(R.id.alert_change_password_current)).getText().toString());
+                                        postparams.put("newpass", ((TextView) alertLayout.findViewById(R.id.alert_change_password_new)).getText().toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, requestUrl, postparams,
+                                            new Response.Listener<JSONObject>() {
+                                                @Override
+                                                public void onResponse(JSONObject response) {
+                                                    try {
+                                                        if (response.getInt("code") == 202) {
+                                                            Toast.makeText(GeneralActivity.this, "Password Changed", Toast.LENGTH_SHORT).show();
+                                                            alertD.dismiss();
+                                                            onLogOut();
+                                                        } else if (response.getInt("code") == 351) {
+                                                            Toast.makeText(GeneralActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                            onLogOut();
+                                                        } else {
+                                                            Toast.makeText(GeneralActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    alertLayout.findViewById(R.id.alert_change_password_progress).setVisibility(View.GONE);
+                                                }
+                                            },
+                                            new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError error) {
+                                                    Toast.makeText(GeneralActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                                                    alertLayout.findViewById(R.id.alert_change_password_progress).setVisibility(View.GONE);
+                                                }
+                                            });
+                                    RequestQueue requestQueue = Volley.newRequestQueue(GeneralActivity.this);
+                                    requestQueue.add(jsonObjectRequest);
+
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
 
