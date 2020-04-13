@@ -46,7 +46,7 @@ public class DashActivity extends AppCompatActivity {
         Toasty.info(DashActivity.this,"Welcome "+userName,Toasty.LENGTH_SHORT,false).show();
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId,user_pass, DashActivity.this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new HomeFragment(userId,user_pass, DashActivity.this, DashActivity.this)).commit();
     }
 
 
@@ -59,11 +59,11 @@ public class DashActivity extends AppCompatActivity {
                     Fragment selectedFragment=null;
                     exitFlag=1;
                     switch(item.getItemId()){
-                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this);
+                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this, DashActivity.this);
                         break;
                         case R.id.nav_term: selectedFragment = new TermsFragment( userId,user_pass,DashActivity.this);
                         break;
-                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this);
+                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this, DashActivity.this);
                         break;
                         case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId,user_pass);
                         break;

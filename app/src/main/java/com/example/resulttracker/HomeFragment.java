@@ -86,11 +86,13 @@ public class HomeFragment extends Fragment {
     private ProgressBar mHomeProgressBar;
     private LinearLayout mHomeNoMarks;
     private View mainView;
+    private DashActivity mDash;
 
-    HomeFragment(int stud_id, String stud_pass,Context mContext){
+    HomeFragment(int stud_id, String stud_pass,Context mContext, DashActivity mDash){
         this.stud_id=stud_id;
         this.mContext=mContext;
         this.stud_pass=stud_pass;
+        this.mDash=mDash;
     }
     @Nullable
     @Override
@@ -205,6 +207,7 @@ public class HomeFragment extends Fragment {
                                     mCirclularProgress.setProgress(0);   // Main Progress
                                     mCirclularProgress.setSecondaryProgress(100); // Secondary Progress
                                     mCirclularProgress.setMax(100); // Maximum Progress
+
                                     new Thread(new Runnable() {
 
                                         @Override
@@ -218,8 +221,13 @@ public class HomeFragment extends Fragment {
                                                     @Override
                                                     public void run() {
                                                         // TODO Auto-generated method stub
-                                                        mCirclularProgress.setProgress(pStatus);
-                                                        mCirclarProgressText.setText(pStatus + "%");
+                                                        mDash.runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                mCirclularProgress.setProgress(pStatus);
+                                                                mCirclarProgressText.setText(pStatus + "%");
+                                                            }
+                                                        });
 
                                                     }
                                                 });
@@ -229,8 +237,14 @@ public class HomeFragment extends Fragment {
                                                     e.printStackTrace();
                                                 }
                                             }
-                                            mCirclularProgress.setProgress((int)average_value);
-                                            mCirclarProgressText.setText(average_value + "%");
+                                            mDash.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mCirclularProgress.setProgress((int)average_value);
+                                                    mCirclarProgressText.setText(average_value + "%");
+                                                }
+                                            });
+
                                         }
                                     }).start();
                                     final int allMarksResponseListLength=allMarksResponseList.length();

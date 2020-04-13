@@ -68,15 +68,17 @@ public class SubjectFragment extends Fragment {
     private TextView mRankTv;
     private TextView mRankTotalTv;
     private View mainView;
+    private DashActivity mDash;
 
     private ArrayList<String> labels = new ArrayList<>();
 
     private HorizontalBarChart mChartSubject;
 
-    SubjectFragment(int stud_id, String stud_pass, Context mContext){
+    SubjectFragment(int stud_id, String stud_pass, Context mContext,DashActivity mDash){
         this.stud_id=stud_id;
         this.mContext=mContext;
         this.stud_pass=stud_pass;
+        this.mDash=mDash;
     }
     @Nullable
     @Override
@@ -252,7 +254,7 @@ public class SubjectFragment extends Fragment {
                             try {
                                 if(response.getInt("code")==202){
                                     JSONArray subjectJsonArray=response.getJSONArray("response");
-                                    SubjectMarksRecyclerViewAdapter adapter =new SubjectMarksRecyclerViewAdapter(subjectJsonArray);
+                                    SubjectMarksRecyclerViewAdapter adapter =new SubjectMarksRecyclerViewAdapter(subjectJsonArray,mDash);
                                     mSubjectRecyclerMarks.setAdapter(adapter);
                                     mSubjectRecyclerMarks.setNestedScrollingEnabled(false);
                                     mSubjectRecyclerMarks.setLayoutManager(new LinearLayoutManager(mContext));

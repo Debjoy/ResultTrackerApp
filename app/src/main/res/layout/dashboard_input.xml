@@ -167,7 +167,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Loading.. Please wait"
+                                android:text="Loading.."
                                 android:textSize="14sp"
                                 android:textColor="@color/colorText"/>
                             <ProgressBar

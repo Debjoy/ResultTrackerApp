@@ -17,10 +17,11 @@ import org.json.JSONObject;
 public class SubjectMarksRecyclerViewAdapter extends RecyclerView.Adapter<SubjectMarksRecyclerViewAdapter.SubjectViewHolder> {
 
     private JSONArray subjectArrayJson;
-
+    private DashActivity mDash;
     private Handler handler = new Handler();
-    SubjectMarksRecyclerViewAdapter(JSONArray subjectArrayJson){
+    SubjectMarksRecyclerViewAdapter(JSONArray subjectArrayJson, DashActivity mDash){
         this.subjectArrayJson=subjectArrayJson;
+        this.mDash=mDash;
     }
 
     @NonNull
@@ -63,9 +64,14 @@ public class SubjectMarksRecyclerViewAdapter extends RecyclerView.Adapter<Subjec
                             @Override
                             public void run() {
                                 // TODO Auto-generated method stub
-                                holder.mCircularProgressBar.setProgress(finalPStatus);
-                                holder.mProgressText.setText(finalPStatus + "%");
+                                mDash.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        holder.mCircularProgressBar.setProgress(finalPStatus);
+                                        holder.mProgressText.setText(finalPStatus + "%");
 
+                                    }
+                                });
                             }
                         });
                         try {
@@ -74,8 +80,13 @@ public class SubjectMarksRecyclerViewAdapter extends RecyclerView.Adapter<Subjec
                             e.printStackTrace();
                         }
                     }
-                    holder.mCircularProgressBar.setProgress((int)average_value);
-                    holder.mProgressText.setText(average_value + "%");
+                    mDash.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.mCircularProgressBar.setProgress((int)average_value);
+                            holder.mProgressText.setText(average_value + "%");
+                        }
+                    });
                 }
             }).start();
 
