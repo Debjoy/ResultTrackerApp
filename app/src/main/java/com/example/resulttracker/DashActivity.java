@@ -19,6 +19,9 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import es.dmoral.toasty.Toasty;
+import me.ibrahimsn.lib.OnItemReselectedListener;
+import me.ibrahimsn.lib.OnItemSelectedListener;
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class DashActivity extends AppCompatActivity {
     private int exitFlag=1;
@@ -26,6 +29,7 @@ public class DashActivity extends AppCompatActivity {
     private String userName;
     private int userId;
     private String user_pass;
+    private SmoothBottomBar bottomBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +40,27 @@ public class DashActivity extends AppCompatActivity {
 
 
         exitFlag=1;
-        bottomNav=findViewById(R.id.bottom_navigation_view);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //bottomNav=findViewById(R.id.bottom_navigation_view);
+        //bottomNav.setOnNavigationItemSelectedListener(navListener);
+        bottomBar=findViewById(R.id.bottom_navigation_view);
+        bottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelect(int i) {
+                Fragment selectedFragment=null;
+                exitFlag=1;
+                switch(i){
+                    case 0 : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this, DashActivity.this);
+                        break;
+                    case 1: selectedFragment = new TermsFragment( userId,user_pass,DashActivity.this);
+                        break;
+                    case 2: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this, DashActivity.this);
+                        break;
+                    case 3: selectedFragment = new InputFragment(DashActivity.this, userId,user_pass);
+                        break;
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,selectedFragment).commit();
+            }
+        });
 
         SharedPreferences spref = getSharedPreferences("data_user", MODE_PRIVATE);
         userName=spref.getString("username",null);
@@ -52,26 +75,28 @@ public class DashActivity extends AppCompatActivity {
 
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment=null;
-                    exitFlag=1;
-                    switch(item.getItemId()){
-                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this, DashActivity.this);
-                        break;
-                        case R.id.nav_term: selectedFragment = new TermsFragment( userId,user_pass,DashActivity.this);
-                        break;
-                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this, DashActivity.this);
-                        break;
-                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId,user_pass);
-                        break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,selectedFragment).commit();
-                    return true;
-                }
-            };
+//    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+//            new BottomNavigationView.OnNavigationItemSelectedListener() {
+//                @Override
+//                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                    Fragment selectedFragment=null;
+//                    exitFlag=1;
+//                    switch(item.getItemId()){
+//                        case R.id.nav_home : selectedFragment=new HomeFragment(userId, user_pass, DashActivity.this, DashActivity.this);
+//                        break;
+//                        case R.id.nav_term: selectedFragment = new TermsFragment( userId,user_pass,DashActivity.this);
+//                        break;
+//                        case R.id.nav_subjects: selectedFragment =  new SubjectFragment(userId, user_pass, DashActivity.this, DashActivity.this);
+//                        break;
+//                        case R.id.nav_input: selectedFragment = new InputFragment(DashActivity.this, userId,user_pass);
+//                        break;
+//                    }
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,selectedFragment).commit();
+//                    return true;
+//                }
+//            };
+
+
 
     @Override
     public void onBackPressed() {

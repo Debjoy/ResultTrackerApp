@@ -86,10 +86,10 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                 newButton.setText(((JSONObject)subjectArray.get(i)).getString("sub_name"));
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) newButton.getLayoutParams();
                 params.height=dpToPx(35);
-                params.setMargins(0,0,dpToPx(2),0);
+                params.setMargins(0,0,dpToPx(2),dpToPx(10));
                 newButton.setLayoutParams(params);
                 newButton.setAllCaps(false);
-                newButton.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_button_accent));
+                newButton.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_button_primary_light));
                 newButton.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
                 newButton.setMinimumWidth(0);
                 newButton.setMinWidth(0);
@@ -321,7 +321,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) newButton.getLayoutParams();
             params.height=dpToPx(35);
             params.width=dpToPx(35);
-            params.setMargins(0,0,dpToPx(2),0);
+            params.setMargins(0,0,dpToPx(2),dpToPx(10));
             newButton.setLayoutParams(params);
             newButton.setBackground(mContext.getResources().getDrawable(R.drawable.ic_add_circle_black_24dp));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -43,6 +43,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class SubjectFragment extends Fragment {
 
@@ -195,7 +196,8 @@ public class SubjectFragment extends Fragment {
                                         @Override
                                         public void onClick(View v) {
                                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id, stud_pass)).commit();
-                                            ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                            //((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                            ((SmoothBottomBar)getActivity().findViewById(R.id.bottom_navigation_view)).setActiveItem(3);
                                         }
                                     });
                                 }
@@ -302,7 +304,7 @@ public class SubjectFragment extends Fragment {
                                     BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
                                     //if(position%2==0)
                                     //dataset.setColor(Color.parseColor("#263238"));
-                                    dataset.setColor(mContext.getResources().getColor(R.color.colorAccent));
+                                    dataset.setColor(mContext.getResources().getColor(R.color.colorAccentLight));
                                     //else
                                     //dataset.setColor(Color.parseColor("#263238"));
                                     ArrayList<IBarDataSet> dataSets = new ArrayList<>();

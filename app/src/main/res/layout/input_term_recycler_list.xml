@@ -10,7 +10,9 @@
         android:layout_marginBottom="15dp"
         app:cardCornerRadius="5dp"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:contentPadding="10dp"
+        app:contentPaddingLeft="10dp"
+        app:contentPaddingRight="10dp"
+        app:contentPaddingTop="10dp"
         app:cardElevation="@dimen/cardview_default_elevation">
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +85,7 @@
                 android:layout_height="wrap_content"
                 app:flChildSpacing="5dp"
                 app:flChildSpacingForLastRow="align"
-                app:flRowSpacing="8dp">
+                app:flRowSpacing="0dp">
 
 
             </com.nex3z.flowlayout.FlowLayout>

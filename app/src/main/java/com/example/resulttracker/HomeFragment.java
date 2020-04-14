@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class HomeFragment extends Fragment {
     private String mainUrl;
@@ -285,12 +286,12 @@ public class HomeFragment extends Fragment {
                                     LineDataSet dataSet = new LineDataSet(entries, "Marks");
                                     dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
                                     dataSet.setDrawFilled(true);
-                                    dataSet.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
+                                    dataSet.setFillColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
                                     dataSet.setDrawCircles(false);
                                     dataSet.setFillAlpha(255);
                                     dataSet.setDrawValues(false);
 
-                                    dataSet.setColor(mContext.getResources().getColor(R.color.colorAccent));
+                                    dataSet.setColor(mContext.getResources().getColor(R.color.colorAccentLight));
                                     LineData lineData = new LineData(dataSet);
                                     mLineChart.setData(lineData);
 
@@ -365,7 +366,8 @@ public class HomeFragment extends Fragment {
                                         @Override
                                         public void onClick(View v) {
                                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_dashboard_frame,new InputFragment(mContext, stud_id,stud_pass)).commit();
-                                            ((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                            //((BottomNavigationView)getActivity().findViewById(R.id.bottom_navigation_view)).getMenu().getItem(3).setChecked(true);
+                                            ((SmoothBottomBar)getActivity().findViewById(R.id.bottom_navigation_view)).setActiveItem(3);
                                         }
                                     });
                                 }

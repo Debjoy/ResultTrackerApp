@@ -263,7 +263,7 @@ public class TermsFragment extends Fragment {
                                 xAxis.setXOffset(75f);
 
                                 BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
-                                dataset.setColor(mContext.getResources().getColor(R.color.colorAccent));
+                                dataset.setColor(mContext.getResources().getColor(R.color.colorAccentLight));
 
                                 ArrayList<IBarDataSet> dataSets = new ArrayList<>();
                                 dataSets.add(dataset);

@@ -13,12 +13,27 @@
         android:layout_above="@id/bottom_navigation_view"
         ></FrameLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView-->
+        <!--android:id="@+id/bottom_navigation_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/colorWhite"-->
+        <!--app:menu="@menu/bottom_navigation"-->
+        <!--app:labelVisibilityMode="labeled"/>-->
+    <me.ibrahimsn.lib.SmoothBottomBar
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorWhite"
+        app:backgroundColor="@color/colorAccent"
         app:menu="@menu/bottom_navigation"
-        app:labelVisibilityMode="labeled"/>
+        app:indicatorColor="@color/colorAccentLight"
+        app:textColor="@color/colorWhite"
+        app:iconTint="@color/colorWhite"
+        app:iconTintActive="@color/colorWhite"
+        app:textSize="12sp"
+        app:sideMargins="5dp"
+        app:duration="@android:integer/config_longAnimTime"
+        />
 </RelativeLayout>

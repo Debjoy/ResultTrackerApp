@@ -122,7 +122,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
                                 BarDataSet dataset = new BarDataSet(entries, "score in percentage %");
                                 //if(position%2==0)
-                                dataset.setColor(mContext.getResources().getColor(R.color.colorPrimary));
+                                dataset.setColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
                                 //else
                                 //dataset.setColor(Color.parseColor("#263238"));
                                 ArrayList<IBarDataSet> dataSets = new ArrayList<>();

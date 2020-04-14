@@ -84,33 +84,65 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_marginRight="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorText"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="Hey,"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:layout_gravity="center"
+                            android:text="you'll"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:layout_gravity="center"
+                            android:text="have"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="30sp"
+                            android:id="@+id/input_no_of_exams"
+                            android:textStyle="bold"
+                            android:background="@drawable/rounded_button_primary_light"
+                            android:textColor="@color/colorWhite"
+                            android:paddingVertical="5dp"
+                            android:paddingHorizontal="20dp"
+                            android:text="4"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:textColor="@color/colorText"
-                    android:textSize="20sp"
-                    android:text="Hey,"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorText"
-                    android:layout_gravity="center"
-                    android:text="you'll have"/>
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="26sp"
-                    android:id="@+id/input_no_of_exams"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
-                    android:text="4"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:textColor="@color/colorText"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="exams per subject"/>
 
 
