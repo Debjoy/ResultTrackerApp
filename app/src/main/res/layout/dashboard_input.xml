@@ -76,8 +76,9 @@
             android:layout_height="150dp"
             android:orientation="horizontal"
             android:background="@color/colorWhite"
-            android:outlineAmbientShadowColor="@color/colorBlack"
-            android:translationZ="@dimen/cardview_default_elevation">
+            android:outlineAmbientShadowColor="@color/colorBackground"
+            android:outlineSpotShadowColor="@color/colorBackgroundShadow"
+            android:translationZ="10dp">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -160,8 +161,12 @@
                     android:text="ENTER\nMARKS"
                     android:padding="20dp"
                     android:textSize="23dp"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/rounded_button_accent"/>
+                    android:textColor="@color/colorPrimaryLight"
+                    android:elevation="10dp"
+                    android:outlineAmbientShadowColor="@color/colorBackground"
+                    android:outlineSpotShadowColor="@color/colorBackgroundShadow"
+                    android:stateListAnimator="@null"
+                    android:background="@drawable/rounded_button"/>
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,7 +190,10 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="5dp"
                         android:layout_marginRight="5dp">
                         <LinearLayout
                             android:id="@+id/input_term_wise_subjets_loading"
@@ -228,6 +236,7 @@
                             android:layout_marginRight="8dp"
                             android:textColor="@color/colorText"
                             android:textStyle="bold"
+
                             android:layout_toLeftOf="@id/input_add_new_term"/>
                     </RelativeLayout>
 
@@ -236,9 +245,6 @@
                     android:id="@+id/input_recycler_layout"
                     android:layout_width="match_parent"
                     android:layout_marginTop="0dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
                     android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
                 <LinearLayout
                     android:id="@+id/input_term_no_term"

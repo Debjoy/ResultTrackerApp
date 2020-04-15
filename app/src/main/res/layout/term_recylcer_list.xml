@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginBottom="15dp"
-        app:cardCornerRadius="5dp"
-        app:contentPadding="10dp"
-        app:cardElevation="10dp"
-        android:outlineAmbientShadowColor="@color/colorBackground"
-        android:outlineSpotShadowColor="@color/colorBackgroundShadow">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="5dp"
+    app:contentPadding="10dp"
+    app:cardElevation="10dp"
+    android:outlineAmbientShadowColor="@color/colorBackgroundShadow"
+    android:outlineSpotShadowColor="@color/colorBackgroundShadow">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,5 +58,4 @@
         </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

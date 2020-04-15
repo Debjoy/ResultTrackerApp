@@ -74,7 +74,7 @@ and then finally add some marks\n to view this page"/>
         android:id="@+id/term_full_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
+        android:background="@color/colorWhite"
         android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -147,7 +147,7 @@ and then finally add some marks\n to view this page"/>
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="10dp"
-                    android:outlineAmbientShadowColor="@color/colorBackground"
+                    android:outlineAmbientShadowColor="@color/colorBackgroundShadow"
                     android:outlineSpotShadowColor="@color/colorBackgroundShadow"
                     app:contentPadding="10dp"
                     android:layout_marginTop="8dp"
@@ -183,6 +183,22 @@ and then finally add some marks\n to view this page"/>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Your Subjects:"
+                        android:textSize="22sp"
+                        android:drawableLeft="@drawable/ic_library_books_black_24dp"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/colorPrimaryLight"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimaryLight"/>
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
