@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="Here are some basic terminology guide"
                 android:textSize="17sp"
+                android:layout_marginRight="20dp"
                 android:textColor="@color/colorText"
                 android:layout_marginBottom="10dp"
                 />
@@ -47,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="Terms:"
                 android:textStyle="bold"
+                android:layout_marginRight="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawableLeft="@drawable/ic_looks_one_black_24dp"
                 android:textColor="@color/colorText"
@@ -55,6 +59,7 @@
                 />
             <TextView
                 android:layout_width="match_parent"
+                android:layout_marginRight="20dp"
                 android:layout_height="wrap_content"
                 android:text="These are bascally the academic period where the exam structure remains the same
 and have the same set of subjects. It can be also called as an academic year. eg. Classes, Semesters, etc."
@@ -66,6 +71,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Exam Structure:"
+                android:layout_marginRight="20dp"
                 android:textStyle="bold"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="5dp"
@@ -76,6 +82,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
                 android:text="This is basically the set of exams which repeats every term. eg. unit tests, internals, semesters, etc."
                 android:textColor="@color/colorText"
                 android:layout_marginBottom="5dp"
@@ -83,6 +90,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
                 />
             <TextView
                 android:layout_width="match_parent"
+                android:layout_marginRight="20dp"
                 android:layout_height="wrap_content"
                 android:text="Subjects:"
                 android:textStyle="bold"
@@ -97,6 +105,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
                 android:layout_height="wrap_content"
                 android:text="A group of subject will create a term and each subject will be able to give any exam from exam structure once. eg. Physics, Chemestry"
                 android:textColor="@color/colorText"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="5dp"
                 android:drawablePadding="10dp"
                 />
@@ -105,6 +114,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
                 android:layout_height="wrap_content"
                 android:text="Marks:"
                 android:textStyle="bold"
+                android:layout_marginRight="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:drawablePadding="5dp"
                 android:drawableLeft="@drawable/ic_looks_4_black_24dp"
@@ -116,7 +126,7 @@ and have the same set of subjects. It can be also called as an academic year. eg
                 android:layout_height="wrap_content"
                 android:text="These are the most basic units of this app. Marks will be there for every exam per subject."
                 android:textColor="@color/colorText"
-                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
                 android:drawablePadding="10dp"
                 />
 
@@ -130,13 +140,20 @@ and have the same set of subjects. It can be also called as an academic year. eg
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/rounded_button_primary"
+                    android:background="@drawable/rounded_button_primary_light"
                     android:minWidth="70dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
                     android:paddingLeft="10dp"
+                    android:elevation="10dp"
+                    android:outlineAmbientShadowColor="@color/colorPrimary"
+                    android:outlineSpotShadowColor="@color/colorPrimary"
+                    android:stateListAnimator="@null"
                     android:paddingRight="10dp"
                     android:text="Learn More"
                     android:textAllCaps="false"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginBottom="20dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

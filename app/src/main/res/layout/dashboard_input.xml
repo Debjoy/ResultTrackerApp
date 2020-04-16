@@ -219,7 +219,7 @@
                             android:id="@+id/input_add_new_term"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/rounded_button_accent"
+                            android:background="@drawable/rounded_button_accent_light"
                             android:drawableRight="@drawable/ic_add_black_24dp"
                             android:drawableTint="@color/colorWhite"
                             android:minHeight="0dp"

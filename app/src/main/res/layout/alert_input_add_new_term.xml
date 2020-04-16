@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,14 +30,19 @@
 
     <EditText
         android:id="@+id/alert_add_term_name_edit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Term Name Here"
-        android:layout_marginBottom="10dp"
+        android:hint="Enter term name here"
+        android:layout_marginVertical="10dp"
         android:minWidth="180dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorPrimaryLight"
+        android:textColorHint="@color/colorPrimarySuperLight"
+        android:background="@drawable/edit_text_box"
+        android:padding="10dp"
         android:drawableRight="@drawable/ic_mode_edit_black_24dp"
         android:drawablePadding="10dp"
-        android:drawableTint="@color/colorText"
+        android:drawableTint="@color/colorPrimaryLight"
         android:text=""/>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -48,14 +54,20 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:minWidth="0dp"
-            android:background="@drawable/rounded_button_primary"
+            android:background="@drawable/rounded_button_primary_light"
             android:layout_marginLeft="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Add"
+            android:layout_marginTop="10dp"
             android:drawableRight="@drawable/ic_add_circle_black_24dp"
             android:drawableTint="@color/colorWhite"
+            android:elevation="10dp"
+            android:outlineAmbientShadowColor="@color/colorPrimary"
+            android:outlineSpotShadowColor="@color/colorPrimary"
+            android:stateListAnimator="@null"
             android:drawablePadding="10dp"
+            android:layout_marginBottom="20dp"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"/>
         <Button
@@ -65,10 +77,17 @@
             android:layout_marginLeft="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:minWidth="0dp"
+            android:background="@drawable/rounded_button"
+            android:outlineAmbientShadowColor="@color/colorPrimary"
+            android:outlineSpotShadowColor="@color/colorPrimary"
+            android:elevation="10dp"
             android:textAllCaps="false"
-            android:background="@drawable/rounded_button_accent"
-            android:textColor="@color/colorWhite"
+            android:stateListAnimator="@null"
+            android:textColor="@color/colorPrimaryLight"
             android:text="Cancel"/>
     </LinearLayout>
 

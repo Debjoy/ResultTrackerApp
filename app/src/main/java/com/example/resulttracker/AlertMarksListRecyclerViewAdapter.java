@@ -3,6 +3,7 @@ package com.example.resulttracker;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,12 +76,12 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
             final String full_marks="/ "+((JSONObject)mMarksList.get(position)).getString("full_marks");
             holder.mFullMarks.setText(full_marks);
             String examName=((JSONObject)mMarksList.get(position)).getString("exam_name");
-            if(examName.length()>23)
-                examName=examName.substring(0,21)+"..";
+            if(examName.length()>17)
+                examName=examName.substring(0,15)+"..";
             holder.mExamName.setText(examName);
             String subjectName = ((JSONObject)mMarksList.get(position)).getString("subject_name");
-            if(subjectName.length()>21)
-                subjectName=subjectName.substring(0,19)+"..";
+            if(subjectName.length()>15)
+                subjectName=subjectName.substring(0,13)+"..";
             holder.mSubjectName.setText(subjectName);
 
             //ADDDING FUNCTIONALITY TO DELETE BUTTON
@@ -164,6 +165,7 @@ public class AlertMarksListRecyclerViewAdapter extends RecyclerView.Adapter<Aler
                     builder.setView(alertLayout);
                     final AlertDialog alertD=builder.show();
                     ((EditText)alertLayout.findViewById(R.id.alert_update_marks_edit_text)).setText(marks);
+                    ((EditText)alertLayout.findViewById(R.id.alert_update_marks_edit_text)).setFilters(new InputFilter[]{new InputFilterMinMax("0",full_marks,mContext)});
                     ((TextView)alertLayout.findViewById(R.id.alert_update_marks_full_text_view)).setText(full_marks);
 
                     ((Button)alertLayout.findViewById(R.id.alert_update_marks_cancel_button)).setOnClickListener(new View.OnClickListener() {

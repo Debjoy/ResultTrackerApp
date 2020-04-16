@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp">
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -25,6 +27,7 @@
         android:text="There is no room left for new marks"
         android:textSize="17sp"
         android:textColor="@color/colorText"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         />
     <TextView
@@ -32,6 +35,7 @@
         android:layout_height="wrap_content"
         android:text="To make room for entering new marks you can do one of the following actions:"
         android:textColor="@color/colorText"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         />
     <TextView
@@ -42,6 +46,7 @@
         android:layout_marginBottom="5dp"
         android:drawablePadding="10dp"
         android:drawableTint="@color/colorPrimary"
+        android:layout_marginRight="20dp"
         android:drawableLeft="@drawable/ic_looks_one_black_24dp"
         />
     <TextView
@@ -50,6 +55,7 @@
         android:layout_height="wrap_content"
         android:text="Add a new Term where you add a new Subject"
         android:textColor="@color/colorText"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/ic_looks_two_black_24dp"
@@ -59,7 +65,7 @@
         android:layout_height="wrap_content"
         android:text="Delete marks from existing terms"
         android:textColor="@color/colorText"
-        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
         android:drawablePadding="10dp"
         android:drawableTint="@color/colorPrimary"
         android:drawableLeft="@drawable/ic_looks_3_black_24dp"
@@ -74,9 +80,16 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/rounded_button_accent"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_button_primary_light"
+            android:outlineAmbientShadowColor="@color/colorPrimary"
+            android:outlineSpotShadowColor="@color/colorPrimary"
+            android:elevation="10dp"
             android:minWidth="70dp"
             android:paddingLeft="10dp"
+            android:stateListAnimator="@null"
             android:paddingRight="10dp"
             android:text="Ok"
             android:textAllCaps="false"

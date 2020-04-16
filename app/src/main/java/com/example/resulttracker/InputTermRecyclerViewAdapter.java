@@ -112,7 +112,7 @@ public class InputTermRecyclerViewAdapter extends RecyclerView.Adapter<InputTerm
                             final AlertDialog alertD=builder.show();
                             ((TextView)layout.findViewById(R.id.alert_edit_name_title)).setText("Edit Subject Name:");
                             final EditText mSubjectNameEditTextt=layout.findViewById(R.id.alert_edit_name_edit_text);
-                            mSubjectNameEditTextt.setHint("Enter the subject name here");
+                            mSubjectNameEditTextt.setHint("Enter subject name here");
 
                             mSubjectNameEditTextt.setText(subjectName);
                             ((Button)layout.findViewById(R.id.alert_edit_name_cancel_button)).setOnClickListener(new View.OnClickListener() {
