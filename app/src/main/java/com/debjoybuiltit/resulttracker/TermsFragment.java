@@ -1,4 +1,4 @@
-package com.example.resulttracker;
+package com.debjoybuiltit.resulttracker;
 
 import android.app.AlertDialog;
 import android.content.Context;

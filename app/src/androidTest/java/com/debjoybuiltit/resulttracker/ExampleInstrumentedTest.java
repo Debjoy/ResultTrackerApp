@@ -1,4 +1,4 @@
-package com.example.resulttracker;
+package com.debjoybuiltit.resulttracker;
 
 import android.content.Context;
 

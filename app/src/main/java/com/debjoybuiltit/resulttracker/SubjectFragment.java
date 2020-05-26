@@ -1,4 +1,4 @@
-package com.example.resulttracker;
+package com.debjoybuiltit.resulttracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,7 +34,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

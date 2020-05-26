@@ -1,4 +1,4 @@
-package com.example.resulttracker;
+package com.debjoybuiltit.resulttracker;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class SignUpFragment extends Fragment {
+public class SignInFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.sign_up,container,false);
+        View v=inflater.inflate(R.layout.sign_in,container,false);
         return v;
     }
+
 }
