@@ -36,20 +36,9 @@ The android app lets you:
 
 ## Screenshots
 
-[<img src="/readme/1.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/1.png)
-[<img src="/readme/2.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/2.png)
-[<img src="/readme/3.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/3.png)
-[<img src="/readme/4.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/4.png)
-[<img src="/readme/5.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/5.png)
-[<img src="/readme/6.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/6.png)
-[<img src="/readme/7.png" align="left"
-width="200" hspace="10" vspace="10">](/readme/7.png)
+[<img src="/readme/1.png"
+width="100%" >](/readme/1.png)
+
 <br>
 
 ## Setup
