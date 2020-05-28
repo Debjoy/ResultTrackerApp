@@ -36,8 +36,8 @@ The android app lets you:
 
 ## Screenshots
 
-[<img src="/readme/1.png"
-width="100%" >](/readme/1.png)
+[<img src="/readme/screen.png"
+width="100%" >](/readme/screen.png)
 
 <br>
 
