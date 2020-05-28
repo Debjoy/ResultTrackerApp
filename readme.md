@@ -6,9 +6,7 @@ RestultTracker is an Android App which can act as a tool for student to track th
 
 # Try It Out
 <a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4" target="_blank">
-    <img alt="Get it on Google Drive"
-        height="50"
-        src="https://atdebjoy.com/portfolio/img/download-logo.png" /></a>
+    <img alt="Get it on Google Drive" height="50" src="https://atdebjoy.com/portfolio/img/download-logo.png" /></a><br>
 Here is an existing user for  to access<br>username: danny<br>Email ID: daniellennert@yahoo.com (fake email)<br>Password: 1234abcd<br>
 
 using this user you cannot, update, delete or add any exams, subjects, terms or marks. For doing that you'll have to create your own user
