@@ -1,15 +1,22 @@
-# ResultTracker - Android App 
+# ResultTracker - Android App
 
 <img src="readme/ic_launcher-web.png" align="left"
 width="200" hspace="10" vspace="10">
 RestultTracker is an Android App which can act as a tool for student to track their performance. This app will be maintained by the users by themselves. They will be the one to enter marks according to thier particular exam structure ( which they will be the one to create within the app). This app has an exam structure builder which can work for any academic institutions.
 
-<p align="left">
+# Try It Out
+Here is an existing user for  to access
+username: danny
+Email ID: daniellennert@yahoo.com (fake email)
+Password: 1234abcd
+
+using this user you cannot, update, delete or add any exams, subjects, terms or marks. For doing that you'll have to create your own user
+
 <a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4">
     <img alt="Get it on Google Drive"
         height="80"
         src="https://atdebjoy.com/portfolio/img/download-logo.png" />
-</a> 
+		</a>
 
 ## About
 
@@ -26,20 +33,52 @@ The android app lets you:
 
 ## Screenshots
 
-to be add later
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/1.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/2.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/3.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/4.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/5.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/6.png)
+[<img src="/readme/1.png" align="left"
+width="200" hspace="10" vspace="10">](/readme/7.png)
+
+
+## Setup
+
+Clone or download this repo.
+Open Android Studio and select 'Open an existing Android Studio Project'
+Navigate to checked out repository.
+Inside 'ResultTrackerApp' folder select 'settings.gradle' file
+Run the application.
 
 ## Permissions
 
-to be add later
+On Android versions prior to Android 6.0, wallabag requires the following permissions:
+- Full Network Access.
 
 ## Contributing
 
-to be add later
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -m 'Add some feature')
+4. Push your branch (git push origin my-new-feature)
+5. Create a new Pull Request
 
-## Credits  
+## Libraries Used
 
-to be add later
+- <a href="https://developer.android.com/training/volley">Volley</a>
+- <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a>
+- <a href="https://github.com/nex3z/FlowLayout">FlowLayout</a>
+- <a href="https://github.com/thyrlian/AwesomeValidation">Awesome Validation</a>
+- <a href="https://github.com/GrenderG/Toasty">Toasty</a>
+- <a href="https://github.com/ibrahimsn98/SmoothBottomBar">SmoothBottomBar</a>
 
 ## License
-
-to be add later
+This application is released under MIT License (see [LICENSE](LICENSE)).
+Some of the used libraries are released under different licenses.
