@@ -1,7 +1,10 @@
-# ResultTracker - Android App
+
 
 <img src="readme/ic_launcher-web.png" align="left"
 width="200" hspace="10" vspace="10">
+
+# ResultTracker - Android App
+
 RestultTracker is an Android App which can act as a tool for student to track their performance. This app will be maintained by the users by themselves. They will be the one to enter marks according to thier particular exam structure ( which they will be the one to create within the app). This app has an exam structure builder which can work for any academic institutions.
 
 # Try It Out
@@ -35,19 +38,19 @@ The android app lets you:
 
 [<img src="/readme/1.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/1.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/2.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/2.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/3.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/3.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/4.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/4.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/5.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/5.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/6.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/6.png)
-[<img src="/readme/1.png" align="left"
+[<img src="/readme/7.png" align="left"
 width="200" hspace="10" vspace="10">](/readme/7.png)
-
+<br>
 
 ## Setup
 
