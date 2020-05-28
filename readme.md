@@ -5,18 +5,15 @@
 RestultTracker is an Android App which can act as a tool for student to track their performance. This app will be maintained by the users by themselves. They will be the one to enter marks according to thier particular exam structure ( which they will be the one to create within the app). This app has an exam structure builder which can work for any academic institutions.
 
 # Try It Out
+<a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4" target="_blank">
+    <img alt="Get it on Google Drive"
+        height="50"
+        src="https://atdebjoy.com/portfolio/img/download-logo.png" /></a>
 Here is an existing user for  to access<br>username: danny<br>Email ID: daniellennert@yahoo.com (fake email)<br>Password: 1234abcd<br>
 
 using this user you cannot, update, delete or add any exams, subjects, terms or marks. For doing that you'll have to create your own user
 
 <a href="https://atdebjoy.com/others/api/perform/docs/" target="_blank">API Documentation</a>
-
-<a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4" target="_blank">
-    <img alt="Get it on Google Drive"
-        height="50"
-        src="https://atdebjoy.com/portfolio/img/download-logo.png" /></a>
-
-
 
 ## About
 <img src="https://raw.githubusercontent.com/Debjoy/ResultTrackerApp/master/readme/ic_launcher-web.png" width="200" hspace="10" vspace="10" align="left">
