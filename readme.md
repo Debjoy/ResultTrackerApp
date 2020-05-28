@@ -8,14 +8,13 @@ width="200" hspace="10" vspace="10">
 RestultTracker is an Android App which can act as a tool for student to track their performance. This app will be maintained by the users by themselves. They will be the one to enter marks according to thier particular exam structure ( which they will be the one to create within the app). This app has an exam structure builder which can work for any academic institutions.
 
 # Try It Out
-Here is an existing user for  to access
-username: danny
-Email ID: daniellennert@yahoo.com (fake email)
-Password: 1234abcd
+Here is an existing user for  to access<br>username: danny<br>Email ID: daniellennert@yahoo.com (fake email)<br>Password: 1234abcd<br>
 
 using this user you cannot, update, delete or add any exams, subjects, terms or marks. For doing that you'll have to create your own user
 
-<a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4">
+<a href="https://atdebjoy.com/others/api/perform/docs/" target="_blank">API Documentation</a>
+
+<a href="https://drive.google.com/open?id=1qdiNGY-xmj8mB9RXRxRyMm5AoBVzPlV4" target="_blank">
     <img alt="Get it on Google Drive"
         height="80"
         src="https://atdebjoy.com/portfolio/img/download-logo.png" />
@@ -64,12 +63,12 @@ On Android versions prior to Android 6.0, wallabag requires the following permis
 
 ## Libraries Used
 
-- <a href="https://developer.android.com/training/volley">Volley</a>
-- <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a>
-- <a href="https://github.com/nex3z/FlowLayout">FlowLayout</a>
-- <a href="https://github.com/thyrlian/AwesomeValidation">Awesome Validation</a>
-- <a href="https://github.com/GrenderG/Toasty">Toasty</a>
-- <a href="https://github.com/ibrahimsn98/SmoothBottomBar">SmoothBottomBar</a>
+- <a href="https://developer.android.com/training/volley" target="_blank">Volley</a>
+- <a href="https://github.com/PhilJay/MPAndroidChart" target="_blank">MPAndroidChart</a>
+- <a href="https://github.com/nex3z/FlowLayout" target="_blank">FlowLayout</a>
+- <a href="https://github.com/thyrlian/AwesomeValidation" target="_blank">Awesome Validation</a>
+- <a href="https://github.com/GrenderG/Toasty" target="_blank">Toasty</a>
+- <a href="https://github.com/ibrahimsn98/SmoothBottomBar" target="_blank">SmoothBottomBar</a>
 
 ## License
 This application is released under MIT License (see [LICENSE](LICENSE)).
